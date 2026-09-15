@@ -1,5 +1,6 @@
 package com.ddd.application.ddd.adaptor;
 
+import com.ddd.common.result.Result;
 import com.ddd.model.ddd.DddModel;
 
 /**
@@ -14,9 +15,9 @@ public interface DddOutputAdaptor {
      * 查询指定标识对应的外部数据。
      *
      * @param id 业务标识
-     * @return 转换后的项目内部模型
+     * @return 转换后的项目内部模型操作结果
      *
      * @author AIGenerator
      */
-    DddModel queryById(String id);
+    Result<DddModel> queryById(String id);
 }

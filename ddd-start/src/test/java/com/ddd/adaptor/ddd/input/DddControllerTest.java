@@ -7,13 +7,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
+import com.ddd.common.result.Result;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddRuleMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddRulePO;
+import com.ddd.model.ddd.DddModel;
 import com.ddd.start.Application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,12 +41,16 @@ class DddControllerTest {
     @Autowired
     private DddRuleMapper dddRuleMapper;
 
+    @Autowired
+    private DddOutputAdaptor outputAdaptor;
+
     @Test
     void shouldCoverAllDddPatterns() throws Exception {
         mockMvc.perform(post("/api/ddd/rule").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"ruleCode\":\"UNKNOWN\",\"baseValue\":8}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.code").value("DOMAIN_RULE_NOT_FOUND"));
 
         insertRule("DEFAULT", 1, "默认规则");
         insertRule("DOUBLE", 2, "双倍规则");
@@ -104,6 +112,10 @@ class DddControllerTest {
                 .andExpect(jsonPath("$.data.id").value("ddd-001"))
                 .andExpect(jsonPath("$.data.name").value("DDD_EXTERNAL_ddd-001"))
                 .andExpect(jsonPath("$.data.category").value("DEFAULT"));
+
+        Result<DddModel> invalidOutputResult = outputAdaptor.queryById(" ");
+        assertFalse(invalidOutputResult.success());
+        assertEquals("ADAPTOR_REQUEST_INVALID", invalidOutputResult.code());
     }
 
     /**

@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.exception.DomainErrorCode;
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.model.value.DddOperationIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
@@ -13,7 +14,8 @@ import com.ddd.domain.ddd.model.value.DddValue;
 /**
  * DDD 聚合根实体模板。
  *
- * <p>根实体持有主状态和子操作实体，是聚合内唯一允许变更状态的位置。聚合容器只持有本实体，
+ * <p>根实体持有主状态和子操作实体，是聚合内唯一允许变更状态的位置。
+ * 聚合容器只持有本实体，
  * 不再维护重复的 id、当前值或版本字段。</p>
  *
  * @author AIGenerator
@@ -70,7 +72,8 @@ public final class DddEntity {
     /**
      * 创建仅携带待处理操作的有效输入实体。
      *
-     * <p>待处理操作是显式状态，而不是字段缺失的无效实体；领域服务会在规则计算后将其确认。</p>
+     * <p>待处理操作是显式状态，而不是字段缺失的无效实体；
+     * 领域服务会在规则计算后将其确认。</p>
      *
      * @param id 根实体业务标识
      * @param operation 待处理子操作实体
@@ -121,13 +124,13 @@ public final class DddEntity {
      * 返回输入聚合中唯一的待处理子操作。
      *
      * @return 待处理子操作实体
-     * @throws DomainValidationException 当输入不恰好包含一个待处理操作时抛出
+     * @throws DomainException 当输入不恰好包含一个待处理操作时抛出
      *
      * @author AIGenerator
      */
     public DddOperationEntity requiredPendingOperation() {
         if (operationEntities.size() != 1 || !operationEntities.get(0).pending()) {
-            throw new DomainValidationException("写入参数必须包含一个待处理操作实体");
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
         return operationEntities.get(0);
     }
@@ -139,14 +142,14 @@ public final class DddEntity {
      * @param calculatedValue 规则计算后的领域值
      * @param occurredAt 操作确认时间
      * @return 已确认的子操作实体
-     * @throws DomainValidationException 当操作标识重复时抛出
+     * @throws DomainException 当操作标识重复时抛出
      *
      * @author AIGenerator
      */
     public DddOperationEntity confirm(DddOperationEntity operation, DddValue calculatedValue,
                                       Instant occurredAt) {
         if (findOperation(operation.operationId()).isPresent()) {
-            throw new DomainValidationException("duplicate operationId: " + operation.operationId().value());
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
         DddOperationEntity confirmed = operation.confirm(calculatedValue, occurredAt);
         currentValue = currentValue.add(confirmed.value());

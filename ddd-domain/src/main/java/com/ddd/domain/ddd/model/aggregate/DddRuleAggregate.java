@@ -1,6 +1,7 @@
 package com.ddd.domain.ddd.model.aggregate;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.exception.DomainErrorCode;
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.model.value.DddValue;
 
@@ -19,10 +20,10 @@ public record DddRuleAggregate(
         String reason) {
     public DddRuleAggregate {
         if (ruleCode == null || ruleCode.isBlank()) {
-            throw new DomainValidationException("ruleCode must not be blank");
+            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
         }
         if (factor <= 0) {
-            throw new DomainValidationException("factor must be positive");
+            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
         }
     }
 
@@ -36,8 +37,22 @@ public record DddRuleAggregate(
      */
     public DddValue evaluate(DddRuleParam param) {
         if (!ruleCode.equals(param.ruleCode())) {
-            throw new DomainValidationException("rule ruleCode does not match context");
+            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
         }
         return param.baseValue().multiply(factor);
+    }
+
+    /**
+     * 使用原始基础数值执行规则计算。
+     *
+     * <p>值对象和领域参数的封装留在规则聚合内，Application 只传递原始命令数据。</p>
+     *
+     * @param baseValue 原始基础数值
+     * @return 计算后的领域值
+     *
+     * @author AIGenerator
+     */
+    public DddValue evaluate(int baseValue) {
+        return evaluate(new DddRuleParam(ruleCode, DddValue.positive(baseValue)));
     }
 }

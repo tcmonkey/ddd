@@ -1,5 +1,7 @@
 package com.ddd.domain.ddd.model.param;
 
+import com.ddd.domain.ddd.exception.DomainErrorCode;
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 
 /**
@@ -12,7 +14,7 @@ import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 public record DddWriteParam(DddAggregate aggregate) {
     public DddWriteParam {
         if (aggregate == null) {
-            throw new IllegalArgumentException("aggregate must not be null");
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
     }
 }

@@ -2,15 +2,17 @@ package com.ddd.domain.ddd.model.entity;
 
 import java.time.Instant;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.exception.DomainErrorCode;
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.value.DddOperationIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 
 /**
  * 聚合根实体持有的单次操作子实体。
  *
- * <p>待处理状态只包含原始输入；确认后必须同时具有计算值和发生时间。该状态机使 application 可以
- * 先构造输入实体，再由领域服务与根实体完成初始化，而不会产生语义不完整的对象。</p>
+ * <p>待处理状态只包含原始输入；确认后必须同时具有计算值和发生时间。
+ * 该状态机使 application 可以先构造输入实体，再由领域服务与根实体完成初始化，
+ * 而不会产生语义不完整的对象。</p>
  *
  * @param operationId 一次写操作的幂等标识
  * @param baseValue 参与规则计算的原始数值
@@ -28,10 +30,10 @@ public record DddOperationEntity(
         Instant occurredAt) {
     public DddOperationEntity {
         if (operationId == null || baseValue == null || ruleCode == null || ruleCode.isBlank()) {
-            throw new DomainValidationException("操作实体的必要字段不能为空");
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
         if ((value == null) != (occurredAt == null)) {
-            throw new DomainValidationException("操作实体的计算值和发生时间必须同时存在或同时缺失");
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
     }
 
@@ -61,7 +63,7 @@ public record DddOperationEntity(
      */
     public DddOperationEntity confirm(DddValue calculatedValue, Instant occurredAt) {
         if (!pending()) {
-            throw new DomainValidationException("已确认的操作不能重复确认");
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
         return new DddOperationEntity(operationId, baseValue, ruleCode, calculatedValue, occurredAt);
     }

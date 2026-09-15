@@ -9,17 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ddd.adaptor.ddd.input.assembler.DddInputAssembler;
-import com.ddd.application.ddd.result.DddCalculateResult;
-import com.ddd.application.ddd.result.DddExternalResult;
-import com.ddd.application.ddd.result.DddReadResult;
-import com.ddd.application.ddd.result.DddRuleResult;
-import com.ddd.application.ddd.result.DddWriteResult;
 import com.ddd.application.ddd.service.DddCalculateApplication;
 import com.ddd.application.ddd.service.DddExternalReadApplication;
 import com.ddd.application.ddd.service.DddReadApplication;
 import com.ddd.application.ddd.service.DddRuleApplication;
 import com.ddd.application.ddd.service.DddWriteApplication;
-import com.ddd.client.common.Result;
+import com.ddd.common.result.Result;
 import com.ddd.client.ddd.request.DddCalculateRequest;
 import com.ddd.client.ddd.request.DddRuleRequest;
 import com.ddd.client.ddd.request.DddWriteRequest;
@@ -67,8 +62,7 @@ public class DddController {
      */
     @PostMapping("/write")
     public Result<DddWriteResponse> write(@Valid @RequestBody DddWriteRequest request) {
-        DddWriteResult result = writeApplication.execute(assembler.toCommand(request));
-        return Result.success(assembler.toResponse(result));
+        return writeApplication.execute(assembler.toCommand(request)).map(assembler::toResponse);
     }
 
     /**
@@ -81,8 +75,7 @@ public class DddController {
      */
     @GetMapping("/{id}")
     public Result<DddReadResponse> query(@PathVariable("id") String id) {
-        DddReadResult view = readApplication.query(id);
-        return Result.success(assembler.toResponse(view));
+        return readApplication.query(id).map(assembler::toResponse);
     }
 
     /**
@@ -95,8 +88,7 @@ public class DddController {
      */
     @PostMapping("/calculate")
     public Result<DddCalculateResponse> calculate(@Valid @RequestBody DddCalculateRequest request) {
-        DddCalculateResult result = calculateApplication.execute(assembler.toCommand(request));
-        return Result.success(assembler.toResponse(result));
+        return calculateApplication.execute(assembler.toCommand(request)).map(assembler::toResponse);
     }
 
     /**
@@ -109,8 +101,7 @@ public class DddController {
      */
     @PostMapping("/rule")
     public Result<DddRuleResponse> calculateRule(@Valid @RequestBody DddRuleRequest request) {
-        DddRuleResult result = ruleApplication.execute(assembler.toCommand(request));
-        return Result.success(assembler.toResponse(result));
+        return ruleApplication.execute(assembler.toCommand(request)).map(assembler::toResponse);
     }
 
     /**
@@ -123,7 +114,6 @@ public class DddController {
      */
     @GetMapping("/{id}/external")
     public Result<DddExternalReadResponse> queryExternal(@PathVariable("id") String id) {
-        DddExternalResult view = externalReadApplication.query(id);
-        return Result.success(assembler.toResponse(view));
+        return externalReadApplication.query(id).map(assembler::toResponse);
     }
 }

@@ -23,6 +23,7 @@
     </properties>
 
     <modules>
+        <module>ddd-common</module>
         <module>ddd-client</module>
         <module>ddd-model</module>
         <module>ddd-domain</module>
@@ -34,6 +35,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.ddd</groupId>
+                <artifactId>ddd-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.ddd</groupId>
                 <artifactId>ddd-client</artifactId>

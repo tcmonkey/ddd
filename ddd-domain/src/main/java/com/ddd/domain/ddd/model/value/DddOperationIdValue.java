@@ -1,6 +1,7 @@
 package com.ddd.domain.ddd.model.value;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.exception.DomainErrorCode;
+import com.ddd.domain.ddd.exception.DomainException;
 
 /**
  * DDD 写操作的幂等标识值对象模板。
@@ -12,7 +13,7 @@ import com.ddd.domain.ddd.exception.DomainValidationException;
 public record DddOperationIdValue(String value) {
     public DddOperationIdValue {
         if (value == null || value.isBlank()) {
-            throw new DomainValidationException("operationId must not be blank");
+            throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
     }
 }

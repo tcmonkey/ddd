@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
 import com.ddd.application.ddd.result.DddExternalResult;
+import com.ddd.common.result.Result;
 import com.ddd.model.ddd.DddModel;
 
 /**
@@ -30,8 +31,9 @@ public final class DddExternalReadApplication {
      *
      * @author AIGenerator
      */
-    public DddExternalResult query(String id) {
-        DddModel external = outputAdaptor.queryById(id);
-        return new DddExternalResult(external.id(), external.name(), external.category());
+    public Result<DddExternalResult> query(String id) {
+        Result<DddModel> externalResult = outputAdaptor.queryById(id);
+        return externalResult.map(external -> new DddExternalResult(external.id(), external.name(),
+                external.category()));
     }
 }

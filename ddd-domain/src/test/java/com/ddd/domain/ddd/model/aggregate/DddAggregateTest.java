@@ -4,7 +4,7 @@ import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.entity.DddEntity;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
 import com.ddd.domain.ddd.model.value.DddIdValue;
@@ -40,7 +40,7 @@ class DddAggregateTest {
         DddOperationEntity operation = DddOperationEntity.pending(operationId, DddValue.positive(12), "DEFAULT");
         entity.confirm(operation, DddValue.positive(12), Instant.now());
 
-        assertThrows(DomainValidationException.class,
+        assertThrows(DomainException.class,
                 () -> entity.confirm(operation, DddValue.positive(12), Instant.now()));
     }
 }

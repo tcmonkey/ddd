@@ -1,11 +1,13 @@
 package com.ddd.domain.ddd.model.aggregate;
 
 import com.ddd.domain.ddd.model.entity.DddEntity;
+import com.ddd.domain.ddd.model.value.DddIdValue;
 
 /**
  * DDD 写模式的聚合容器模板。
  *
- * <p>聚合仅持有根实体，不保存任何独立业务状态。根实体及其子操作实体共同表达一个事务一致性边界，
+ * <p>聚合仅持有根实体，不保存任何独立业务状态。
+ * 根实体及其子操作实体共同表达一个事务一致性边界，
  * 所有状态变化都委托给根实体的方法完成。</p>
  *
  * @author AIGenerator
@@ -37,7 +39,8 @@ public final class DddAggregate {
     /**
      * 根据原始写入数据创建仅含待处理操作的输入聚合。
      *
-     * <p>Application 只传递命令中的原始数据，不创建或操作值对象。根实体负责将原始数据封装为值对象和
+     * <p>Application 只传递命令中的原始数据，不创建或操作值对象。
+     * 根实体负责将原始数据封装为值对象和
      * 子操作实体，从而确保模型构造规则留在聚合边界内。</p>
      *
      * @param rawId 原始根实体标识
@@ -50,6 +53,18 @@ public final class DddAggregate {
      */
     public static DddAggregate draft(String rawId, String rawOperationId, int rawBaseValue, String ruleCode) {
         return of(DddEntity.draft(rawId, rawOperationId, rawBaseValue, ruleCode));
+    }
+
+    /**
+     * 将原始标识封装为聚合查询所需的领域标识。
+     *
+     * @param rawId 原始根实体标识
+     * @return 校验后的领域标识
+     *
+     * @author AIGenerator
+     */
+    public static DddIdValue idOf(String rawId) {
+        return new DddIdValue(rawId);
     }
 
     /**

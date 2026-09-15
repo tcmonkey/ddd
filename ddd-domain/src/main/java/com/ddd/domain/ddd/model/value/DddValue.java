@@ -1,6 +1,7 @@
 package com.ddd.domain.ddd.model.value;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.exception.DomainErrorCode;
+import com.ddd.domain.ddd.exception.DomainException;
 
 /**
  * 带有显式算术边界校验的非负领域值对象模板。
@@ -12,13 +13,13 @@ import com.ddd.domain.ddd.exception.DomainValidationException;
 public record DddValue(int value) {
     public DddValue {
         if (value < 0) {
-            throw new DomainValidationException("value must not be negative");
+            throw new DomainException(DomainErrorCode.DOMAIN_VALUE_INVALID);
         }
     }
 
     public static DddValue positive(int value) {
         if (value <= 0) {
-            throw new DomainValidationException("value must be positive");
+            throw new DomainException(DomainErrorCode.DOMAIN_VALUE_INVALID);
         }
         return new DddValue(value);
     }
@@ -29,7 +30,7 @@ public record DddValue(int value) {
 
     public DddValue multiply(int factor) {
         if (factor <= 0) {
-            throw new DomainValidationException("factor must be positive");
+            throw new DomainException(DomainErrorCode.DOMAIN_VALUE_INVALID);
         }
         return new DddValue(Math.multiplyExact(value, factor));
     }

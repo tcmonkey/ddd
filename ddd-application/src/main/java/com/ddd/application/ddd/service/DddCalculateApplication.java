@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.command.DddCalculateCommand;
 import com.ddd.application.ddd.result.DddCalculateResult;
+import com.ddd.common.result.Result;
 import com.ddd.domain.ddd.service.DddCalculateDomainService;
 
 /**
@@ -19,10 +20,16 @@ public final class DddCalculateApplication {
         this.calculateDomainService = calculateDomainService;
     }
 
-    public DddCalculateResult execute(DddCalculateCommand command) {
-        int calculatedValue = calculateDomainService
-                .calculate(command.baseValue(), command.factor())
-                .value();
-        return new DddCalculateResult(calculatedValue);
+    /**
+     * 调用无状态领域服务执行数值计算，并转换为应用层结果。
+     *
+     * @param command 纯计算应用命令
+     * @return 纯计算应用结果
+     *
+     * @author AIGenerator
+     */
+    public Result<DddCalculateResult> execute(DddCalculateCommand command) {
+        return calculateDomainService.calculate(command.baseValue(), command.factor())
+                .map(value -> new DddCalculateResult(value.value()));
     }
 }

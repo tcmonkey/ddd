@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 29,
+  "revision": 30,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-15T21:04:33+08:00"
+    "updated_at": "2026-09-15T22:44:13+08:00"
   },
   "handoff": {
-    "summary": "按领域值边界收敛写链路：DddWriteApplication 仅传递命令原始字段，DddAggregate.draft 委托根实体创建 Value Object 与待处理子实体；同步技术方案、计划、自测、追踪和决策记录。mvn clean test、Javadoc、格式与交付校验均通过。",
-    "next_action": "用户继续审阅 Aggregate、Entity 与应用层的职责边界；确认稳定后将代码规范沉淀到 solo-delivery 模板。"
+    "summary": "新增 ddd-common 统一 Result<T>、ErrorCode 与 BaseException；DomainService、OutAdaptor 在公开入口记录一次日志并转换内部错误码；Application 保留 command/result 并隔离 DddModel；补齐异常枚举、Javadoc、集成测试和技术文档。",
+    "next_action": "用户审阅统一 Result、错误码和 HTTP 状态映射约定；确认后继续沉淀到 solo-delivery 的 Java DDD 模板规则。"
   },
-  "last_updated": "2026-09-15T21:04:33+08:00"
+  "last_updated": "2026-09-15T22:44:13+08:00"
 }

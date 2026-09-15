@@ -1,22 +1,30 @@
 package com.ddd.adaptor.ddd.output;
 
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.ddd.adaptor.exception.AdaptorErrorCode;
+import com.ddd.adaptor.exception.AdaptorException;
 import com.ddd.adaptor.ddd.output.converter.DddOutputConverter;
 import com.ddd.adaptor.ddd.output.model.DddExternalResponse;
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
+import com.ddd.common.result.Result;
 import com.ddd.model.ddd.DddModel;
 
 /**
  * DDD 外部数据查询的 output adaptor 示例实现。
  *
- * <p>当前项目不接入真实第三方服务，因此构造模拟的第三方响应并完成转换；接入时只替换本类中的
+ * <p>当前项目不接入真实第三方服务，因此构造模拟的第三方响应并完成转换；
+ * 接入时只替换本类中的
  * 外部调用实现，application 端口和内部模型保持不变。</p>
  *
  * @author AIGenerator
  */
 @Component
 public class DddOutputAdaptorImpl implements DddOutputAdaptor {
+    private static final Logger LOG = LoggerFactory.getLogger(DddOutputAdaptorImpl.class);
+
     private final DddOutputConverter converter;
 
     public DddOutputAdaptorImpl(DddOutputConverter converter) {
@@ -26,7 +34,8 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
     /**
      * 查询第三方数据。
      *
-     * <p>当前以模拟响应代替真实外部调用，仍返回完整的项目内部模型，作为未来接入第三方服务的
+     * <p>当前以模拟响应代替真实外部调用，仍返回完整的项目内部模型，
+     * 作为未来接入第三方服务的
      * 可替换模板。</p>
      *
      * @param id 业务标识
@@ -35,9 +44,34 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
      * @author AIGenerator
      */
     @Override
-    public DddModel queryById(String id) {
-        DddExternalResponse remoteResponse = new DddExternalResponse(
-                id, "DDD_EXTERNAL_" + id, "DEFAULT");
-        return converter.toModel(remoteResponse);
+    public Result<DddModel> queryById(String id) {
+        try {
+            return Result.success(converter.toModel(invokeRemote(id)));
+        } catch (AdaptorException exception) {
+            LOG.warn("DDD 外部适配失败, code={}", exception.errorCode().code());
+            return Result.failure(exception.errorCode());
+        } catch (Exception exception) {
+            LOG.error("DDD 外部适配发生未预期异常", exception);
+            return Result.failure(AdaptorErrorCode.ADAPTOR_PROCESS_FAILED);
+        }
+    }
+
+    /**
+     * 调用外部系统并取得其协议响应。
+     *
+     * <p>当前为可替换的模拟实现。真实 HTTP、RPC 或 MQ 客户端抛出的异常在
+     * {@link #queryById(String)}
+     * 统一记录并映射为 adaptor 错误码。</p>
+     *
+     * @param id 业务标识
+     * @return 外部协议响应
+     *
+     * @author AIGenerator
+     */
+    private DddExternalResponse invokeRemote(String id) {
+        if (id == null || id.isBlank()) {
+            throw new AdaptorException(AdaptorErrorCode.ADAPTOR_REQUEST_INVALID);
+        }
+        return new DddExternalResponse(id, "DDD_EXTERNAL_" + id, "DEFAULT");
     }
 }

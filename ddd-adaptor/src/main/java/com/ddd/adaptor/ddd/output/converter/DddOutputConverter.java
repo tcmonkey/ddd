@@ -2,6 +2,8 @@ package com.ddd.adaptor.ddd.output.converter;
 
 import org.springframework.stereotype.Component;
 
+import com.ddd.adaptor.exception.AdaptorErrorCode;
+import com.ddd.adaptor.exception.AdaptorException;
 import com.ddd.adaptor.ddd.output.model.DddExternalResponse;
 import com.ddd.model.ddd.DddModel;
 
@@ -23,6 +25,9 @@ public class DddOutputConverter {
      * @author AIGenerator
      */
     public DddModel toModel(DddExternalResponse response) {
+        if (response == null || response.sourceId() == null || response.sourceId().isBlank()) {
+            throw new AdaptorException(AdaptorErrorCode.ADAPTOR_EXTERNAL_RESPONSE_INVALID);
+        }
         return new DddModel(response.sourceId(), response.sourceName(), response.sourceCategory());
     }
 }

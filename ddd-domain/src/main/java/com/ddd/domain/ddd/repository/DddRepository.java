@@ -6,7 +6,8 @@ import com.ddd.domain.ddd.model.value.DddIdValue;
 /**
  * DDD 聚合根的领域仓储模板。
  *
- * <p>仓储边界只传递聚合根，不泄漏持久化对象或 {@code Optional}。数据不存在时，查询实现返回一个
+ * <p>仓储边界只传递聚合根，不泄漏持久化对象或 {@code Optional}。
+ * 数据不存在时，查询实现返回一个
  * 尚未持久化的空聚合根，调用方可按正常业务流程继续处理。</p>
  *
  * @author AIGenerator

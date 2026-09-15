@@ -14,6 +14,8 @@ import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRepository;
 import com.ddd.infrastructure.DddBaseRepository;
+import com.ddd.infrastructure.exception.InfrastructureErrorCode;
+import com.ddd.infrastructure.exception.InfrastructureException;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
 
@@ -94,7 +96,8 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
         try {
             return objectMapper.writeValueAsString(operationEntities);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("DDD 领域实体快照无法序列化", exception);
+            throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_SERIALIZE_FAILED,
+                    exception);
         }
     }
 
@@ -108,16 +111,16 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      */
     private List<DddOperationEntity> readOperationEntities(String entitiesJson) {
         if (entitiesJson == null || entitiesJson.isBlank()) {
-            throw new IllegalStateException("DDD 领域实体快照缺失");
+            throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
         }
         try {
             List<DddOperationEntity> entities = objectMapper.readValue(entitiesJson, OPERATION_ENTITY_TYPE);
             if (entities == null || entities.contains(null)) {
-                throw new IllegalStateException("DDD 领域实体快照格式无效");
+                throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
             }
             return entities;
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("DDD 领域实体快照无法反序列化", exception);
+            throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID, exception);
         }
     }
 }
