@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 31,
+  "revision": 34,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-15T23:43:36+08:00"
+    "updated_at": "2026-09-16T00:20:12+08:00"
   },
   "handoff": {
-    "summary": "写领域服务通过 DddAggregate 语义方法协作根实体；Controller、Application、DomainService、Adaptor、Repository 的流程型方法均已按获取、调用、转换拆为编号步骤，移除嵌套调用链。",
-    "next_action": "用户继续审阅 Java DDD 参考工程的聚合边界、流程注释和命名规范；确认后将新增规则沉淀进 solo-delivery 的 Java DDD 模板。"
+    "summary": "README 模块图改为左到右的运行时调用图：外部输入、ddd-adaptor/input、application、domain、infrastructure、DB 为主线；ddd-adaptor/output 从 application 向右分支到外部系统，明确区分 input/output。",
+    "next_action": "用户继续审阅 README 图与 Java DDD 参考工程；按反馈继续收敛模板规则。"
   },
-  "last_updated": "2026-09-15T23:43:36+08:00"
+  "last_updated": "2026-09-16T00:20:12+08:00"
 }
