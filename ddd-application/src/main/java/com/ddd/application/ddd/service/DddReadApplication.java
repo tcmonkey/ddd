@@ -2,12 +2,12 @@ package com.ddd.application.ddd.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.result.DddReadResult;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
+import com.ddd.domain.ddd.model.entity.DddOperationEntity;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.repository.DddRepository;
 
@@ -20,8 +20,11 @@ import com.ddd.domain.ddd.repository.DddRepository;
  */
 @Service
 public final class DddReadApplication {
-    @Autowired
-    private DddRepository dddRepository;
+    private final DddRepository dddRepository;
+
+    public DddReadApplication(DddRepository dddRepository) {
+        this.dddRepository = dddRepository;
+    }
 
     public DddReadResult query(String rawId) {
         DddIdValue id = new DddIdValue(rawId);
@@ -29,13 +32,14 @@ public final class DddReadApplication {
     }
 
     private DddReadResult toView(DddAggregate aggregate) {
-        List<DddReadResult.EntityView> items = aggregate.entities().stream()
+        DddEntity entity = aggregate.entity();
+        List<DddReadResult.EntityView> items = entity.operationEntities().stream()
                 .map(this::toEntityView)
                 .toList();
-        return new DddReadResult(aggregate.id().value(), aggregate.currentValue().value(), items);
+        return new DddReadResult(entity.id().value(), entity.currentValue().value(), items);
     }
 
-    private DddReadResult.EntityView toEntityView(DddEntity item) {
+    private DddReadResult.EntityView toEntityView(DddOperationEntity item) {
         return new DddReadResult.EntityView(item.operationId().value(), item.value().value(),
                 item.ruleCode(), item.occurredAt());
     }

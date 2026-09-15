@@ -1,7 +1,6 @@
 package com.ddd.adaptor.ddd.input;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,23 +39,23 @@ import com.ddd.client.ddd.response.DddWriteResponse;
 @RestController
 @RequestMapping("/api/ddd")
 public class DddController {
-    @Autowired
-    private DddWriteApplication writeApplication;
+    private final DddWriteApplication writeApplication;
+    private final DddReadApplication readApplication;
+    private final DddCalculateApplication calculateApplication;
+    private final DddRuleApplication ruleApplication;
+    private final DddExternalReadApplication externalReadApplication;
+    private final DddInputAssembler assembler;
 
-    @Autowired
-    private DddReadApplication readApplication;
-
-    @Autowired
-    private DddCalculateApplication calculateApplication;
-
-    @Autowired
-    private DddRuleApplication ruleApplication;
-
-    @Autowired
-    private DddExternalReadApplication externalReadApplication;
-
-    @Autowired
-    private DddInputAssembler assembler;
+    public DddController(DddWriteApplication writeApplication, DddReadApplication readApplication,
+                         DddCalculateApplication calculateApplication, DddRuleApplication ruleApplication,
+                         DddExternalReadApplication externalReadApplication, DddInputAssembler assembler) {
+        this.writeApplication = writeApplication;
+        this.readApplication = readApplication;
+        this.calculateApplication = calculateApplication;
+        this.ruleApplication = ruleApplication;
+        this.externalReadApplication = externalReadApplication;
+        this.assembler = assembler;
+    }
 
     /**
      * 接收写模式请求，并将处理委托给写应用服务。

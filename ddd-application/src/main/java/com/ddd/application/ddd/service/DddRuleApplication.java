@@ -1,6 +1,5 @@
 package com.ddd.application.ddd.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.command.DddRuleCommand;
@@ -19,8 +18,11 @@ import com.ddd.domain.ddd.repository.DddRuleRepository;
  */
 @Service
 public final class DddRuleApplication {
-    @Autowired
-    private DddRuleRepository dddRuleRepository;
+    private final DddRuleRepository dddRuleRepository;
+
+    public DddRuleApplication(DddRuleRepository dddRuleRepository) {
+        this.dddRuleRepository = dddRuleRepository;
+    }
 
     /**
      * 按规则聚合根计算业务值。

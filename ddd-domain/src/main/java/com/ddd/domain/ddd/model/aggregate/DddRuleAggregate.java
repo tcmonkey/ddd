@@ -2,7 +2,6 @@ package com.ddd.domain.ddd.model.aggregate;
 
 import com.ddd.domain.ddd.exception.DomainValidationException;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
-import com.ddd.domain.ddd.model.param.DddWriteParam;
 import com.ddd.domain.ddd.model.value.DddValue;
 
 /**
@@ -25,10 +24,6 @@ public record DddRuleAggregate(
         if (factor <= 0) {
             throw new DomainValidationException("factor must be positive");
         }
-    }
-
-    public DddValue evaluate(DddWriteParam context) {
-        return evaluate(new DddRuleParam(context.ruleCode(), context.baseValue()));
     }
 
     /**

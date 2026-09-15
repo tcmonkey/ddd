@@ -8,6 +8,7 @@ import com.ddd.domain.ddd.model.value.DddValue;
  *
  * @param operationId 一次写操作的幂等标识
  * @param value 领域决策得到的本次数值
+ * @param currentValue 保存前或保存后的根实体当前值
  * @param reason 规则或领域决策的说明
  * @param duplicate 是否为幂等重放
  *
@@ -16,13 +17,16 @@ import com.ddd.domain.ddd.model.value.DddValue;
 public record DddDecisionParam(
         DddOperationIdValue operationId,
         DddValue value,
+        DddValue currentValue,
         String reason,
         boolean duplicate) {
-    public static DddDecisionParam write(DddOperationIdValue operationId, DddValue value, String reason) {
-        return new DddDecisionParam(operationId, value, reason, false);
+    public static DddDecisionParam write(DddOperationIdValue operationId, DddValue value,
+                                         DddValue currentValue, String reason) {
+        return new DddDecisionParam(operationId, value, currentValue, reason, false);
     }
 
-    public static DddDecisionParam duplicate(DddOperationIdValue operationId, DddValue value, String reason) {
-        return new DddDecisionParam(operationId, value, reason, true);
+    public static DddDecisionParam duplicate(DddOperationIdValue operationId, DddValue value,
+                                             DddValue currentValue, String reason) {
+        return new DddDecisionParam(operationId, value, currentValue, reason, true);
     }
 }

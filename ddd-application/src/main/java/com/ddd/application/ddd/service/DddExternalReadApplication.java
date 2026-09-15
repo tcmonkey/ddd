@@ -1,6 +1,5 @@
 package com.ddd.application.ddd.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
@@ -17,8 +16,11 @@ import com.ddd.model.ddd.DddModel;
  */
 @Service
 public final class DddExternalReadApplication {
-    @Autowired
-    private DddOutputAdaptor outputAdaptor;
+    private final DddOutputAdaptor outputAdaptor;
+
+    public DddExternalReadApplication(DddOutputAdaptor outputAdaptor) {
+        this.outputAdaptor = outputAdaptor;
+    }
 
     /**
      * 查询外部数据并转换为应用层结果。

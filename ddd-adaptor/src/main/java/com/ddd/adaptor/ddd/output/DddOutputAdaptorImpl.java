@@ -1,6 +1,5 @@
 package com.ddd.adaptor.ddd.output;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ddd.adaptor.ddd.output.converter.DddOutputConverter;
@@ -18,8 +17,11 @@ import com.ddd.model.ddd.DddModel;
  */
 @Component
 public class DddOutputAdaptorImpl implements DddOutputAdaptor {
-    @Autowired
-    private DddOutputConverter converter;
+    private final DddOutputConverter converter;
+
+    public DddOutputAdaptorImpl(DddOutputConverter converter) {
+        this.converter = converter;
+    }
 
     /**
      * 查询第三方数据。

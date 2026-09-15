@@ -1,24 +1,18 @@
 package com.ddd.domain.ddd.model.param;
 
-import com.ddd.domain.ddd.model.value.DddOperationIdValue;
-import com.ddd.domain.ddd.model.value.DddValue;
+import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 
 /**
- * DDD 写模式领域决策所需的不可变参数。
+ * DDD 写模式领域服务的不可变输入参数。
  *
- * @param operationId 一次写操作的幂等标识
- * @param ruleCode 选择或记录规则的编码
- * @param baseValue 参与规则或纯计算的原始数值
+ * @param aggregate 包含根实体和待处理子操作实体的输入聚合
  *
  * @author AIGenerator
  */
-public record DddWriteParam(
-        DddOperationIdValue operationId,
-        String ruleCode,
-        DddValue baseValue) {
+public record DddWriteParam(DddAggregate aggregate) {
     public DddWriteParam {
-        if (ruleCode == null || ruleCode.isBlank()) {
-            throw new IllegalArgumentException("ruleCode must not be blank");
+        if (aggregate == null) {
+            throw new IllegalArgumentException("aggregate must not be null");
         }
     }
 }

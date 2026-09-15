@@ -1,6 +1,5 @@
 package com.ddd.application.ddd.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.command.DddCalculateCommand;
@@ -14,8 +13,11 @@ import com.ddd.domain.ddd.service.DddCalculateDomainService;
  */
 @Service
 public final class DddCalculateApplication {
-    @Autowired
-    private DddCalculateDomainService calculateDomainService;
+    private final DddCalculateDomainService calculateDomainService;
+
+    public DddCalculateApplication(DddCalculateDomainService calculateDomainService) {
+        this.calculateDomainService = calculateDomainService;
+    }
 
     public DddCalculateResult execute(DddCalculateCommand command) {
         int calculatedValue = calculateDomainService

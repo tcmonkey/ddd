@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 27,
+  "revision": 29,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-15T18:02:57+08:00"
+    "updated_at": "2026-09-15T21:04:33+08:00"
   },
   "handoff": {
-    "summary": "已补齐ddd-start的logback-spring.xml：默认控制台，prod同时启用按日期和大小滚动的文件，日志目录与级别可由环境变量覆盖。默认及prod测试各3/3通过，prod临时目录生成ddd.log；XML、差异及交付校验通过，设计和开发记录已同步。",
-    "next_action": "等待用户评审日志格式与滚动阈值；真实业务接入时再补请求traceId MDC、用例边界业务日志和指标，当前配置只预留traceId字段。"
+    "summary": "按领域值边界收敛写链路：DddWriteApplication 仅传递命令原始字段，DddAggregate.draft 委托根实体创建 Value Object 与待处理子实体；同步技术方案、计划、自测、追踪和决策记录。mvn clean test、Javadoc、格式与交付校验均通过。",
+    "next_action": "用户继续审阅 Aggregate、Entity 与应用层的职责边界；确认稳定后将代码规范沉淀到 solo-delivery 模板。"
   },
-  "last_updated": "2026-09-15T18:02:57+08:00"
+  "last_updated": "2026-09-15T21:04:33+08:00"
 }
