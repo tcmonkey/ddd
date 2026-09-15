@@ -9,6 +9,8 @@ import org.springframework.context.annotation.FilterType;
  * 领域服务的定向扫描配置。
  *
  * <p>在不向 domain 模块引入 Spring 依赖的前提下，将标记的领域服务注册为 Bean。</p>
+ *
+ * @author AIGenerator
  */
 @Configuration
 @ComponentScan(

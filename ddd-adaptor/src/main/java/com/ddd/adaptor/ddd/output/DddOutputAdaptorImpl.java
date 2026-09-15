@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
  *
  * <p>当前项目不接入真实第三方服务，因此构造模拟的第三方响应并完成转换；接入时只替换本类中的
  * 外部调用实现，application 端口和内部模型保持不变。</p>
+ *
+ * @author AIGenerator
  */
 @Component
 public class DddOutputAdaptorImpl implements DddOutputAdaptor {
@@ -20,6 +22,8 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
      * 创建 DDD output adaptor。
      *
      * @param converter 第三方响应转换器
+     *
+     * @author AIGenerator
      */
     public DddOutputAdaptorImpl(DddOutputConverter converter) {
         this.converter = converter;
@@ -33,6 +37,8 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
      *
      * @param id 业务标识
      * @return 项目内部模型
+     *
+     * @author AIGenerator
      */
     @Override
     public DddModel queryById(String id) {

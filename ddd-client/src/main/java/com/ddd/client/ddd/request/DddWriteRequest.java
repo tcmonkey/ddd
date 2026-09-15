@@ -3,7 +3,11 @@ package com.ddd.client.ddd.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
-/** DDD 写模式的外部请求。 */
+/**
+ * DDD 写模式的外部请求。
+ *
+ * @author AIGenerator
+ */
 public record DddWriteRequest(
         @NotBlank String id,
         @NotBlank String operationId,

@@ -21,6 +21,8 @@ import com.ddd.client.ddd.response.DddRuleResponse;
  * HTTP 协议 DTO 与应用层契约之间的防腐层。
  *
  * <p>所有转换集中在此处，避免 client 类型泄漏到 application 或 domain。</p>
+ *
+ * @author AIGenerator
  */
 public final class DddInputAssembler {
     public DddWriteCommand toCommand(DddWriteRequest request) {
@@ -37,6 +39,8 @@ public final class DddInputAssembler {
      *
      * @param request 规则计算外部请求
      * @return 应用层规则计算命令
+     *
+     * @author AIGenerator
      */
     public DddRuleCommand toCommand(DddRuleRequest request) {
         return new DddRuleCommand(request.ruleCode(), request.baseValue());
@@ -63,6 +67,8 @@ public final class DddInputAssembler {
      *
      * @param result 规则计算应用层结果
      * @return 规则计算外部响应
+     *
+     * @author AIGenerator
      */
     public DddRuleResponse toResponse(DddRuleResult result) {
         return new DddRuleResponse(result.ruleCode(), result.factor(), result.calculatedValue(),
@@ -74,6 +80,8 @@ public final class DddInputAssembler {
      *
      * @param view 外部数据查询结果
      * @return 外部数据 HTTP 响应
+     *
+     * @author AIGenerator
      */
     public DddExternalReadResponse toResponse(DddExternalResult view) {
         return new DddExternalReadResponse(view.id(), view.name(), view.category());

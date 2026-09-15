@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
  * DDD 公共模板的输入适配器。
  *
  * <p>负责协议校验、请求组装、调用单个应用服务和响应转换，不承载领域业务规则。</p>
+ *
+ * @author AIGenerator
  */
 @RestController
 @RequestMapping("/api/ddd")
@@ -80,6 +82,8 @@ public class DddController {
      *
      * @param request 规则计算请求
      * @return 规则计算响应
+     *
+     * @author AIGenerator
      */
     @PostMapping("/rule")
     public Result<DddRuleResponse> calculateRule(
@@ -93,6 +97,8 @@ public class DddController {
      *
      * @param id 业务对象标识
      * @return DDD 外部数据响应
+     *
+     * @author AIGenerator
      */
     @GetMapping("/{id}/external")
     public Result<DddExternalReadResponse> queryExternal(@PathVariable("id") String id) {

@@ -5,7 +5,11 @@ import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.exception.DomainValidationException;
 import com.ddd.domain.ddd.model.value.DddValue;
 
-/** DDD 规则与计算模式使用的规则聚合根模板。 */
+/**
+ * DDD 规则与计算模式使用的规则聚合根模板。
+ *
+ * @author AIGenerator
+ */
 public record DddRuleAggregate(String ruleCode, int factor, String reason) {
     public DddRuleAggregate {
         if (ruleCode == null || ruleCode.isBlank()) {
@@ -25,6 +29,8 @@ public record DddRuleAggregate(String ruleCode, int factor, String reason) {
      *
      * @param param 规则计算领域参数
      * @return 计算后的值对象
+     *
+     * @author AIGenerator
      */
     public DddValue evaluate(DddRuleParam param) {
         if (!ruleCode.equals(param.ruleCode())) {

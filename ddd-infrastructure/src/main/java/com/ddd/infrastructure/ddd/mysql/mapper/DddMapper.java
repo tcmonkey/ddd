@@ -8,6 +8,8 @@ import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
  *
  * <p>由 {@code Application} 上的 {@code @MapperScan} 集中注册，无需在接口上逐个标注
  * {@code @Mapper}。</p>
+ *
+ * @author AIGenerator
  */
 public interface DddMapper extends DddBaseMapper<DddPO> {
 }

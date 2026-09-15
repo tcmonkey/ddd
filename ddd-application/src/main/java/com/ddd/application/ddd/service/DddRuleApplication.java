@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
  * DDD 规则与计算模式的应用服务模板。
  *
  * <p>该用例读取规则聚合根，并由聚合根完成规则匹配与业务计算；不修改数据聚合根状态。</p>
+ *
+ * @author AIGenerator
  */
 @Service
 public final class DddRuleApplication {
@@ -21,6 +23,8 @@ public final class DddRuleApplication {
      * 创建规则与计算应用服务。
      *
      * @param dddRuleRepository 规则聚合根领域仓储
+     *
+     * @author AIGenerator
      */
     public DddRuleApplication(DddRuleRepository dddRuleRepository) {
         this.dddRuleRepository = dddRuleRepository;
@@ -31,6 +35,8 @@ public final class DddRuleApplication {
      *
      * @param command 规则编码和基础值
      * @return 规则计算结果
+     *
+     * @author AIGenerator
      */
     public DddRuleResult execute(DddRuleCommand command) {
         DddRuleAggregate rule = dddRuleRepository.getRequiredByRuleCode(command.ruleCode());

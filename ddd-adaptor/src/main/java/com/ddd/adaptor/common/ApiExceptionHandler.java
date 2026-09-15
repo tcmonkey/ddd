@@ -14,6 +14,8 @@ import java.util.ConcurrentModificationException;
  * HTTP 异常统一映射器。
  *
  * <p>领域异常不依赖 Web 框架，由输入适配层统一转换为外部协议响应。</p>
+ *
+ * @author AIGenerator
  */
 @RestControllerAdvice
 public class ApiExceptionHandler {

@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 
-/** DDD 聚合根持久化对象模板，不得暴露到基础设施层之外。 */
+/**
+ * DDD 聚合根持久化对象模板，不得暴露到基础设施层之外。
+ *
+ * @author AIGenerator
+ */
 @TableName("ddd_data")
 public class DddPO {
     @TableId("id")

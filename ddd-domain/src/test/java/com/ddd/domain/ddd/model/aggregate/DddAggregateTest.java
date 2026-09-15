@@ -11,6 +11,11 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * DDD 聚合根状态变更与幂等边界测试。
+ *
+ * @author AIGenerator
+ */
 class DddAggregateTest {
     @Test
     void shouldChangeAggregateAndCreateEntityTogether() {

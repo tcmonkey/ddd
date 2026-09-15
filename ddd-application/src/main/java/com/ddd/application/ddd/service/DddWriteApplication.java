@@ -21,6 +21,8 @@ import java.util.ConcurrentModificationException;
  *
  * <p>负责检索和保存聚合根，但不直接修改状态；状态变更由
  * {@link DddAggregate} 统一维护。</p>
+ *
+ * @author AIGenerator
  */
 @Service
 public class DddWriteApplication {

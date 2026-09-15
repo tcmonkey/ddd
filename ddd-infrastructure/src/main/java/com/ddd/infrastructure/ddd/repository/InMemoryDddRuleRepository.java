@@ -10,6 +10,8 @@ import java.util.Map;
  * DDD 规则聚合根的内存仓储模板。
  *
  * <p>生产代码应从配置或存储加载相同的领域对象。</p>
+ *
+ * @author AIGenerator
  */
 public final class InMemoryDddRuleRepository implements DddRuleRepository {
     private final Map<String, DddRuleAggregate> rules = Map.of(

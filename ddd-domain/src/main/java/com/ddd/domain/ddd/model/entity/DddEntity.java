@@ -5,7 +5,11 @@ import com.ddd.domain.ddd.model.value.DddValue;
 
 import java.time.Instant;
 
-/** 由 {@link com.ddd.domain.ddd.model.aggregate.DddAggregate} 持有的领域实体模板。 */
+/**
+ * 由 {@link com.ddd.domain.ddd.model.aggregate.DddAggregate} 持有的领域实体模板。
+ *
+ * @author AIGenerator
+ */
 public record DddEntity(DddOperationIdValue operationId, DddValue value, String ruleCode, Instant occurredAt) {
     public DddEntity {
         if (ruleCode == null || ruleCode.isBlank()) {

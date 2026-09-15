@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.time.Instant;
 
-/** DDD 领域实体的持久化对象模板。 */
+/**
+ * DDD 领域实体的持久化对象模板。
+ *
+ * @author AIGenerator
+ */
 @TableName("ddd_entity")
 public class DddEntityPO {
     @TableId("operation_id")

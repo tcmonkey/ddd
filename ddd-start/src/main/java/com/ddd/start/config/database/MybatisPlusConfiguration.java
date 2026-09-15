@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInt
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** 由外层启动模块维护的 MyBatis-Plus 配置。 */
+/**
+ * 由外层启动模块维护的 MyBatis-Plus 配置。
+ *
+ * @author AIGenerator
+ */
 @Configuration
 public class MybatisPlusConfiguration {
     @Bean

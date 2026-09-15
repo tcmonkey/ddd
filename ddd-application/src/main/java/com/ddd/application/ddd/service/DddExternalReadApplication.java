@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
  *
  * <p>这是“读模式查询外部系统”的示例：application 只依赖自身定义的端口，
  * output adaptor 负责外部调用与模型转换。</p>
+ *
+ * @author AIGenerator
  */
 @Service
 public final class DddExternalReadApplication {
@@ -19,6 +21,8 @@ public final class DddExternalReadApplication {
      * 创建外部数据查询应用服务。
      *
      * @param outputAdaptor 外部数据查询端口
+     *
+     * @author AIGenerator
      */
     public DddExternalReadApplication(DddOutputAdaptor outputAdaptor) {
         this.outputAdaptor = outputAdaptor;
@@ -29,6 +33,8 @@ public final class DddExternalReadApplication {
      *
      * @param id 业务标识
      * @return 外部数据查询结果
+     *
+     * @author AIGenerator
      */
     public DddExternalResult query(String id) {
         DddModel external = outputAdaptor.queryById(id);

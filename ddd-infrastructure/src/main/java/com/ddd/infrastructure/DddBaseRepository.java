@@ -11,12 +11,16 @@ import com.baomidou.mybatisplus.spring.repository.CrudRepository;
  *
  * @param <M> MyBatis-Plus Mapper 类型
  * @param <T> 持久化对象类型
+ *
+ * @author AIGenerator
  */
 public abstract class DddBaseRepository<M extends BaseMapper<T>, T> extends CrudRepository<M, T> {
     /**
      * 使用已由 Spring 创建的 Mapper 初始化基础仓储。
      *
      * @param baseMapper 当前持久化对象对应的 Mapper
+     *
+     * @author AIGenerator
      */
     protected DddBaseRepository(M baseMapper) {
         this.baseMapper = baseMapper;

@@ -20,6 +20,8 @@ import org.springframework.stereotype.Repository;
  *
  * <p>聚合根自身的基础 CRUD 由 {@link DddBaseRepository} 提供；实体查询使用 MyBatis-Plus
  * 条件构造器生成，不在 Mapper 或 XML 中编写自定义 SQL。</p>
+ *
+ * @author AIGenerator
  */
 @Repository
 public class DddRepositoryImpl

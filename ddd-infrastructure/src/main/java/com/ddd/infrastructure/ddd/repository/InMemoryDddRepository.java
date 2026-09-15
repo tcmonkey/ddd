@@ -12,6 +12,8 @@ import java.util.concurrent.ConcurrentMap;
  * 内存版 DDD 聚合根仓储模板，用于脱离数据库的局部测试。
  *
  * <p>生产运行使用 MyBatis-Plus 实现；该实现保留相同的聚合根返回和布尔保存约定。</p>
+ *
+ * @author AIGenerator
  */
 public final class InMemoryDddRepository implements DddRepository {
     private final ConcurrentMap<DddIdValue, DddAggregate> aggregates = new ConcurrentHashMap<>();

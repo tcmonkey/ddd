@@ -13,6 +13,8 @@ import java.util.List;
  * DDD 域内读模式的应用服务模板。
  *
  * <p>仅转换聚合根数据，不承载业务规则。</p>
+ *
+ * @author AIGenerator
  */
 @Service
 public final class DddReadApplication {

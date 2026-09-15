@@ -5,7 +5,11 @@ import com.ddd.application.ddd.result.DddCalculateResult;
 import com.ddd.domain.ddd.service.DddCalculateDomainService;
 import org.springframework.stereotype.Service;
 
-/** DDD 纯计算模式的应用服务边界。 */
+/**
+ * DDD 纯计算模式的应用服务边界。
+ *
+ * @author AIGenerator
+ */
 @Service
 public final class DddCalculateApplication {
     private final DddCalculateDomainService calculateDomainService;

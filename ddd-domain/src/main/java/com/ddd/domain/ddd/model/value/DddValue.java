@@ -2,7 +2,11 @@ package com.ddd.domain.ddd.model.value;
 
 import com.ddd.domain.ddd.exception.DomainValidationException;
 
-/** 带有显式算术边界校验的非负领域值对象模板。 */
+/**
+ * 带有显式算术边界校验的非负领域值对象模板。
+ *
+ * @author AIGenerator
+ */
 public record DddValue(int value) {
     public DddValue {
         if (value < 0) {

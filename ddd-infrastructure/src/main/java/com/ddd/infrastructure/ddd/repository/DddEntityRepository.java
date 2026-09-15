@@ -13,6 +13,8 @@ import java.util.List;
  *
  * <p>新增、更新等基础 CRUD 继承自 {@link DddBaseRepository}；按业务对象筛选使用
  * MyBatis-Plus 条件构造器，不编写 Mapper 自定义 SQL。</p>
+ *
+ * @author AIGenerator
  */
 @Repository
 public class DddEntityRepository
@@ -22,6 +24,8 @@ public class DddEntityRepository
      * 创建领域实体基础设施仓储。
      *
      * @param entityMapper 领域实体 Mapper
+     *
+     * @author AIGenerator
      */
     public DddEntityRepository(DddEntityMapper entityMapper) {
         super(entityMapper);
@@ -32,6 +36,8 @@ public class DddEntityRepository
      *
      * @param id 聚合根标识
      * @return 对应的领域实体列表
+     *
+     * @author AIGenerator
      */
     public List<DddEntityPO> findById(String id) {
         return list(new LambdaQueryWrapper<DddEntityPO>()

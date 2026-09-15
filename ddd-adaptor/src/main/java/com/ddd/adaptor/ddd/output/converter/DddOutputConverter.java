@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
  * 第三方响应到项目内部模型的转换器。
  *
  * <p>第三方字段适配集中在 output converter，避免第三方协议进入 application。</p>
+ *
+ * @author AIGenerator
  */
 @Component
 public class DddOutputConverter {
@@ -16,6 +18,8 @@ public class DddOutputConverter {
      *
      * @param response 第三方响应
      * @return 项目内部模型
+     *
+     * @author AIGenerator
      */
     public DddModel toModel(DddExternalResponse response) {
         return new DddModel(response.sourceId(), response.sourceName(), response.sourceCategory());

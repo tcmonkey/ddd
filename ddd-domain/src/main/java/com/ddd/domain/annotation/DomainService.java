@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
  * 标记需要由外层组合根注册的纯领域服务。
  *
  * <p>该注解不依赖 Spring，保证 domain 模块保持框架无关。</p>
+ *
+ * @author AIGenerator
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

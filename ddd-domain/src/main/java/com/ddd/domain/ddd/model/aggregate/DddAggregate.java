@@ -15,6 +15,8 @@ import java.util.Optional;
  * DDD 写模式使用的聚合根模板。
  *
  * <p>所有状态变更均在此处完成，以保证当前值与实体明细保持同一业务不变量。</p>
+ *
+ * @author AIGenerator
  */
 public final class DddAggregate {
     private final DddIdValue id;

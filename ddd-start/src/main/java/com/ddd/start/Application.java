@@ -4,7 +4,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** Java DDD 参考工程的框架启动入口。 */
+/**
+ * Java DDD 参考工程的框架启动入口。
+ *
+ * @author AIGenerator
+ */
 @SpringBootApplication(scanBasePackages = "com.ddd")
 @MapperScan("com.ddd.infrastructure.**.mapper")
 public class Application {

@@ -13,6 +13,8 @@ import java.time.Clock;
  *
  * <p>领域模型不包含 Spring 注解；MyBatis-Plus 聚合根仓储由 {@code @Repository} 自动注册，
  * 本配置只装配时钟、规则数据和输入组装器等基础 Bean。</p>
+ *
+ * @author AIGenerator
  */
 @Configuration
 public class DddConfiguration {

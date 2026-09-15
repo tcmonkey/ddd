@@ -13,6 +13,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * DDD 五种参考调用链的 HTTP 集成测试。
+ *
+ * @author AIGenerator
+ */
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
 class DddControllerTest {

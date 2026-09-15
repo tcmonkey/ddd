@@ -2,7 +2,11 @@ package com.ddd.domain.ddd.model.value;
 
 import com.ddd.domain.ddd.exception.DomainValidationException;
 
-/** DDD 聚合根标识值对象模板。 */
+/**
+ * DDD 聚合根标识值对象模板。
+ *
+ * @author AIGenerator
+ */
 public record DddIdValue(String value) {
     public DddIdValue {
         if (value == null || value.isBlank()) {
