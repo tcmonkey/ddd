@@ -1,10 +1,10 @@
 package com.ddd.domain.ddd.service;
 
-import com.ddd.domain.annotation.DomainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ddd.common.result.Result;
+import com.ddd.domain.annotation.DomainService;
 import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.value.DddValue;
@@ -31,7 +31,12 @@ public final class DddCalculateDomainService {
      */
     public Result<DddValue> calculate(int baseValue, int factor) {
         try {
-            return Result.success(DddValue.positive(baseValue).multiply(factor));
+            // 1. 将原始数值封装为满足不变量的领域值对象。
+            DddValue base = DddValue.positive(baseValue);
+
+            // 2. 使用领域值对象完成计算并返回领域结果。
+            DddValue calculatedValue = base.multiply(factor);
+            return Result.success(calculatedValue);
         } catch (DomainException exception) {
             LOG.warn("DDD 纯计算失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());

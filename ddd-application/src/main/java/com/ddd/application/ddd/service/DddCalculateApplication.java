@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.ddd.application.ddd.command.DddCalculateCommand;
 import com.ddd.application.ddd.result.DddCalculateResult;
 import com.ddd.common.result.Result;
+import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.service.DddCalculateDomainService;
 
 /**
@@ -29,7 +30,15 @@ public final class DddCalculateApplication {
      * @author AIGenerator
      */
     public Result<DddCalculateResult> execute(DddCalculateCommand command) {
-        return calculateDomainService.calculate(command.baseValue(), command.factor())
-                .map(value -> new DddCalculateResult(value.value()));
+        // 1. 调用领域服务执行无状态计算。
+        Result<DddValue> domainResult = calculateDomainService.calculate(command.baseValue(), command.factor());
+        if (!domainResult.success()) {
+            return Result.failure(domainResult.code(), domainResult.message());
+        }
+
+        // 2. 将领域值对象转换为应用层结果。
+        DddValue calculatedValue = domainResult.data();
+        DddCalculateResult result = new DddCalculateResult(calculatedValue.value());
+        return Result.success(result);
     }
 }

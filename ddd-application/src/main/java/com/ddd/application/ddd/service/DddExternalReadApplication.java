@@ -32,8 +32,15 @@ public final class DddExternalReadApplication {
      * @author AIGenerator
      */
     public Result<DddExternalResult> query(String id) {
+        // 1. 调用输出适配端口获取项目内部模型。
         Result<DddModel> externalResult = outputAdaptor.queryById(id);
-        return externalResult.map(external -> new DddExternalResult(external.id(), external.name(),
-                external.category()));
+        if (!externalResult.success()) {
+            return Result.failure(externalResult.code(), externalResult.message());
+        }
+
+        // 2. 将内部模型转换为应用层结果，避免向 Controller 泄漏模型。
+        DddModel model = externalResult.data();
+        DddExternalResult result = new DddExternalResult(model.id(), model.name(), model.category());
+        return Result.success(result);
     }
 }

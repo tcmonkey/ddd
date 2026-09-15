@@ -44,23 +44,35 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
 
     @Override
     public DddAggregate findById(DddIdValue id) {
+        // 1. 使用主键查询主聚合的持久化快照。
         DddPO stored = getById(id.value());
         if (stored == null) {
-            return DddAggregate.of(DddEntity.open(id));
+            // 2. 不存在时返回可用于首次写入的空聚合。
+            DddEntity entity = DddEntity.open(id);
+            DddAggregate aggregate = DddAggregate.of(entity);
+            return aggregate;
         }
-        return DddAggregate.of(DddEntity.restore(
-                new DddIdValue(stored.getId()),
-                new DddValue(stored.getCurrentValue()),
-                stored.getVersion(),
-                readOperationEntities(stored.getEntitiesJson())));
+
+        // 3. 已存在时恢复根实体和子操作快照，再封装为聚合。
+        DddIdValue storedId = new DddIdValue(stored.getId());
+        DddValue currentValue = new DddValue(stored.getCurrentValue());
+        List<DddOperationEntity> operationEntities = readOperationEntities(stored.getEntitiesJson());
+        DddEntity entity = DddEntity.restore(storedId, currentValue, stored.getVersion(), operationEntities);
+        DddAggregate aggregate = DddAggregate.of(entity);
+        return aggregate;
     }
 
     @Override
     public Boolean save(DddAggregate aggregate) {
+        // 1. 查询现有快照，用于区分插入与带版本的更新。
         DddPO stored = getById(aggregate.entity().id().value());
         if (stored == null) {
-            return super.save(toDddPO(aggregate, aggregate.entity().version()));
+            // 2. 首次写入使用当前实体版本创建主表记录。
+            DddPO insert = toDddPO(aggregate, aggregate.entity().version());
+            return super.save(insert);
         }
+
+        // 3. 更新时传入旧版本，交由 MyBatis-Plus 乐观锁校验。
         DddPO update = toDddPO(aggregate, aggregate.entity().version() - 1);
         return super.updateById(update);
     }
@@ -75,12 +87,16 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      * @author AIGenerator
      */
     private DddPO toDddPO(DddAggregate aggregate, long version) {
+        // 1. 提取聚合根实体的持久化状态。
         DddEntity entity = aggregate.entity();
+
+        // 2. 序列化子实体快照并组装单表持久化对象。
+        String entitiesJson = writeOperationEntities(entity.operationEntities());
         DddPO po = new DddPO();
         po.setId(entity.id().value());
         po.setCurrentValue(entity.currentValue().value());
         po.setVersion(version);
-        po.setEntitiesJson(writeOperationEntities(entity.operationEntities()));
+        po.setEntitiesJson(entitiesJson);
         return po;
     }
 
@@ -94,7 +110,9 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      */
     private String writeOperationEntities(List<DddOperationEntity> operationEntities) {
         try {
-            return objectMapper.writeValueAsString(operationEntities);
+            // 1. 将聚合内子实体转换为可持久化的 JSON 快照。
+            String entitiesJson = objectMapper.writeValueAsString(operationEntities);
+            return entitiesJson;
         } catch (JsonProcessingException exception) {
             throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_SERIALIZE_FAILED,
                     exception);
@@ -110,10 +128,12 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      * @author AIGenerator
      */
     private List<DddOperationEntity> readOperationEntities(String entitiesJson) {
+        // 1. 在反序列化前校验快照内容完整性。
         if (entitiesJson == null || entitiesJson.isBlank()) {
             throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
         }
         try {
+            // 2. 将 JSON 快照恢复为领域子实体集合。
             List<DddOperationEntity> entities = objectMapper.readValue(entitiesJson, OPERATION_ENTITY_TYPE);
             if (entities == null || entities.contains(null)) {
                 throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);

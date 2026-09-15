@@ -30,10 +30,15 @@ public class DddRuleRepositoryImpl extends DddBaseRepository<DddRuleMapper, DddR
      */
     @Override
     public DddRuleAggregate getRequiredByRuleCode(String ruleCode) {
+        // 1. 使用 MyBatis-Plus 基础 CRUD 查询规则持久化对象。
         DddRulePO stored = getById(ruleCode);
         if (stored == null) {
             throw new DomainException(DomainErrorCode.DOMAIN_RULE_NOT_FOUND);
         }
-        return new DddRuleAggregate(stored.getRuleCode(), stored.getFactor(), stored.getReason());
+
+        // 2. 将持久化对象恢复为规则聚合。
+        DddRuleAggregate aggregate = new DddRuleAggregate(stored.getRuleCode(), stored.getFactor(),
+                stored.getReason());
+        return aggregate;
     }
 }

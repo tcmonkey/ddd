@@ -1,8 +1,8 @@
 package com.ddd.adaptor.ddd.output;
 
-import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.ddd.adaptor.exception.AdaptorErrorCode;
 import com.ddd.adaptor.exception.AdaptorException;
@@ -46,7 +46,12 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
     @Override
     public Result<DddModel> queryById(String id) {
         try {
-            return Result.success(converter.toModel(invokeRemote(id)));
+            // 1. 调用外部系统并取得外部协议响应。
+            DddExternalResponse externalResponse = invokeRemote(id);
+
+            // 2. 将外部协议转换为项目内部模型。
+            DddModel model = converter.toModel(externalResponse);
+            return Result.success(model);
         } catch (AdaptorException exception) {
             LOG.warn("DDD 外部适配失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());
@@ -69,9 +74,13 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
      * @author AIGenerator
      */
     private DddExternalResponse invokeRemote(String id) {
+        // 1. 校验调用外部系统所需的基础参数。
         if (id == null || id.isBlank()) {
             throw new AdaptorException(AdaptorErrorCode.ADAPTOR_REQUEST_INVALID);
         }
-        return new DddExternalResponse(id, "DDD_EXTERNAL_" + id, "DEFAULT");
+
+        // 2. 当前用模拟响应占位，真实实现只替换这一处调用。
+        DddExternalResponse response = new DddExternalResponse(id, "DDD_EXTERNAL_" + id, "DEFAULT");
+        return response;
     }
 }

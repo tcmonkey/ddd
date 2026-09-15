@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 30,
+  "revision": 31,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-15T22:44:13+08:00"
+    "updated_at": "2026-09-15T23:43:36+08:00"
   },
   "handoff": {
-    "summary": "新增 ddd-common 统一 Result<T>、ErrorCode 与 BaseException；DomainService、OutAdaptor 在公开入口记录一次日志并转换内部错误码；Application 保留 command/result 并隔离 DddModel；补齐异常枚举、Javadoc、集成测试和技术文档。",
-    "next_action": "用户审阅统一 Result、错误码和 HTTP 状态映射约定；确认后继续沉淀到 solo-delivery 的 Java DDD 模板规则。"
+    "summary": "写领域服务通过 DddAggregate 语义方法协作根实体；Controller、Application、DomainService、Adaptor、Repository 的流程型方法均已按获取、调用、转换拆为编号步骤，移除嵌套调用链。",
+    "next_action": "用户继续审阅 Java DDD 参考工程的聚合边界、流程注释和命名规范；确认后将新增规则沉淀进 solo-delivery 的 Java DDD 模板。"
   },
-  "last_updated": "2026-09-15T22:44:13+08:00"
+  "last_updated": "2026-09-15T23:43:36+08:00"
 }

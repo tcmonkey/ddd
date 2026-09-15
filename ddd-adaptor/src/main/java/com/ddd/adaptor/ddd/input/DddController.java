@@ -9,6 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ddd.adaptor.ddd.input.assembler.DddInputAssembler;
+import com.ddd.application.ddd.command.DddCalculateCommand;
+import com.ddd.application.ddd.command.DddRuleCommand;
+import com.ddd.application.ddd.command.DddWriteCommand;
+import com.ddd.application.ddd.result.DddCalculateResult;
+import com.ddd.application.ddd.result.DddExternalResult;
+import com.ddd.application.ddd.result.DddReadResult;
+import com.ddd.application.ddd.result.DddRuleResult;
+import com.ddd.application.ddd.result.DddWriteResult;
 import com.ddd.application.ddd.service.DddCalculateApplication;
 import com.ddd.application.ddd.service.DddExternalReadApplication;
 import com.ddd.application.ddd.service.DddReadApplication;
@@ -62,7 +70,18 @@ public class DddController {
      */
     @PostMapping("/write")
     public Result<DddWriteResponse> write(@Valid @RequestBody DddWriteRequest request) {
-        return writeApplication.execute(assembler.toCommand(request)).map(assembler::toResponse);
+        // 1. 将 HTTP 请求转换为应用命令。
+        DddWriteCommand command = assembler.toCommand(request);
+
+        // 2. 调用写入应用服务。
+        Result<DddWriteResult> applicationResult = writeApplication.execute(command);
+        if (!applicationResult.success()) {
+            return Result.failure(applicationResult.code(), applicationResult.message());
+        }
+
+        // 3. 将应用结果转换为 HTTP 响应。
+        DddWriteResponse response = assembler.toResponse(applicationResult.data());
+        return Result.success(response);
     }
 
     /**
@@ -75,7 +94,15 @@ public class DddController {
      */
     @GetMapping("/{id}")
     public Result<DddReadResponse> query(@PathVariable("id") String id) {
-        return readApplication.query(id).map(assembler::toResponse);
+        // 1. 调用域内读取应用服务。
+        Result<DddReadResult> applicationResult = readApplication.query(id);
+        if (!applicationResult.success()) {
+            return Result.failure(applicationResult.code(), applicationResult.message());
+        }
+
+        // 2. 将应用结果转换为 HTTP 响应。
+        DddReadResponse response = assembler.toResponse(applicationResult.data());
+        return Result.success(response);
     }
 
     /**
@@ -88,7 +115,18 @@ public class DddController {
      */
     @PostMapping("/calculate")
     public Result<DddCalculateResponse> calculate(@Valid @RequestBody DddCalculateRequest request) {
-        return calculateApplication.execute(assembler.toCommand(request)).map(assembler::toResponse);
+        // 1. 将 HTTP 请求转换为应用命令。
+        DddCalculateCommand command = assembler.toCommand(request);
+
+        // 2. 调用纯计算应用服务。
+        Result<DddCalculateResult> applicationResult = calculateApplication.execute(command);
+        if (!applicationResult.success()) {
+            return Result.failure(applicationResult.code(), applicationResult.message());
+        }
+
+        // 3. 将应用结果转换为 HTTP 响应。
+        DddCalculateResponse response = assembler.toResponse(applicationResult.data());
+        return Result.success(response);
     }
 
     /**
@@ -101,7 +139,18 @@ public class DddController {
      */
     @PostMapping("/rule")
     public Result<DddRuleResponse> calculateRule(@Valid @RequestBody DddRuleRequest request) {
-        return ruleApplication.execute(assembler.toCommand(request)).map(assembler::toResponse);
+        // 1. 将 HTTP 请求转换为应用命令。
+        DddRuleCommand command = assembler.toCommand(request);
+
+        // 2. 调用规则计算应用服务。
+        Result<DddRuleResult> applicationResult = ruleApplication.execute(command);
+        if (!applicationResult.success()) {
+            return Result.failure(applicationResult.code(), applicationResult.message());
+        }
+
+        // 3. 将应用结果转换为 HTTP 响应。
+        DddRuleResponse response = assembler.toResponse(applicationResult.data());
+        return Result.success(response);
     }
 
     /**
@@ -114,6 +163,14 @@ public class DddController {
      */
     @GetMapping("/{id}/external")
     public Result<DddExternalReadResponse> queryExternal(@PathVariable("id") String id) {
-        return externalReadApplication.query(id).map(assembler::toResponse);
+        // 1. 调用外部读取应用服务。
+        Result<DddExternalResult> applicationResult = externalReadApplication.query(id);
+        if (!applicationResult.success()) {
+            return Result.failure(applicationResult.code(), applicationResult.message());
+        }
+
+        // 2. 将应用结果转换为 HTTP 响应。
+        DddExternalReadResponse response = assembler.toResponse(applicationResult.data());
+        return Result.success(response);
     }
 }

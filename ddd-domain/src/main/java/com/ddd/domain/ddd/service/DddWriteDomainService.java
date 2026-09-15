@@ -1,6 +1,7 @@
 package com.ddd.domain.ddd.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,6 @@ import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
-import com.ddd.domain.ddd.model.entity.DddEntity;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.model.param.DddWriteParam;
@@ -50,25 +50,35 @@ public final class DddWriteDomainService {
      */
     public Result<DddWriteDecision> execute(DddWriteParam param) {
         try {
-            DddEntity inputEntity = param.aggregate().entity();
-            DddOperationEntity pendingOperation = inputEntity.requiredPendingOperation();
-            DddAggregate aggregate = dddRepository.findById(inputEntity.id());
-            DddEntity entity = aggregate.entity();
-            DddOperationEntity existing = entity.findOperation(pendingOperation.operationId()).orElse(null);
+            // 1. 从输入聚合取得待处理操作，保持领域服务只与聚合协作。
+            DddAggregate inputAggregate = param.aggregate();
+            DddOperationEntity pendingOperation = inputAggregate.requiredPendingOperation();
+
+            // 2. 加载已持久化聚合，用于执行幂等判断和状态变更。
+            DddAggregate aggregate = dddRepository.findById(inputAggregate.id());
+            Optional<DddOperationEntity> existingOperation = aggregate.findOperation(pendingOperation.operationId());
+            DddOperationEntity existing = existingOperation.orElse(null);
             if (existing != null) {
-                return Result.success(DddWriteDecision.duplicate(existing.operationId(), existing.value(),
-                        entity.currentValue(), "idempotent replay"));
+                // 3. 已存在相同操作时返回幂等决策，不再重复写入。
+                DddWriteDecision decision = DddWriteDecision.duplicate(existing.operationId(), existing.value(),
+                        aggregate.currentValue(), "idempotent replay");
+                return Result.success(decision);
             }
 
+            // 4. 读取规则并完成待处理操作的确认。
             DddRuleAggregate rule = dddRuleRepository.getRequiredByRuleCode(pendingOperation.ruleCode());
-            DddValue calculatedValue = rule.evaluate(new DddRuleParam(pendingOperation.ruleCode(),
-                    pendingOperation.baseValue()));
-            DddOperationEntity confirmed = entity.confirm(pendingOperation, calculatedValue, Instant.now());
-            if (!Boolean.TRUE.equals(dddRepository.save(aggregate))) {
+            DddRuleParam ruleParam = new DddRuleParam(pendingOperation.ruleCode(), pendingOperation.baseValue());
+            DddValue calculatedValue = rule.evaluate(ruleParam);
+            DddOperationEntity confirmed = aggregate.confirm(pendingOperation, calculatedValue, Instant.now());
+
+            // 5. 保存完整聚合，并返回领域决策结果。
+            Boolean saved = dddRepository.save(aggregate);
+            if (!Boolean.TRUE.equals(saved)) {
                 throw new DomainException(DomainErrorCode.DOMAIN_CONCURRENT_CONFLICT);
             }
-            return Result.success(DddWriteDecision.written(confirmed.operationId(), confirmed.value(),
-                    entity.currentValue(), rule.reason()));
+            DddWriteDecision decision = DddWriteDecision.written(confirmed.operationId(), confirmed.value(),
+                    aggregate.currentValue(), rule.reason());
+            return Result.success(decision);
         } catch (DomainException exception) {
             LOG.warn("DDD 领域写入失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());

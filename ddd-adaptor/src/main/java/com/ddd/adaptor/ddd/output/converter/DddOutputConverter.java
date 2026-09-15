@@ -25,9 +25,13 @@ public class DddOutputConverter {
      * @author AIGenerator
      */
     public DddModel toModel(DddExternalResponse response) {
+        // 1. 校验外部响应是否具备转换为内部模型的必要字段。
         if (response == null || response.sourceId() == null || response.sourceId().isBlank()) {
             throw new AdaptorException(AdaptorErrorCode.ADAPTOR_EXTERNAL_RESPONSE_INVALID);
         }
-        return new DddModel(response.sourceId(), response.sourceName(), response.sourceCategory());
+
+        // 2. 将第三方协议字段隔离并转换为项目内部模型。
+        DddModel model = new DddModel(response.sourceId(), response.sourceName(), response.sourceCategory());
+        return model;
     }
 }

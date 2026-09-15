@@ -1,5 +1,7 @@
 package com.ddd.adaptor.ddd.input.assembler;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.ddd.application.ddd.command.DddCalculateCommand;
@@ -29,12 +31,25 @@ import com.ddd.client.ddd.response.DddWriteResponse;
 @Component
 public final class DddInputAssembler {
     public DddWriteCommand toCommand(DddWriteRequest request) {
-        return new DddWriteCommand(request.id(), request.operationId(), request.ruleCode(),
-                request.baseValue());
+        // 1. 从 HTTP 请求读取写入所需的基础字段。
+        String id = request.id();
+        String operationId = request.operationId();
+        String ruleCode = request.ruleCode();
+        int baseValue = request.baseValue();
+
+        // 2. 组装 application 层命令。
+        DddWriteCommand command = new DddWriteCommand(id, operationId, ruleCode, baseValue);
+        return command;
     }
 
     public DddCalculateCommand toCommand(DddCalculateRequest request) {
-        return new DddCalculateCommand(request.baseValue(), request.factor());
+        // 1. 从 HTTP 请求读取纯计算参数。
+        int baseValue = request.baseValue();
+        int factor = request.factor();
+
+        // 2. 组装 application 层命令。
+        DddCalculateCommand command = new DddCalculateCommand(baseValue, factor);
+        return command;
     }
 
     /**
@@ -46,23 +61,47 @@ public final class DddInputAssembler {
      * @author AIGenerator
      */
     public DddRuleCommand toCommand(DddRuleRequest request) {
-        return new DddRuleCommand(request.ruleCode(), request.baseValue());
+        // 1. 从 HTTP 请求读取规则计算参数。
+        String ruleCode = request.ruleCode();
+        int baseValue = request.baseValue();
+
+        // 2. 组装 application 层命令。
+        DddRuleCommand command = new DddRuleCommand(ruleCode, baseValue);
+        return command;
     }
 
     public DddWriteResponse toResponse(DddWriteResult result) {
-        return new DddWriteResponse(result.id(), result.operationId(), result.changedValue(),
-                result.currentValue(), result.duplicate());
+        // 1. 从应用层结果读取响应字段。
+        String id = result.id();
+        String operationId = result.operationId();
+        int changedValue = result.changedValue();
+        int currentValue = result.currentValue();
+        boolean duplicate = result.duplicate();
+
+        // 2. 组装 HTTP 响应。
+        DddWriteResponse response = new DddWriteResponse(id, operationId, changedValue, currentValue, duplicate);
+        return response;
     }
 
     public DddReadResponse toResponse(DddReadResult view) {
-        return new DddReadResponse(view.id(), view.currentValue(), view.entities().stream()
+        // 1. 将应用层子实体视图转换为 HTTP 子项。
+        List<DddReadResponse.EntityItem> entities = view.entities().stream()
                 .map(item -> new DddReadResponse.EntityItem(item.operationId(), item.value(), item.ruleCode(),
                         item.occurredAt()))
-                .toList());
+                .toList();
+
+        // 2. 组装 HTTP 响应。
+        DddReadResponse response = new DddReadResponse(view.id(), view.currentValue(), entities);
+        return response;
     }
 
     public DddCalculateResponse toResponse(DddCalculateResult result) {
-        return new DddCalculateResponse(result.calculatedValue());
+        // 1. 读取应用层计算结果。
+        int calculatedValue = result.calculatedValue();
+
+        // 2. 组装 HTTP 响应。
+        DddCalculateResponse response = new DddCalculateResponse(calculatedValue);
+        return response;
     }
 
     /**
@@ -74,8 +113,15 @@ public final class DddInputAssembler {
      * @author AIGenerator
      */
     public DddRuleResponse toResponse(DddRuleResult result) {
-        return new DddRuleResponse(result.ruleCode(), result.factor(), result.calculatedValue(),
-                result.reason());
+        // 1. 从应用层结果读取规则计算字段。
+        String ruleCode = result.ruleCode();
+        int factor = result.factor();
+        int calculatedValue = result.calculatedValue();
+        String reason = result.reason();
+
+        // 2. 组装 HTTP 响应。
+        DddRuleResponse response = new DddRuleResponse(ruleCode, factor, calculatedValue, reason);
+        return response;
     }
 
     /**
@@ -87,6 +133,13 @@ public final class DddInputAssembler {
      * @author AIGenerator
      */
     public DddExternalReadResponse toResponse(DddExternalResult view) {
-        return new DddExternalReadResponse(view.id(), view.name(), view.category());
+        // 1. 从应用层结果读取外部查询字段。
+        String id = view.id();
+        String name = view.name();
+        String category = view.category();
+
+        // 2. 组装 HTTP 响应。
+        DddExternalReadResponse response = new DddExternalReadResponse(id, name, category);
+        return response;
     }
 }

@@ -36,10 +36,14 @@ public record DddRuleAggregate(
      * @author AIGenerator
      */
     public DddValue evaluate(DddRuleParam param) {
+        // 1. 校验参数所属规则与当前聚合一致。
         if (!ruleCode.equals(param.ruleCode())) {
             throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
         }
-        return param.baseValue().multiply(factor);
+
+        // 2. 使用规则因子计算领域值。
+        DddValue calculatedValue = param.baseValue().multiply(factor);
+        return calculatedValue;
     }
 
     /**
@@ -53,6 +57,11 @@ public record DddRuleAggregate(
      * @author AIGenerator
      */
     public DddValue evaluate(int baseValue) {
-        return evaluate(new DddRuleParam(ruleCode, DddValue.positive(baseValue)));
+        // 1. 将原始数值封装为领域值对象。
+        DddValue value = DddValue.positive(baseValue);
+
+        // 2. 构造规则参数并执行聚合内计算。
+        DddRuleParam param = new DddRuleParam(ruleCode, value);
+        return evaluate(param);
     }
 }

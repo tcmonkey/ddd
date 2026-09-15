@@ -42,7 +42,12 @@ public final class DddReadApplication {
      */
     public Result<DddReadResult> query(String rawId) {
         try {
-            return Result.success(toView(dddRepository.findById(DddAggregate.idOf(rawId))));
+            // 1. 将原始标识封装为聚合标识并读取完整聚合。
+            DddAggregate aggregate = dddRepository.findById(DddAggregate.idOf(rawId));
+
+            // 2. 将聚合转换为应用层只读结果。
+            DddReadResult result = toView(aggregate);
+            return Result.success(result);
         } catch (DomainException exception) {
             LOG.warn("DDD 域内查询失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());
@@ -53,15 +58,30 @@ public final class DddReadApplication {
     }
 
     private DddReadResult toView(DddAggregate aggregate) {
+        // 1. 获取聚合根实体的当前状态。
         DddEntity entity = aggregate.entity();
+
+        // 2. 将聚合内子实体转换为应用层视图。
         List<DddReadResult.EntityView> items = entity.operationEntities().stream()
                 .map(this::toEntityView)
                 .toList();
-        return new DddReadResult(entity.id().value(), entity.currentValue().value(), items);
+
+        // 3. 组装应用层读取结果。
+        String id = entity.id().value();
+        int currentValue = entity.currentValue().value();
+        DddReadResult result = new DddReadResult(id, currentValue, items);
+        return result;
     }
 
     private DddReadResult.EntityView toEntityView(DddOperationEntity item) {
-        return new DddReadResult.EntityView(item.operationId().value(), item.value().value(),
-                item.ruleCode(), item.occurredAt());
+        // 1. 从领域子实体读取展示所需字段。
+        String operationId = item.operationId().value();
+        int value = item.value().value();
+        String ruleCode = item.ruleCode();
+
+        // 2. 组装应用层子实体视图。
+        DddReadResult.EntityView view = new DddReadResult.EntityView(operationId, value, ruleCode,
+                item.occurredAt());
+        return view;
     }
 }

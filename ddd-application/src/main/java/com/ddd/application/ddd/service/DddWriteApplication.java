@@ -46,11 +46,27 @@ public class DddWriteApplication {
     @Transactional
     public Result<DddWriteResult> execute(DddWriteCommand command) {
         try {
-            DddAggregate aggregate = DddAggregate.draft(command.id(), command.operationId(), command.baseValue(),
-                    command.ruleCode());
+            // 1. 使用原始命令创建输入聚合，领域层负责封装值对象和实体。
+            String id = command.id();
+            String operationId = command.operationId();
+            int baseValue = command.baseValue();
+            String ruleCode = command.ruleCode();
+            DddAggregate aggregate = DddAggregate.draft(id, operationId, baseValue, ruleCode);
+
+            // 2. 调用领域服务完成写入决策。
             Result<DddWriteDecision> decisionResult = dddWriteDomainService.execute(new DddWriteParam(aggregate));
-            return decisionResult.map(decision -> new DddWriteResult(command.id(), decision.operationId().value(),
-                    decision.value().value(), decision.currentValue().value(), decision.duplicate()));
+            if (!decisionResult.success()) {
+                return Result.failure(decisionResult.code(), decisionResult.message());
+            }
+
+            // 3. 将领域决策转换为应用层结果。
+            DddWriteDecision decision = decisionResult.data();
+            String decidedOperationId = decision.operationId().value();
+            int changedValue = decision.value().value();
+            int currentValue = decision.currentValue().value();
+            DddWriteResult result = new DddWriteResult(id, decidedOperationId, changedValue, currentValue,
+                    decision.duplicate());
+            return Result.success(result);
         } catch (DomainException exception) {
             LOG.warn("DDD 写入应用组装失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());

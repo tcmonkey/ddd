@@ -99,9 +99,15 @@ public final class DddEntity {
      * @author AIGenerator
      */
     public static DddEntity draft(String rawId, String rawOperationId, int rawBaseValue, String ruleCode) {
-        DddOperationEntity operation = DddOperationEntity.pending(new DddOperationIdValue(rawOperationId),
-                DddValue.positive(rawBaseValue), ruleCode);
-        return draft(new DddIdValue(rawId), operation);
+        // 1. 将原始输入封装为领域值对象。
+        DddIdValue id = new DddIdValue(rawId);
+        DddOperationIdValue operationId = new DddOperationIdValue(rawOperationId);
+        DddValue baseValue = DddValue.positive(rawBaseValue);
+
+        // 2. 创建待处理操作并组装输入实体。
+        DddOperationEntity operation = DddOperationEntity.pending(operationId, baseValue, ruleCode);
+        DddEntity entity = draft(id, operation);
+        return entity;
     }
 
     /**
