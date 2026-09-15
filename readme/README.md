@@ -1,7 +1,24 @@
 # DDD开发规范
 # 分层设计
+## 图片模式
+![img.png](ddd.png)
 
-![](https://cdn.nlark.com/yuque/0/2026/jpeg/2205361/1789386496042-b58e3315-293c-47ee-97bf-76a1cacfd0a1.jpeg)
+## Mermaid模式
+```mermaid
+flowchart LR
+    HTTP["RPC / HTTP 等"] --> IN["adaptor / in"]
+    EVENT["MQ / Scheduler 等"] --> IN
+    IN --> APP["application"]
+    APP --> DOMAIN["domain"]
+
+    APP -.-> OUT["adaptor / out"]
+    OUT --> THIRD["三方接口"]
+    OUT --> MIDDLE["MQ / OSS 等"]
+
+    DOMAIN -.-> INFRA["infrastructure"]
+    INFRA --> DB["域内 DB"]
+```
+
 
 ## adaptor
 
