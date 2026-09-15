@@ -1,0 +1,28 @@
+schema_version: "1.2"
+template_version: "0.4.0"
+project:
+  name: "ddd"
+  root: "/Users/monkey/Documents/kit/workspace/ddd"
+  repository: "unavailable"
+delivery:
+  mode: "full"
+  interaction: "guided"
+  ui_required: false
+  input_dir: "AI/input"
+  output_dir: "AI/output"
+  current_phase: "product"
+compatibility:
+  state_owner: ".ai-delivery"
+  skill_standard: "agent-skills"
+  runtime_binding: "dynamic"
+  artifact_bridge: "relative-symlink"
+  concurrent_agents: false
+quality:
+  require_compile: true
+  require_developer_self_test: true
+  require_code_review: true
+  require_independent_testing: true
+  performance_testing: "auto"
+  require_release_approval: true
+created_at: "2026-09-14T17:33:49+08:00"
+updated_at: "2026-09-14T17:44:35+08:00"

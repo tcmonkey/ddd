@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.4",
+  "template_version": "0.7.0",
+  "project_name": "ddd",
+  "delivery_mode": "full",
+  "interaction_mode": "guided",
+  "revision": 17,
+  "current_phase": "code_review",
+  "phases": {
+    "intake": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "requirements": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T20:57:39+08:00"
+    },
+    "product": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T21:44:10+08:00"
+    },
+    "ui": {
+      "status": "skipped",
+      "required": false,
+      "approved_at": null
+    },
+    "technical": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T23:29:04+08:00"
+    },
+    "planning": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "development": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "code_review": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "testing": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "release": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "retrospective": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    }
+  },
+  "approvals": [
+    {
+      "gate": "scope",
+      "phase": "requirements",
+      "artifact_version": "0.2",
+      "approved_at": "2026-09-14T17:44:35+08:00",
+      "approved_by": "user",
+      "source": "SRC-002"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.3",
+      "approved_at": "2026-09-14T20:34:06+08:00",
+      "approved_by": "user",
+      "source": "SRC-003"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T20:57:39+08:00",
+      "approved_by": "user",
+      "source": "SRC-004"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.5",
+      "approved_at": "2026-09-14T21:44:10+08:00",
+      "approved_by": "user",
+      "source": "SRC-006"
+    },
+    {
+      "gate": "product",
+      "phase": "product",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T21:44:10+08:00",
+      "approved_by": "user",
+      "source": "SRC-006"
+    },
+    {
+      "gate": "technical",
+      "phase": "technical",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T23:29:04+08:00",
+      "approved_by": "user",
+      "source": "SRC-007"
+    }
+  ],
+  "open_questions": [],
+  "runtime": {
+    "platform": "codex",
+    "model": "gpt-5",
+    "capabilities": {
+      "filesystem": "read-write",
+      "shell": "available",
+      "python": "python3",
+      "repository": "unavailable",
+      "browser": "available",
+      "persistence": "durable"
+    }
+  },
+  "last_actor": {
+    "platform": "codex",
+    "model": "gpt-5",
+    "updated_at": "2026-09-15T13:07:47+08:00"
+  },
+  "handoff": {
+    "summary": "已删除具体业务案例并将源码统一为Ddd*中性占位符；产品方案、技术方案、开发计划和自测报告同步泛化，纯计算模式保持无仓储无聚合；mvn clean test通过3/3且静态与交付校验通过",
+    "next_action": "用户评审Ddd*占位命名和五条参考调用链；确认后进入独立代码审查并决定是否将稳定代码规范沉淀到solo-delivery"
+  },
+  "last_updated": "2026-09-15T13:07:47+08:00"
+}

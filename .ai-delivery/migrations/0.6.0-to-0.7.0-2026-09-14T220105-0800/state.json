@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.4",
+  "template_version": "0.6.0",
+  "project_name": "ddd",
+  "delivery_mode": "full",
+  "interaction_mode": "guided",
+  "revision": 7,
+  "current_phase": "technical",
+  "phases": {
+    "intake": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "requirements": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T20:57:39+08:00"
+    },
+    "product": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T21:44:10+08:00"
+    },
+    "ui": {
+      "status": "skipped",
+      "required": false,
+      "approved_at": null
+    },
+    "technical": {
+      "status": "review",
+      "required": true,
+      "approved_at": null
+    },
+    "planning": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "development": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "code_review": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "testing": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "release": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "retrospective": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    }
+  },
+  "approvals": [
+    {
+      "gate": "scope",
+      "phase": "requirements",
+      "artifact_version": "0.2",
+      "approved_at": "2026-09-14T17:44:35+08:00",
+      "approved_by": "user",
+      "source": "SRC-002"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.3",
+      "approved_at": "2026-09-14T20:34:06+08:00",
+      "approved_by": "user",
+      "source": "SRC-003"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T20:57:39+08:00",
+      "approved_by": "user",
+      "source": "SRC-004"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.5",
+      "approved_at": "2026-09-14T21:44:10+08:00",
+      "approved_by": "user",
+      "source": "SRC-006"
+    },
+    {
+      "gate": "product",
+      "phase": "product",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T21:44:10+08:00",
+      "approved_by": "user",
+      "source": "SRC-006"
+    }
+  ],
+  "open_questions": [
+    "Q-004",
+    "Q-005"
+  ],
+  "runtime": {
+    "platform": "codex",
+    "model": "gpt-5",
+    "capabilities": {
+      "filesystem": "read-write",
+      "shell": "available",
+      "python": "python3",
+      "repository": "unavailable",
+      "browser": "available",
+      "persistence": "durable"
+    }
+  },
+  "last_actor": {
+    "platform": "codex",
+    "model": "gpt-5",
+    "updated_at": "2026-09-14T21:49:04+08:00"
+  },
+  "handoff": {
+    "summary": "产品方案已批准；已登记DDD开发规范，并生成以伪代码为核心的聚合式技术方案模板草案",
+    "next_action": "用户评审 04 技术方案模板；确认后补充Java技术基线与示例业务，完成正式技术方案"
+  },
+  "last_updated": "2026-09-14T21:49:04+08:00"
+}

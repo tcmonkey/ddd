@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.2",
+  "template_version": "0.4.0",
+  "project_name": "ddd",
+  "delivery_mode": "full",
+  "interaction_mode": "guided",
+  "revision": 2,
+  "current_phase": "product",
+  "phases": {
+    "intake": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "requirements": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T17:44:35+08:00"
+    },
+    "product": {
+      "status": "review",
+      "required": true,
+      "approved_at": null
+    },
+    "ui": {
+      "status": "skipped",
+      "required": false,
+      "approved_at": null
+    },
+    "technical": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "planning": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "development": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "code_review": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "testing": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "release": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "retrospective": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    }
+  },
+  "approvals": [
+    {
+      "gate": "scope",
+      "phase": "requirements",
+      "artifact_version": "0.2",
+      "approved_at": "2026-09-14T17:44:35+08:00",
+      "approved_by": "user",
+      "source": "SRC-002"
+    }
+  ],
+  "open_questions": [
+    "Q-004",
+    "Q-005"
+  ],
+  "runtime": {
+    "platform": "codex",
+    "model": "gpt-5",
+    "capabilities": {
+      "filesystem": "read-write",
+      "shell": "available",
+      "python": "python3",
+      "repository": "unavailable",
+      "browser": "available",
+      "persistence": "durable"
+    }
+  },
+  "last_actor": {
+    "platform": "codex",
+    "model": "gpt-5",
+    "updated_at": "2026-09-14T17:49:09+08:00"
+  },
+  "handoff": {
+    "summary": "需求范围已批准；建立AI输入输出目录并生成首版产品方案",
+    "next_action": "用户评审产品方案；确认后提供DDD规范和Java技术基线以进入技术方案"
+  },
+  "last_updated": "2026-09-14T17:49:09+08:00"
+}
