@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
+import com.ddd.infrastructure.ddd.mysql.mapper.DddRuleMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
+import com.ddd.infrastructure.ddd.mysql.pojo.DddRulePO;
 import com.ddd.start.Application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,8 +34,19 @@ class DddControllerTest {
     @Autowired
     private DddMapper dddMapper;
 
+    @Autowired
+    private DddRuleMapper dddRuleMapper;
+
     @Test
     void shouldCoverAllDddPatterns() throws Exception {
+        mockMvc.perform(post("/api/ddd/rule").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"ruleCode\":\"UNKNOWN\",\"baseValue\":8}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_ERROR"));
+
+        insertRule("DEFAULT", 1, "默认规则");
+        insertRule("DOUBLE", 2, "双倍规则");
+
         String request = """
                 {"id":"ddd-001","operationId":"operation-001","ruleCode":"DOUBLE","baseValue":10}
                 """;
@@ -91,5 +104,22 @@ class DddControllerTest {
                 .andExpect(jsonPath("$.data.id").value("ddd-001"))
                 .andExpect(jsonPath("$.data.name").value("DDD_EXTERNAL_ddd-001"))
                 .andExpect(jsonPath("$.data.category").value("DEFAULT"));
+    }
+
+    /**
+     * 只在测试环境写入规则样本，验证正式仓储的查询链路。
+     *
+     * @param ruleCode 规则编码
+     * @param factor 计算因子
+     * @param reason 规则说明
+     *
+     * @author AIGenerator
+     */
+    private void insertRule(String ruleCode, int factor, String reason) {
+        DddRulePO rule = new DddRulePO();
+        rule.setRuleCode(ruleCode);
+        rule.setFactor(factor);
+        rule.setReason(reason);
+        dddRuleMapper.insert(rule);
     }
 }

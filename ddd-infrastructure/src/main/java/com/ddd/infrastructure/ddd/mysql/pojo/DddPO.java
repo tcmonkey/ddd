@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.annotation.Version;
 /**
  * {@link com.ddd.domain.ddd.model.aggregate.DddAggregate} 的持久化对象。
  *
- * <p>对应唯一的 {@code ddd_data} 表；聚合主状态和领域实体快照保存在同一行。
+ * <p>对应主聚合唯一的 {@code ddd_data} 表；聚合主状态和领域实体快照保存在同一行。
  * 此类型不得暴露到基础设施层之外。</p>
  *
  * @author AIGenerator

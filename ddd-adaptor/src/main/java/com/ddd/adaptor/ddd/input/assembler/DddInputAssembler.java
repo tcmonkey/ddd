@@ -1,5 +1,7 @@
 package com.ddd.adaptor.ddd.input.assembler;
 
+import org.springframework.stereotype.Component;
+
 import com.ddd.application.ddd.command.DddCalculateCommand;
 import com.ddd.application.ddd.command.DddRuleCommand;
 import com.ddd.application.ddd.command.DddWriteCommand;
@@ -24,6 +26,7 @@ import com.ddd.client.ddd.response.DddWriteResponse;
  *
  * @author AIGenerator
  */
+@Component
 public final class DddInputAssembler {
     public DddWriteCommand toCommand(DddWriteRequest request) {
         return new DddWriteCommand(request.id(), request.operationId(), request.ruleCode(),

@@ -1,6 +1,6 @@
 package com.ddd.application.ddd.service;
 
-import java.time.Clock;
+import java.time.Instant;
 import java.util.ConcurrentModificationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +34,6 @@ public class DddWriteApplication {
     @Autowired
     private DddWriteDomainService dddWriteDomainService;
 
-    @Autowired
-    private Clock clock;
-
     @Transactional
     public DddWriteResult execute(DddWriteCommand command) {
         DddIdValue id = new DddIdValue(command.id());
@@ -51,7 +48,7 @@ public class DddWriteApplication {
                     aggregate.currentValue().value(), true);
         }
 
-        aggregate.write(decision.operationId(), decision.value(), command.ruleCode(), clock.instant());
+        aggregate.write(decision.operationId(), decision.value(), command.ruleCode(), Instant.now());
         if (!Boolean.TRUE.equals(dddRepository.save(aggregate))) {
             throw new ConcurrentModificationException("DDD 聚合根保存失败或发生版本冲突");
         }

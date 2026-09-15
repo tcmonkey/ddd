@@ -26,15 +26,13 @@ import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
  * @author AIGenerator
  */
 @Repository
-public class DddRepositoryImpl
-        extends DddBaseRepository<DddMapper, DddPO>
-        implements DddRepository {
+public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> implements DddRepository {
     /**
      * 领域实体快照的 JSON 类型，用于在基础设施层恢复聚合内部实体。
      *
      * @author AIGenerator
      */
-    private static final TypeReference<List<DddEntity>> ENTITY_TYPE = new TypeReference<>() { };
+    private static final TypeReference<List<DddEntity>> ENTITY_TYPE = new TypeReference<>() {};
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -62,6 +60,15 @@ public class DddRepositoryImpl
         return super.updateById(update);
     }
 
+    /**
+     * 将聚合主状态与完整实体快照组装为单表持久化对象。
+     *
+     * @param aggregate 待保存的聚合根
+     * @param version 插入时使用当前版本，更新时使用预期的旧版本
+     * @return 主表持久化对象
+     *
+     * @author AIGenerator
+     */
     private DddPO toDddPO(DddAggregate aggregate, long version) {
         DddPO po = new DddPO();
         po.setId(aggregate.id().value());
@@ -100,7 +107,11 @@ public class DddRepositoryImpl
             throw new IllegalStateException("DDD 领域实体快照缺失");
         }
         try {
-            return objectMapper.readValue(entitiesJson, ENTITY_TYPE);
+            List<DddEntity> entities = objectMapper.readValue(entitiesJson, ENTITY_TYPE);
+            if (entities == null || entities.contains(null)) {
+                throw new IllegalStateException("DDD 领域实体快照格式无效");
+            }
+            return entities;
         } catch (JsonProcessingException exception) {
             throw new IllegalStateException("DDD 领域实体快照无法反序列化", exception);
         }

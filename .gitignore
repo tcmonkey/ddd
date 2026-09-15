@@ -41,3 +41,6 @@ build/
 ### Local RAG uploads ###
 /rag/*
 !/rag/.gitkeep
+
+### Local logs ###
+logs/
