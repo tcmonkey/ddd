@@ -1,25 +1,27 @@
 package com.ddd.infrastructure.ddd.repository;
 
+import java.util.List;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
-import com.ddd.domain.ddd.model.value.DddOperationIdValue;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRepository;
 import com.ddd.infrastructure.DddBaseRepository;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
-import com.ddd.infrastructure.ddd.mysql.pojo.DddEntityPO;
-
-import java.util.HashSet;
-import java.util.Set;
-import org.springframework.stereotype.Repository;
 
 /**
  * DDD 聚合根的 MyBatis-Plus 仓储实现模板。
  *
- * <p>聚合根自身的基础 CRUD 由 {@link DddBaseRepository} 提供；实体查询使用 MyBatis-Plus
- * 条件构造器生成，不在 Mapper 或 XML 中编写自定义 SQL。</p>
+ * <p>聚合根的基础 CRUD 由 {@link DddBaseRepository} 提供；领域实体快照与主状态同存于
+ * {@code ddd_data} 表，不在 Mapper 或 XML 中编写自定义 SQL。</p>
  *
  * @author AIGenerator
  */
@@ -27,54 +29,37 @@ import org.springframework.stereotype.Repository;
 public class DddRepositoryImpl
         extends DddBaseRepository<DddMapper, DddPO>
         implements DddRepository {
-    private final DddEntityRepository entityRepository;
+    /**
+     * 领域实体快照的 JSON 类型，用于在基础设施层恢复聚合内部实体。
+     *
+     * @author AIGenerator
+     */
+    private static final TypeReference<List<DddEntity>> ENTITY_TYPE = new TypeReference<>() { };
 
-    public DddRepositoryImpl(DddMapper dddMapper,
-                                                    DddEntityRepository entityRepository) {
-        super(dddMapper);
-        this.entityRepository = entityRepository;
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public DddAggregate findById(DddIdValue id) {
-        DddPO aggregate = getById(id.value());
-        if (aggregate == null) {
+        DddPO stored = getById(id.value());
+        if (stored == null) {
             return DddAggregate.open(id);
         }
         return DddAggregate.restore(
-                new DddIdValue(aggregate.getId()),
-                new DddValue(aggregate.getCurrentValue()),
-                aggregate.getVersion(),
-                entityRepository.findById(id.value())
-                        .stream()
-                        .map(this::toEntity)
-                        .toList());
+                new DddIdValue(stored.getId()),
+                new DddValue(stored.getCurrentValue()),
+                stored.getVersion(),
+                readEntities(stored.getEntitiesJson()));
     }
 
     @Override
     public Boolean save(DddAggregate aggregate) {
         DddPO stored = getById(aggregate.id().value());
-        boolean aggregateSaved;
         if (stored == null) {
-            aggregateSaved = super.save(toDddPO(aggregate, aggregate.version()));
-        } else {
-            DddPO update = toDddPO(aggregate, aggregate.version() - 1);
-            aggregateSaved = super.updateById(update);
+            return super.save(toDddPO(aggregate, aggregate.version()));
         }
-        return aggregateSaved && saveNewEntities(aggregate);
-    }
-
-    private Boolean saveNewEntities(DddAggregate aggregate) {
-        Set<String> storedOperationIds = new HashSet<>(entityRepository.findById(aggregate.id().value())
-                .stream()
-                .map(DddEntityPO::getOperationId)
-                .collect(java.util.stream.Collectors.toSet()));
-        for (DddEntity item : aggregate.entities()) {
-            if (!storedOperationIds.contains(item.operationId().value()) && !entityRepository.save(toEntityPO(aggregate, item))) {
-                return false;
-            }
-        }
-        return true;
+        DddPO update = toDddPO(aggregate, aggregate.version() - 1);
+        return super.updateById(update);
     }
 
     private DddPO toDddPO(DddAggregate aggregate, long version) {
@@ -82,21 +67,42 @@ public class DddRepositoryImpl
         po.setId(aggregate.id().value());
         po.setCurrentValue(aggregate.currentValue().value());
         po.setVersion(version);
+        po.setEntitiesJson(writeEntities(aggregate.entities()));
         return po;
     }
 
-    private DddEntityPO toEntityPO(DddAggregate aggregate, DddEntity item) {
-        DddEntityPO po = new DddEntityPO();
-        po.setOperationId(item.operationId().value());
-        po.setId(aggregate.id().value());
-        po.setBusinessValue(item.value().value());
-        po.setRuleCode(item.ruleCode());
-        po.setOccurredAt(item.occurredAt());
-        return po;
+    /**
+     * 将聚合内部实体转换为主表可保存的 JSON 快照。
+     *
+     * @param entities 聚合内部实体
+     * @return 实体 JSON 快照
+     *
+     * @author AIGenerator
+     */
+    private String writeEntities(List<DddEntity> entities) {
+        try {
+            return objectMapper.writeValueAsString(entities);
+        } catch (JsonProcessingException exception) {
+            throw new IllegalStateException("DDD 领域实体快照无法序列化", exception);
+        }
     }
 
-    private DddEntity toEntity(DddEntityPO po) {
-        return new DddEntity(new DddOperationIdValue(po.getOperationId()), new DddValue(po.getBusinessValue()),
-                po.getRuleCode(), po.getOccurredAt());
+    /**
+     * 从主表 JSON 快照恢复聚合内部实体，不静默忽略缺失或损坏的数据。
+     *
+     * @param entitiesJson 主表中的实体 JSON 快照
+     * @return 聚合内部实体
+     *
+     * @author AIGenerator
+     */
+    private List<DddEntity> readEntities(String entitiesJson) {
+        if (entitiesJson == null || entitiesJson.isBlank()) {
+            throw new IllegalStateException("DDD 领域实体快照缺失");
+        }
+        try {
+            return objectMapper.readValue(entitiesJson, ENTITY_TYPE);
+        } catch (JsonProcessingException exception) {
+            throw new IllegalStateException("DDD 领域实体快照无法反序列化", exception);
+        }
     }
 }

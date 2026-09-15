@@ -1,12 +1,13 @@
 package com.ddd.start.config;
 
-import com.ddd.adaptor.ddd.input.assembler.DddInputAssembler;
-import com.ddd.domain.ddd.repository.DddRuleRepository;
-import com.ddd.infrastructure.ddd.repository.InMemoryDddRuleRepository;
+import java.time.Clock;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Clock;
+import com.ddd.adaptor.ddd.input.assembler.DddInputAssembler;
+import com.ddd.domain.ddd.repository.DddRuleRepository;
+import com.ddd.infrastructure.ddd.repository.InMemoryDddRuleRepository;
 
 /**
  * DDD 公共模板的 Spring 组合根。

@@ -5,6 +5,8 @@ import com.ddd.domain.ddd.exception.DomainValidationException;
 /**
  * DDD 写操作的幂等标识值对象模板。
  *
+ * @param value 操作幂等标识的原始值
+ *
  * @author AIGenerator
  */
 public record DddOperationIdValue(String value) {

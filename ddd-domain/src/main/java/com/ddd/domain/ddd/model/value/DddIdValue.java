@@ -5,6 +5,8 @@ import com.ddd.domain.ddd.exception.DomainValidationException;
 /**
  * DDD 聚合根标识值对象模板。
  *
+ * @param value 聚合根标识的原始值
+ *
  * @author AIGenerator
  */
 public record DddIdValue(String value) {

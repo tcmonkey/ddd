@@ -1,15 +1,15 @@
 package com.ddd.domain.ddd.model.aggregate;
 
-import com.ddd.domain.ddd.model.entity.DddEntity;
-import com.ddd.domain.ddd.exception.DomainValidationException;
-import com.ddd.domain.ddd.model.value.DddOperationIdValue;
-import com.ddd.domain.ddd.model.value.DddIdValue;
-import com.ddd.domain.ddd.model.value.DddValue;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.model.entity.DddEntity;
+import com.ddd.domain.ddd.model.value.DddIdValue;
+import com.ddd.domain.ddd.model.value.DddOperationIdValue;
+import com.ddd.domain.ddd.model.value.DddValue;
 
 /**
  * DDD 写模式使用的聚合根模板。
@@ -19,13 +19,35 @@ import java.util.Optional;
  * @author AIGenerator
  */
 public final class DddAggregate {
+    /**
+     * 聚合根业务标识，确定实体明细和持久化状态所属的边界。
+     *
+     * @author AIGenerator
+     */
     private final DddIdValue id;
+
+    /**
+     * 聚合根当前值，只能通过领域写入行为改变。
+     *
+     * @author AIGenerator
+     */
     private DddValue currentValue;
+
+    /**
+     * 聚合版本，写入后递增，持久化时用于并发冲突检测。
+     *
+     * @author AIGenerator
+     */
     private long version;
+
+    /**
+     * 聚合内实体明细，与当前值的变化共同构成业务不变量。
+     *
+     * @author AIGenerator
+     */
     private final List<DddEntity> entities;
 
-    private DddAggregate(DddIdValue id, DddValue currentValue, long version,
-                                List<DddEntity> entities) {
+    private DddAggregate(DddIdValue id, DddValue currentValue, long version, List<DddEntity> entities) {
         this.id = id;
         this.currentValue = currentValue;
         this.version = version;
@@ -36,8 +58,7 @@ public final class DddAggregate {
         return new DddAggregate(id, new DddValue(0), 0, List.of());
     }
 
-    public static DddAggregate restore(DddIdValue id, DddValue currentValue, long version,
-                                              List<DddEntity> entities) {
+    public static DddAggregate restore(DddIdValue id, DddValue currentValue, long version, List<DddEntity> entities) {
         return new DddAggregate(id, currentValue, version, entities);
     }
 

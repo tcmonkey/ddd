@@ -1,9 +1,11 @@
 package com.ddd.application.ddd.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
 import com.ddd.application.ddd.result.DddExternalResult;
 import com.ddd.model.ddd.DddModel;
-import org.springframework.stereotype.Service;
 
 /**
  * DDD 外部数据查询的应用服务模板。
@@ -15,18 +17,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public final class DddExternalReadApplication {
-    private final DddOutputAdaptor outputAdaptor;
-
-    /**
-     * 创建外部数据查询应用服务。
-     *
-     * @param outputAdaptor 外部数据查询端口
-     *
-     * @author AIGenerator
-     */
-    public DddExternalReadApplication(DddOutputAdaptor outputAdaptor) {
-        this.outputAdaptor = outputAdaptor;
-    }
+    @Autowired
+    private DddOutputAdaptor outputAdaptor;
 
     /**
      * 查询外部数据并转换为应用层结果。

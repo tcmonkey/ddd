@@ -1,10 +1,10 @@
 package com.ddd.infrastructure.ddd.repository;
 
-import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
-import com.ddd.domain.ddd.exception.DomainValidationException;
-import com.ddd.domain.ddd.repository.DddRuleRepository;
-
 import java.util.Map;
+
+import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
+import com.ddd.domain.ddd.repository.DddRuleRepository;
 
 /**
  * DDD 规则聚合根的内存仓储模板。

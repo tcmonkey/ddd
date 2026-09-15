@@ -1,10 +1,12 @@
 package com.ddd.adaptor.ddd.output;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ddd.adaptor.ddd.output.converter.DddOutputConverter;
 import com.ddd.adaptor.ddd.output.model.DddExternalResponse;
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
 import com.ddd.model.ddd.DddModel;
-import org.springframework.stereotype.Component;
 
 /**
  * DDD 外部数据查询的 output adaptor 示例实现。
@@ -16,18 +18,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DddOutputAdaptorImpl implements DddOutputAdaptor {
-    private final DddOutputConverter converter;
-
-    /**
-     * 创建 DDD output adaptor。
-     *
-     * @param converter 第三方响应转换器
-     *
-     * @author AIGenerator
-     */
-    public DddOutputAdaptorImpl(DddOutputConverter converter) {
-        this.converter = converter;
-    }
+    @Autowired
+    private DddOutputConverter converter;
 
     /**
      * 查询第三方数据。

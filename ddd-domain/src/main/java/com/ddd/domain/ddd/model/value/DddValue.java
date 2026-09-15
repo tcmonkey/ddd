@@ -5,6 +5,8 @@ import com.ddd.domain.ddd.exception.DomainValidationException;
 /**
  * 带有显式算术边界校验的非负领域值对象模板。
  *
+ * @param value 非负领域数值
+ *
  * @author AIGenerator
  */
 public record DddValue(int value) {

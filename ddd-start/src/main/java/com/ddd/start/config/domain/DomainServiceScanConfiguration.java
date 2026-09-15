@@ -1,9 +1,10 @@
 package com.ddd.start.config.domain;
 
-import com.ddd.domain.annotation.DomainService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+
+import com.ddd.domain.annotation.DomainService;
 
 /**
  * 领域服务的定向扫描配置。

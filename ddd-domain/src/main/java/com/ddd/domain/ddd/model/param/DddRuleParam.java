@@ -7,6 +7,9 @@ import com.ddd.domain.ddd.model.value.DddValue;
  *
  * <p>该参数不包含写模式特有的写入标识，避免纯规则计算复用无业务意义的伪造数据。</p>
  *
+ * @param ruleCode 选择或记录规则的编码
+ * @param baseValue 参与规则或纯计算的原始数值
+ *
  * @author AIGenerator
  */
 public record DddRuleParam(String ruleCode, DddValue baseValue) {

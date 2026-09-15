@@ -3,19 +3,19 @@ package com.ddd.adaptor.ddd.input.assembler;
 import com.ddd.application.ddd.command.DddCalculateCommand;
 import com.ddd.application.ddd.command.DddRuleCommand;
 import com.ddd.application.ddd.command.DddWriteCommand;
-import com.ddd.application.ddd.result.DddWriteResult;
+import com.ddd.application.ddd.result.DddCalculateResult;
 import com.ddd.application.ddd.result.DddExternalResult;
 import com.ddd.application.ddd.result.DddReadResult;
-import com.ddd.application.ddd.result.DddCalculateResult;
 import com.ddd.application.ddd.result.DddRuleResult;
+import com.ddd.application.ddd.result.DddWriteResult;
 import com.ddd.client.ddd.request.DddCalculateRequest;
 import com.ddd.client.ddd.request.DddRuleRequest;
 import com.ddd.client.ddd.request.DddWriteRequest;
-import com.ddd.client.ddd.response.DddWriteResponse;
+import com.ddd.client.ddd.response.DddCalculateResponse;
 import com.ddd.client.ddd.response.DddExternalReadResponse;
 import com.ddd.client.ddd.response.DddReadResponse;
-import com.ddd.client.ddd.response.DddCalculateResponse;
 import com.ddd.client.ddd.response.DddRuleResponse;
+import com.ddd.client.ddd.response.DddWriteResponse;
 
 /**
  * HTTP 协议 DTO 与应用层契约之间的防腐层。

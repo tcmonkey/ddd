@@ -1,8 +1,9 @@
 package com.ddd.adaptor.ddd.output.converter;
 
+import org.springframework.stereotype.Component;
+
 import com.ddd.adaptor.ddd.output.model.DddExternalResponse;
 import com.ddd.model.ddd.DddModel;
-import org.springframework.stereotype.Component;
 
 /**
  * 第三方响应到项目内部模型的转换器。

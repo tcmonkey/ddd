@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 18,
+  "revision": 23,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-15T14:44:27+08:00"
+    "updated_at": "2026-09-15T16:20:30+08:00"
   },
   "handoff": {
-    "summary": "已将82处Java源码Javadoc统一为多行中文格式并全部加入@author AIGenerator，测试类也补齐类注释；技术方案、开发计划、自测与追踪同步更新；mvn clean test通过3/3，注释及交付结构校验通过",
-    "next_action": "用户评审多行Javadoc及作者标签写法；确认后进入代码审查，稳定规范再沉淀到solo-delivery"
+    "summary": "按 120 字符行宽合并四处可容纳的方法/构造器签名；全工程 Unicode 字符数扫描无超限 Java 行，Maven 测试 3/3 通过；设计和开发记录已同步。",
+    "next_action": "等待用户评审代码排版；下一轮建议补齐 application 公开入口的用例契约注释，并讨论 record 组件列表是否保持每字段一行。"
   },
-  "last_updated": "2026-09-15T14:44:27+08:00"
+  "last_updated": "2026-09-15T16:20:30+08:00"
 }

@@ -1,14 +1,15 @@
 package com.ddd.adaptor.common;
 
-import com.ddd.client.common.Result;
-import com.ddd.domain.ddd.exception.DomainValidationException;
+import java.util.ConcurrentModificationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ConcurrentModificationException;
+import com.ddd.client.common.Result;
+import com.ddd.domain.ddd.exception.DomainValidationException;
 
 /**
  * HTTP 异常统一映射器。

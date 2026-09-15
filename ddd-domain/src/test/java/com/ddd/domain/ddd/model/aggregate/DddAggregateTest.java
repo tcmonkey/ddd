@@ -1,12 +1,13 @@
 package com.ddd.domain.ddd.model.aggregate;
 
-import com.ddd.domain.ddd.exception.DomainValidationException;
-import com.ddd.domain.ddd.model.value.DddOperationIdValue;
-import com.ddd.domain.ddd.model.value.DddIdValue;
-import com.ddd.domain.ddd.model.value.DddValue;
+import java.time.Instant;
+
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
+import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.model.value.DddIdValue;
+import com.ddd.domain.ddd.model.value.DddOperationIdValue;
+import com.ddd.domain.ddd.model.value.DddValue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,7 +22,11 @@ class DddAggregateTest {
     void shouldChangeAggregateAndCreateEntityTogether() {
         DddAggregate aggregate = DddAggregate.open(new DddIdValue("ddd-001"));
 
-        aggregate.write(new DddOperationIdValue("operation-001"), DddValue.positive(12), "DEFAULT", Instant.parse("2026-09-14T00:00:00Z"));
+        aggregate.write(
+                new DddOperationIdValue("operation-001"),
+                DddValue.positive(12),
+                "DEFAULT",
+                Instant.parse("2026-09-14T00:00:00Z"));
 
         assertEquals(12, aggregate.currentValue().value());
         assertEquals(1, aggregate.entities().size());

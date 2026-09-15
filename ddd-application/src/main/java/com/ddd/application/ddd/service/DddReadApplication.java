@@ -1,13 +1,15 @@
 package com.ddd.application.ddd.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.ddd.application.ddd.result.DddReadResult;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.repository.DddRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * DDD 域内读模式的应用服务模板。
@@ -18,11 +20,8 @@ import java.util.List;
  */
 @Service
 public final class DddReadApplication {
-    private final DddRepository dddRepository;
-
-    public DddReadApplication(DddRepository dddRepository) {
-        this.dddRepository = dddRepository;
-    }
+    @Autowired
+    private DddRepository dddRepository;
 
     public DddReadResult query(String rawId) {
         DddIdValue id = new DddIdValue(rawId);

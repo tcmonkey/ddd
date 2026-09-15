@@ -1,20 +1,22 @@
 package com.ddd.application.ddd.service;
 
-import com.ddd.application.ddd.command.DddWriteCommand;
-import com.ddd.application.ddd.result.DddWriteResult;
-import com.ddd.domain.ddd.model.aggregate.DddAggregate;
-import com.ddd.domain.ddd.model.param.DddWriteParam;
-import com.ddd.domain.ddd.model.param.DddDecisionParam;
-import com.ddd.domain.ddd.model.value.DddOperationIdValue;
-import com.ddd.domain.ddd.model.value.DddIdValue;
-import com.ddd.domain.ddd.model.value.DddValue;
-import com.ddd.domain.ddd.repository.DddRepository;
-import com.ddd.domain.ddd.service.DddWriteDomainService;
+import java.time.Clock;
+import java.util.ConcurrentModificationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
-import java.util.ConcurrentModificationException;
+import com.ddd.application.ddd.command.DddWriteCommand;
+import com.ddd.application.ddd.result.DddWriteResult;
+import com.ddd.domain.ddd.model.aggregate.DddAggregate;
+import com.ddd.domain.ddd.model.param.DddDecisionParam;
+import com.ddd.domain.ddd.model.param.DddWriteParam;
+import com.ddd.domain.ddd.model.value.DddIdValue;
+import com.ddd.domain.ddd.model.value.DddOperationIdValue;
+import com.ddd.domain.ddd.model.value.DddValue;
+import com.ddd.domain.ddd.repository.DddRepository;
+import com.ddd.domain.ddd.service.DddWriteDomainService;
 
 /**
  * DDD 写模式的应用服务模板。
@@ -26,17 +28,14 @@ import java.util.ConcurrentModificationException;
  */
 @Service
 public class DddWriteApplication {
-    private final DddRepository dddRepository;
-    private final DddWriteDomainService dddWriteDomainService;
-    private final Clock clock;
+    @Autowired
+    private DddRepository dddRepository;
 
-    public DddWriteApplication(DddRepository dddRepository,
-                               DddWriteDomainService dddWriteDomainService,
-                               Clock clock) {
-        this.dddRepository = dddRepository;
-        this.dddWriteDomainService = dddWriteDomainService;
-        this.clock = clock;
-    }
+    @Autowired
+    private DddWriteDomainService dddWriteDomainService;
+
+    @Autowired
+    private Clock clock;
 
     @Transactional
     public DddWriteResult execute(DddWriteCommand command) {

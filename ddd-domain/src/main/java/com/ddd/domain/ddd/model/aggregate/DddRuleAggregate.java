@@ -1,16 +1,23 @@
 package com.ddd.domain.ddd.model.aggregate;
 
-import com.ddd.domain.ddd.model.param.DddWriteParam;
-import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.exception.DomainValidationException;
+import com.ddd.domain.ddd.model.param.DddRuleParam;
+import com.ddd.domain.ddd.model.param.DddWriteParam;
 import com.ddd.domain.ddd.model.value.DddValue;
 
 /**
  * DDD 规则与计算模式使用的规则聚合根模板。
  *
+ * @param ruleCode 选择或记录规则的编码
+ * @param factor 乘法计算因子，必须为正数
+ * @param reason 规则或领域决策的说明
+ *
  * @author AIGenerator
  */
-public record DddRuleAggregate(String ruleCode, int factor, String reason) {
+public record DddRuleAggregate(
+        String ruleCode,
+        int factor,
+        String reason) {
     public DddRuleAggregate {
         if (ruleCode == null || ruleCode.isBlank()) {
             throw new DomainValidationException("ruleCode must not be blank");

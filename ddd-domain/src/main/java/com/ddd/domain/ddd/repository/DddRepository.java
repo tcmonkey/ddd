@@ -23,7 +23,7 @@ public interface DddRepository {
     DddAggregate findById(DddIdValue id);
 
     /**
-     * 保存聚合根及其新增实体。
+     * 保存聚合根及其完整实体快照。
      *
      * @param aggregate 待保存的聚合根
      * @return 保存成功返回 {@code true}；乐观锁冲突或持久化失败返回 {@code false}
