@@ -1,7 +1,7 @@
 # DDD开发规范
 # 分层设计
 ## 图片模式
-![img.png](ddd.png)
+![img.png](readme/ddd.png)
 
 ## Mermaid模式
 ```mermaid
