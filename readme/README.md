@@ -145,22 +145,27 @@ start
 
 ## 调用链路
 
+### 写模式
 ```
 inputAdaptor-->application-->domainservice-->aggregate-->repository
 ```
 
+### 读模式
 ```
 inputAdaptor-->application-->repository
 ```
 
+### 读外部
 ```
 inputAdaptor-->application-->outputAdaptor
 ```
 
+### 规则+计算模式
 ```
 inputAdaptor-->application-->domainservice-->repository-->聚合根
 ```
 
+### 纯计算模式
 ```
 inputAdaptor-->application-->domainservice
 ```
