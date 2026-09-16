@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 34,
+  "revision": 35,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -121,7 +121,7 @@
       "filesystem": "read-write",
       "shell": "available",
       "python": "python3",
-      "repository": "unavailable",
+      "repository": "available",
       "browser": "available",
       "persistence": "durable"
     }
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-16T00:20:12+08:00"
+    "updated_at": "2026-09-16T12:38:28+08:00"
   },
   "handoff": {
-    "summary": "README 模块图改为左到右的运行时调用图：外部输入、ddd-adaptor/input、application、domain、infrastructure、DB 为主线；ddd-adaptor/output 从 application 向右分支到外部系统，明确区分 input/output。",
-    "next_action": "用户继续审阅 README 图与 Java DDD 参考工程；按反馈继续收敛模板规则。"
+    "summary": "正式固化 PO/DO/Result 与 Command/Param 边界：删除旧 DddModel/领域决策类型，新增四类 DO；DomainService 和 OutAdaptor 公开返回 Result<XXDO>；域内读与外部读均由 Controller 创建 Command，外部读 Command 原样传至 OutAdaptor 并由 converter 转为私有第三方请求。README、技术方案、计划、自测和决策记录已同步。",
+    "next_action": "用户审阅新的 PO/DO/Result、对象入参与 OutAdaptor 转换约定；确认后继续进行代码审查或迭代模板规则。"
   },
-  "last_updated": "2026-09-16T00:20:12+08:00"
+  "last_updated": "2026-09-16T12:38:28+08:00"
 }

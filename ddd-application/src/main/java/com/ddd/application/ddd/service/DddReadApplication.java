@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ddd.application.exception.ApplicationErrorCode;
+import com.ddd.application.ddd.command.DddReadCommand;
 import com.ddd.application.ddd.result.DddReadResult;
 import com.ddd.common.result.Result;
 import com.ddd.domain.ddd.exception.DomainException;
@@ -35,15 +36,16 @@ public final class DddReadApplication {
     /**
      * 按聚合根标识查询域内数据，并将领域实体转换为应用层结果。
      *
-     * @param rawId 聚合根原始标识
+     * @param command 域内读取应用命令
      * @return 域内读取结果
      *
      * @author AIGenerator
      */
-    public Result<DddReadResult> query(String rawId) {
+    public Result<DddReadResult> query(DddReadCommand command) {
         try {
-            // 1. 将原始标识封装为聚合标识并读取完整聚合。
-            DddAggregate aggregate = dddRepository.findById(DddAggregate.idOf(rawId));
+            // 1. 从应用命令提取聚合标识并读取完整聚合。
+            String aggregateId = command.id();
+            DddAggregate aggregate = dddRepository.findById(DddAggregate.idOf(aggregateId));
 
             // 2. 将聚合转换为应用层只读结果。
             DddReadResult result = toView(aggregate);

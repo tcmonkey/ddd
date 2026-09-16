@@ -12,8 +12,8 @@ import com.ddd.common.result.Result;
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.param.DddWriteParam;
-import com.ddd.domain.ddd.model.result.DddWriteDecision;
 import com.ddd.domain.ddd.service.DddWriteDomainService;
+import com.ddd.model.ddd.DddWriteDO;
 
 /**
  * DDD 写模式的应用服务模板。
@@ -53,19 +53,20 @@ public class DddWriteApplication {
             String ruleCode = command.ruleCode();
             DddAggregate aggregate = DddAggregate.draft(id, operationId, baseValue, ruleCode);
 
-            // 2. 调用领域服务完成写入决策。
-            Result<DddWriteDecision> decisionResult = dddWriteDomainService.execute(new DddWriteParam(aggregate));
-            if (!decisionResult.success()) {
-                return Result.failure(decisionResult.code(), decisionResult.message());
+            // 2. 组装领域参数并调用领域服务完成写入决策。
+            DddWriteParam param = new DddWriteParam(aggregate);
+            Result<DddWriteDO> domainResult = dddWriteDomainService.execute(param);
+            if (!domainResult.success()) {
+                return Result.failure(domainResult.code(), domainResult.message());
             }
 
-            // 3. 将领域决策转换为应用层结果。
-            DddWriteDecision decision = decisionResult.data();
-            String decidedOperationId = decision.operationId().value();
-            int changedValue = decision.value().value();
-            int currentValue = decision.currentValue().value();
+            // 3. 将领域内部数据对象转换为应用层结果。
+            DddWriteDO dataObject = domainResult.data();
+            String decidedOperationId = dataObject.operationId();
+            int changedValue = dataObject.changedValue();
+            int currentValue = dataObject.currentValue();
             DddWriteResult result = new DddWriteResult(id, decidedOperationId, changedValue, currentValue,
-                    decision.duplicate());
+                    dataObject.duplicate());
             return Result.success(result);
         } catch (DomainException exception) {
             LOG.warn("DDD 写入应用组装失败, code={}", exception.errorCode().code());

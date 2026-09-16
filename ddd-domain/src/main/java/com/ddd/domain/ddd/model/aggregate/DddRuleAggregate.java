@@ -41,27 +41,9 @@ public record DddRuleAggregate(
             throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
         }
 
-        // 2. 使用规则因子计算领域值。
-        DddValue calculatedValue = param.baseValue().multiply(factor);
+        // 2. 在聚合内将原始数值封装为值对象并完成规则计算。
+        DddValue baseValue = DddValue.positive(param.baseValue());
+        DddValue calculatedValue = baseValue.multiply(factor);
         return calculatedValue;
-    }
-
-    /**
-     * 使用原始基础数值执行规则计算。
-     *
-     * <p>值对象和领域参数的封装留在规则聚合内，Application 只传递原始命令数据。</p>
-     *
-     * @param baseValue 原始基础数值
-     * @return 计算后的领域值
-     *
-     * @author AIGenerator
-     */
-    public DddValue evaluate(int baseValue) {
-        // 1. 将原始数值封装为领域值对象。
-        DddValue value = DddValue.positive(baseValue);
-
-        // 2. 构造规则参数并执行聚合内计算。
-        DddRuleParam param = new DddRuleParam(ruleCode, value);
-        return evaluate(param);
     }
 }

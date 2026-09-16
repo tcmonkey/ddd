@@ -20,8 +20,8 @@ mvn clean test
 |---|---|---|
 | `ddd-common` | 通用协议：`Result<T>`、`ErrorCode`、`BaseException`。 | 不依赖 Spring、HTTP、数据库或第三方协议。 |
 | `ddd-client` | 对外协议 DTO：`request`、`response`；未来有 RPC 时在这里声明二方包接口。 | 可依赖 `ddd-common`；禁止依赖 `ddd-model` 和业务实现模块。 |
-| `ddd-model` | 项目内部稳定模型，如 output adaptor 转换后的 `DddModel`。 | 不承载领域行为或外部协议。 |
-| `ddd-domain` | 聚合、实体、值对象、领域参数、领域决策、仓储端口、领域服务。 | 不依赖 Spring/Jakarta/MyBatis；只依赖 `ddd-common`。 |
+| `ddd-model` | 项目内部稳定数据对象（`XXDO`），如领域服务和 output adaptor 返回的 `DddWriteDO`、`DddExternalReadDO`。 | 不承载领域行为、外部协议或持久化映射。 |
+| `ddd-domain` | 聚合、实体、值对象、领域参数、领域服务、仓储端口及领域输出 DO。 | 不依赖 Spring/Jakarta/MyBatis；只依赖 `ddd-common`、`ddd-model`。 |
 | `ddd-application` | 用例编排、`command`、`result` 和外部能力端口。 | 依赖 domain、model、common；不得向 Controller 返回领域模型。 |
 | `ddd-infrastructure` | MyBatis-Plus Mapper、PO、基础仓储和领域仓储实现。 | 依赖 domain、common；禁止自定义 SQL。 |
 | `ddd-adaptor` | HTTP input/output 防腐层、assembler、converter、异常映射与外部协议模型。 | 依赖 application、client、model、common。 |
@@ -49,7 +49,7 @@ flowchart LR
     ADAPTOR_OUT --> EXTERNAL_OUT
 ```
 
-`ddd-client` 提供 input 使用的外部 DTO；`ddd-model` 承接 output 转换后的内部模型；`ddd-common` 是 `ddd-client`、`ddd-domain`、`ddd-application`、`ddd-infrastructure`、`ddd-adaptor` 共用的基础依赖，提供 `Result<T>`、`ErrorCode`、`BaseException`。这三者是横向支撑模块，因此不在主调用链上重复连线。
+`ddd-client` 提供 input 使用的外部 DTO；`ddd-model` 承接 DomainService 和 output adaptor 返回的内部 DO；`ddd-common` 是 `ddd-client`、`ddd-domain`、`ddd-application`、`ddd-infrastructure`、`ddd-adaptor` 共用的基础依赖，提供 `Result<T>`、`ErrorCode`、`BaseException`。这三者是横向支撑模块，因此不在主调用链上重复连线。
 
 运行时依赖注入不改变编译依赖方向：`ddd-infrastructure` 实现 domain 中声明的仓储端口，再由 `ddd-start` 装配到领域服务。
 
@@ -65,14 +65,14 @@ ddd-client
 └── com.ddd.client.ddd/{request,response}
 
 ddd-model
-└── com.ddd.model.ddd/DddModel
+└── com.ddd.model.ddd/{DddWriteDO,DddCalculateDO,DddRuleCalculateDO,DddExternalReadDO}
 
 ddd-domain
 └── com.ddd.domain
     ├── annotation/DomainService
     └── ddd
         ├── exception/{DomainErrorCode, DomainException}
-        ├── model/{aggregate,entity,param,result,value}
+        ├── model/{aggregate,entity,param,value}
         ├── repository
         └── service
 
@@ -112,8 +112,8 @@ ddd-start
 
 ### adaptor
 
-- `input`：HTTP Controller 只做协议校验、`request → command` 转换、调用一个 Application、`result → response` 转换。
-- `output`：调用第三方 HTTP/RPC/MQ/OSS 等能力，并通过 converter 将外部协议转换为 `ddd-model` 内部模型。
+- `input`：HTTP Controller 只做协议校验、`request/path → command` 转换、调用一个 Application、`result → response` 转换。
+- `output`：接收 Application Command，通过 converter 转为 adaptor 私有的第三方请求，调用第三方 HTTP/RPC/MQ/OSS 等能力，再转换为 `ddd-model` 的内部 DO。
 - `ApiExceptionHandler` 只处理未被主调用边界转换的 HTTP 校验异常和兜底异常。
 - 当前 Controller 不需要接口；未来提供 RPC 二方包时，在 `ddd-client` 声明契约，由 `adaptor/input` 实现。
 
@@ -121,7 +121,8 @@ ddd-start
 
 - 只编排用例，保留 `command`、`result`，不持有领域状态。
 - 调用 DomainService 或 domain 的 repository 端口；调用外部能力时，只依赖 Application 自己声明的 `DddOutputAdaptor`。
-- 成功时把领域决策或 `DddModel` 转换为 Application Result；不得让 Controller 接触 Aggregate、Entity、Value Object 或 `DddModel`。
+- 任一跨 Application 边界输入均使用 `XXCommand`，即使只有一个标识；Controller 先转换，Application 也将同一 Command 传给 OutAdaptor。
+- 成功时把 `Result<XXDO>` 转换为 Application Result；不得让 Controller 接触 Aggregate、Entity、Value Object 或 `XXDO`。
 
 ### domain
 
@@ -165,7 +166,7 @@ success = false  → code/message 为本项目内部错误信息，data=null
 | 域内读 | `GET /api/ddd/{id}` | Controller → `DddReadApplication` → Repository → Aggregate | 无。 |
 | 规则+计算 | `POST /api/ddd/rule` | Controller → `DddRuleApplication` → `DddRuleDomainService` → RuleRepository → RuleAggregate | 无。 |
 | 纯计算 | `POST /api/ddd/calculate` | Controller → `DddCalculateApplication` → `DddCalculateDomainService` | 无，不查询仓储、不创建聚合。 |
-| 外部读 | `GET /api/ddd/{id}/external` | Controller → `DddExternalReadApplication` → `DddOutputAdaptor` → output impl → converter → `DddModel` | 无。 |
+| 外部读 | `GET /api/ddd/{id}/external` | Controller → `DddExternalReadCommand` → `DddExternalReadApplication` → `DddOutputAdaptor` → converter → 第三方请求/响应 → `DddExternalReadDO` | 无。 |
 
 ## 代码编写规则
 
@@ -173,6 +174,8 @@ success = false  → code/message 为本项目内部错误信息，data=null
 - 流程型方法必须拆成清晰的局部步骤，使用 `// 1.`、`// 2.` 编号说明“获取/组装 → 调用 → 解析/转换”；不要写嵌套的一行调用链。
 - 方法或构造器签名仅在超过 120 字符时换行；Java 源码行宽不超过 120 字符。
 - Spring 管理的组件统一采用单一构造器注入；domain 通过无 Spring 依赖的 `@DomainService` 标记和 `ddd-start` 扫描装配。
+- `XXPO` 仅用于 infrastructure 中的数据库映射；`XXDO` 仅用于项目内部的无行为数据传递，DomainService 和 OutAdaptor 的公开成功结果统一为 `Result<XXDO>`；Application 必须转换为自己的 `XXResult`。
+- 任何跨 Application、DomainService 或 OutAdaptor 公开边界的入参都使用 `XXCommand` 或 `XXParam` 对象；禁止传递裸 `String`、数字、布尔值或其他基本类型。OutAdaptor 内部的 converter 负责将 Command 转为第三方请求对象。
 - 所有版本在根 `pom.xml` 管理，子模块 dependency/plugin 不声明版本（Maven 必需的 parent version 除外）。
 - 不创建无真实用途的 Controller、RPC 接口、Configuration 或内存式仓储；按真实需求裁剪模块与调用模式。
 

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.ddd.application.ddd.command.DddCalculateCommand;
+import com.ddd.application.ddd.command.DddExternalReadCommand;
+import com.ddd.application.ddd.command.DddReadCommand;
 import com.ddd.application.ddd.command.DddRuleCommand;
 import com.ddd.application.ddd.command.DddWriteCommand;
 import com.ddd.application.ddd.result.DddCalculateResult;
@@ -30,6 +32,14 @@ import com.ddd.client.ddd.response.DddWriteResponse;
  */
 @Component
 public final class DddInputAssembler {
+    /**
+     * 将 HTTP 写模式请求转换为应用层命令。
+     *
+     * @param request 写模式 HTTP 请求
+     * @return 写模式应用命令
+     *
+     * @author AIGenerator
+     */
     public DddWriteCommand toCommand(DddWriteRequest request) {
         // 1. 从 HTTP 请求读取写入所需的基础字段。
         String id = request.id();
@@ -42,6 +52,14 @@ public final class DddInputAssembler {
         return command;
     }
 
+    /**
+     * 将 HTTP 纯计算请求转换为应用层命令。
+     *
+     * @param request 纯计算 HTTP 请求
+     * @return 纯计算应用命令
+     *
+     * @author AIGenerator
+     */
     public DddCalculateCommand toCommand(DddCalculateRequest request) {
         // 1. 从 HTTP 请求读取纯计算参数。
         int baseValue = request.baseValue();
@@ -49,6 +67,44 @@ public final class DddInputAssembler {
 
         // 2. 组装 application 层命令。
         DddCalculateCommand command = new DddCalculateCommand(baseValue, factor);
+        return command;
+    }
+
+    /**
+     * 将 HTTP 路径标识转换为域内读取应用命令。
+     *
+     * <p>即使只有一个标识字段，跨 Application 边界也必须传递命令对象。</p>
+     *
+     * @param id HTTP 路径中的聚合标识
+     * @return 域内读取应用命令
+     *
+     * @author AIGenerator
+     */
+    public DddReadCommand toReadCommand(String id) {
+        // 1. 读取 HTTP 路径中的聚合标识。
+        String aggregateId = id;
+
+        // 2. 组装域内读取应用命令。
+        DddReadCommand command = new DddReadCommand(aggregateId);
+        return command;
+    }
+
+    /**
+     * 将 HTTP 路径标识转换为外部读取应用命令。
+     *
+     * <p>即使只有一个标识字段，跨 Application 边界也必须传递命令对象。</p>
+     *
+     * @param id HTTP 路径中的业务标识
+     * @return 外部读取应用命令
+     *
+     * @author AIGenerator
+     */
+    public DddExternalReadCommand toExternalReadCommand(String id) {
+        // 1. 读取 HTTP 路径中的业务标识。
+        String businessId = id;
+
+        // 2. 组装外部读取应用命令。
+        DddExternalReadCommand command = new DddExternalReadCommand(businessId);
         return command;
     }
 
@@ -70,6 +126,14 @@ public final class DddInputAssembler {
         return command;
     }
 
+    /**
+     * 将写模式应用结果转换为 HTTP 响应。
+     *
+     * @param result 写模式应用结果
+     * @return 写模式 HTTP 响应
+     *
+     * @author AIGenerator
+     */
     public DddWriteResponse toResponse(DddWriteResult result) {
         // 1. 从应用层结果读取响应字段。
         String id = result.id();
@@ -83,6 +147,14 @@ public final class DddInputAssembler {
         return response;
     }
 
+    /**
+     * 将域内读取应用结果转换为 HTTP 响应。
+     *
+     * @param view 域内读取应用结果
+     * @return 域内读取 HTTP 响应
+     *
+     * @author AIGenerator
+     */
     public DddReadResponse toResponse(DddReadResult view) {
         // 1. 将应用层子实体视图转换为 HTTP 子项。
         List<DddReadResponse.EntityItem> entities = view.entities().stream()
@@ -95,6 +167,14 @@ public final class DddInputAssembler {
         return response;
     }
 
+    /**
+     * 将纯计算应用结果转换为 HTTP 响应。
+     *
+     * @param result 纯计算应用结果
+     * @return 纯计算 HTTP 响应
+     *
+     * @author AIGenerator
+     */
     public DddCalculateResponse toResponse(DddCalculateResult result) {
         // 1. 读取应用层计算结果。
         int calculatedValue = result.calculatedValue();

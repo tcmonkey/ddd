@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import com.ddd.application.ddd.command.DddRuleCommand;
 import com.ddd.application.ddd.result.DddRuleResult;
 import com.ddd.common.result.Result;
-import com.ddd.domain.ddd.model.result.DddRuleDecision;
+import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.service.DddRuleDomainService;
+import com.ddd.model.ddd.DddRuleCalculateDO;
 
 /**
  * DDD 规则与计算模式的应用服务模板。
@@ -33,20 +34,19 @@ public final class DddRuleApplication {
      * @author AIGenerator
      */
     public Result<DddRuleResult> execute(DddRuleCommand command) {
-        // 1. 调用规则领域服务取得领域决策。
-        String ruleCode = command.ruleCode();
-        int baseValue = command.baseValue();
-        Result<DddRuleDecision> domainResult = dddRuleDomainService.execute(ruleCode, baseValue);
+        // 1. 调用规则领域服务取得领域内部数据对象。
+        DddRuleParam param = new DddRuleParam(command.ruleCode(), command.baseValue());
+        Result<DddRuleCalculateDO> domainResult = dddRuleDomainService.execute(param);
         if (!domainResult.success()) {
             return Result.failure(domainResult.code(), domainResult.message());
         }
 
-        // 2. 将领域决策转换为应用层结果。
-        DddRuleDecision decision = domainResult.data();
-        String decidedRuleCode = decision.ruleCode();
-        int factor = decision.factor();
-        int calculatedValue = decision.calculatedValue().value();
-        String reason = decision.reason();
+        // 2. 将领域内部数据对象转换为应用层结果。
+        DddRuleCalculateDO dataObject = domainResult.data();
+        String decidedRuleCode = dataObject.ruleCode();
+        int factor = dataObject.factor();
+        int calculatedValue = dataObject.calculatedValue();
+        String reason = dataObject.reason();
         DddRuleResult result = new DddRuleResult(decidedRuleCode, factor, calculatedValue, reason);
         return Result.success(result);
     }

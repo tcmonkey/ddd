@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ddd.adaptor.ddd.input.assembler.DddInputAssembler;
 import com.ddd.application.ddd.command.DddCalculateCommand;
+import com.ddd.application.ddd.command.DddExternalReadCommand;
+import com.ddd.application.ddd.command.DddReadCommand;
 import com.ddd.application.ddd.command.DddRuleCommand;
 import com.ddd.application.ddd.command.DddWriteCommand;
 import com.ddd.application.ddd.result.DddCalculateResult;
@@ -94,13 +96,16 @@ public class DddController {
      */
     @GetMapping("/{id}")
     public Result<DddReadResponse> query(@PathVariable("id") String id) {
-        // 1. 调用域内读取应用服务。
-        Result<DddReadResult> applicationResult = readApplication.query(id);
+        // 1. 将 HTTP 路径标识转换为应用命令。
+        DddReadCommand command = assembler.toReadCommand(id);
+
+        // 2. 调用域内读取应用服务。
+        Result<DddReadResult> applicationResult = readApplication.query(command);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }
 
-        // 2. 将应用结果转换为 HTTP 响应。
+        // 3. 将应用结果转换为 HTTP 响应。
         DddReadResponse response = assembler.toResponse(applicationResult.data());
         return Result.success(response);
     }
@@ -163,13 +168,16 @@ public class DddController {
      */
     @GetMapping("/{id}/external")
     public Result<DddExternalReadResponse> queryExternal(@PathVariable("id") String id) {
-        // 1. 调用外部读取应用服务。
-        Result<DddExternalResult> applicationResult = externalReadApplication.query(id);
+        // 1. 将 HTTP 路径标识转换为应用命令。
+        DddExternalReadCommand command = assembler.toExternalReadCommand(id);
+
+        // 2. 调用外部读取应用服务。
+        Result<DddExternalResult> applicationResult = externalReadApplication.query(command);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }
 
-        // 2. 将应用结果转换为 HTTP 响应。
+        // 3. 将应用结果转换为 HTTP 响应。
         DddExternalReadResponse response = assembler.toResponse(applicationResult.data());
         return Result.success(response);
     }

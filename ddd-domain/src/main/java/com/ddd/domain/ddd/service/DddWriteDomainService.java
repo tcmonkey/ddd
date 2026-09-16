@@ -14,10 +14,10 @@ import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.model.param.DddWriteParam;
-import com.ddd.domain.ddd.model.result.DddWriteDecision;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRepository;
 import com.ddd.domain.ddd.repository.DddRuleRepository;
+import com.ddd.model.ddd.DddWriteDO;
 
 /**
  * DDD 写模式的领域决策服务模板。
@@ -48,7 +48,7 @@ public final class DddWriteDomainService {
      *
      * @author AIGenerator
      */
-    public Result<DddWriteDecision> execute(DddWriteParam param) {
+    public Result<DddWriteDO> execute(DddWriteParam param) {
         try {
             // 1. 从输入聚合取得待处理操作，保持领域服务只与聚合协作。
             DddAggregate inputAggregate = param.aggregate();
@@ -60,14 +60,15 @@ public final class DddWriteDomainService {
             DddOperationEntity existing = existingOperation.orElse(null);
             if (existing != null) {
                 // 3. 已存在相同操作时返回幂等决策，不再重复写入。
-                DddWriteDecision decision = DddWriteDecision.duplicate(existing.operationId(), existing.value(),
-                        aggregate.currentValue(), "idempotent replay");
-                return Result.success(decision);
+                DddWriteDO result = new DddWriteDO(existing.operationId().value(), existing.value().value(),
+                        aggregate.currentValue().value(), "idempotent replay", true);
+                return Result.success(result);
             }
 
             // 4. 读取规则并完成待处理操作的确认。
             DddRuleAggregate rule = dddRuleRepository.getRequiredByRuleCode(pendingOperation.ruleCode());
-            DddRuleParam ruleParam = new DddRuleParam(pendingOperation.ruleCode(), pendingOperation.baseValue());
+            DddRuleParam ruleParam = new DddRuleParam(pendingOperation.ruleCode(),
+                    pendingOperation.baseValue().value());
             DddValue calculatedValue = rule.evaluate(ruleParam);
             DddOperationEntity confirmed = aggregate.confirm(pendingOperation, calculatedValue, Instant.now());
 
@@ -76,9 +77,9 @@ public final class DddWriteDomainService {
             if (!Boolean.TRUE.equals(saved)) {
                 throw new DomainException(DomainErrorCode.DOMAIN_CONCURRENT_CONFLICT);
             }
-            DddWriteDecision decision = DddWriteDecision.written(confirmed.operationId(), confirmed.value(),
-                    aggregate.currentValue(), rule.reason());
-            return Result.success(decision);
+            DddWriteDO result = new DddWriteDO(confirmed.operationId().value(), confirmed.value().value(),
+                    aggregate.currentValue().value(), rule.reason(), false);
+            return Result.success(result);
         } catch (DomainException exception) {
             LOG.warn("DDD 领域写入失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());

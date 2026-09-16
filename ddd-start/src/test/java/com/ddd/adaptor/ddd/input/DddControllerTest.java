@@ -8,12 +8,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
+import com.ddd.application.ddd.command.DddExternalReadCommand;
 import com.ddd.common.result.Result;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddRuleMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddRulePO;
-import com.ddd.model.ddd.DddModel;
+import com.ddd.model.ddd.DddExternalReadDO;
 import com.ddd.start.Application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -113,7 +114,7 @@ class DddControllerTest {
                 .andExpect(jsonPath("$.data.name").value("DDD_EXTERNAL_ddd-001"))
                 .andExpect(jsonPath("$.data.category").value("DEFAULT"));
 
-        Result<DddModel> invalidOutputResult = outputAdaptor.queryById(" ");
+        Result<DddExternalReadDO> invalidOutputResult = outputAdaptor.query(new DddExternalReadCommand(" "));
         assertFalse(invalidOutputResult.success());
         assertEquals("ADAPTOR_REQUEST_INVALID", invalidOutputResult.code());
     }

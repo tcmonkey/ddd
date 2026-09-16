@@ -2,8 +2,6 @@ package com.ddd.domain.ddd.model.param;
 
 import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.exception.DomainException;
-import com.ddd.domain.ddd.model.value.DddValue;
-
 /**
  * 规则与计算模式所需的不可变领域参数。
  *
@@ -15,7 +13,7 @@ import com.ddd.domain.ddd.model.value.DddValue;
  *
  * @author AIGenerator
  */
-public record DddRuleParam(String ruleCode, DddValue baseValue) {
+public record DddRuleParam(String ruleCode, int baseValue) {
     /**
      * 校验规则计算的必要参数。
      *
@@ -25,6 +23,9 @@ public record DddRuleParam(String ruleCode, DddValue baseValue) {
      */
     public DddRuleParam {
         if (ruleCode == null || ruleCode.isBlank()) {
+            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
+        }
+        if (baseValue <= 0) {
             throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
         }
     }

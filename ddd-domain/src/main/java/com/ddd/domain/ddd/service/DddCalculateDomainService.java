@@ -7,7 +7,9 @@ import com.ddd.common.result.Result;
 import com.ddd.domain.annotation.DomainService;
 import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.exception.DomainException;
+import com.ddd.domain.ddd.model.param.DddCalculateParam;
 import com.ddd.domain.ddd.model.value.DddValue;
+import com.ddd.model.ddd.DddCalculateDO;
 
 /**
  * DDD 纯计算模式的领域服务模板。
@@ -23,20 +25,20 @@ public final class DddCalculateDomainService {
     /**
      * 根据输入值和计算因子得到结果。
      *
-     * @param baseValue 输入值
-     * @param factor 计算因子
+     * @param param 纯计算领域参数
      * @return 计算结果操作包装
      *
      * @author AIGenerator
      */
-    public Result<DddValue> calculate(int baseValue, int factor) {
+    public Result<DddCalculateDO> calculate(DddCalculateParam param) {
         try {
             // 1. 将原始数值封装为满足不变量的领域值对象。
-            DddValue base = DddValue.positive(baseValue);
+            DddValue base = DddValue.positive(param.baseValue());
 
             // 2. 使用领域值对象完成计算并返回领域结果。
-            DddValue calculatedValue = base.multiply(factor);
-            return Result.success(calculatedValue);
+            DddValue calculatedValue = base.multiply(param.factor());
+            DddCalculateDO result = new DddCalculateDO(calculatedValue.value());
+            return Result.success(result);
         } catch (DomainException exception) {
             LOG.warn("DDD 纯计算失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());
