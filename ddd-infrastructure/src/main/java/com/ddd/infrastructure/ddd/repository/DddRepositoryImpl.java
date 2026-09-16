@@ -103,7 +103,7 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
     /**
      * 将根实体内子操作实体转换为主表可保存的 JSON 快照。
      *
-     * @param entities 聚合内部实体
+     * @param operationEntities 聚合内部实体
      * @return 实体 JSON 快照
      *
      * @author AIGenerator
