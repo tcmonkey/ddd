@@ -1,6 +1,6 @@
 # Java DDD 开发规范
 
-版本：1.0。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。
+版本：1.1。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。
 
 ## 1. 使用方式与规则优先级
 
@@ -22,6 +22,7 @@
 | MOD-006 | domain 只依赖 common/model/JDK，禁止 Spring、Jakarta、MyBatis 等框架。 | P：禁止常见框架 import；POM、全限定类型/传递依赖需评审 |
 | MOD-007 | application 依赖 domain/model/common；infrastructure 实现 domain 仓储端口；adaptor 依赖 application/client/model/common。start 只负责启动和装配，业务模块禁止反向依赖 start。 | R |
 | MOD-008 | 同一 adaptor module 区分 input/output：input 放协议入口及 assembler，output 放外部能力实现、converter 和私有第三方模型。 | R |
+| MOD-009 | start 的 POM 是本服务的显式装配清单，直接声明实际随服务运行的内部模块，不仅依靠传递依赖。完整模板列出 common、client、model、domain、application、infrastructure、adaptor；真实项目按服务边界裁剪，不引入无用途、其他服务或仅工具用途的模块。测试专用依赖使用 test scope，运行专用依赖按需使用 runtime scope；所有依赖版本仍由根 POM 管理。业务模块不得反向依赖 start。 | R：核对 POM、有效依赖树和运行验证，Checkstyle 不检查 |
 
 按业务子域组织包，推荐骨架：
 
@@ -163,7 +164,13 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 
 新项目使用 solo 的 Java DDD 模板时，AI 在根 POM 建好、正式编码前自动执行 Skill 的 `scripts/install_java_ddd_checks.py --project <项目根>`，生成根 checkstyle.xml、继承执行的 Maven 配置和本规范快照 `AI/output/19 Java DDD开发规范.md`，无需用户每次重复指定。没有执行能力的宿主按同一资源生成文件，不能谎称构建已执行。
 
-## 11. 历史约定收敛结论
+## 11. 参考代码的使用边界
+
+编码参考随 Skill 存放在 `assets/java-ddd/reference-project/`，包含八个 Maven module 的源码、配置、测试、根 POM 与 Checkstyle。开发计划按任务选择参考链路；编码前读取该快照 README 及相关实际文件。规范负责约束，代码负责示例，Checkstyle 负责可自动检查的语法；代码与规则冲突时指出并以确认后的规则处理，不从样例擅自新增强制约束。
+
+真实项目不能机械复制所有演示链路或生产未适配配置；已有项目约定优先。快照是经用户确认的静态版本，不依赖原 ddd 工程的绝对路径，不随新业务开发自动更新。
+
+## 12. 历史约定收敛结论
 
 | 历史分歧 | 当前唯一生效规则 | 来源 |
 |---|---|---|
@@ -179,6 +186,7 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 | Repository 使用领域读取 Param / 标识类型 | Repository CRUD 标识例外；分页自有域内对象 | SRC-033 |
 | 通用 request/command/execute / 具体参数与动作 | 四层签名及完整类型变量名，明确业务动作 | SRC-034 |
 | 手动接口 Javadoc 检查 / 构建约束 | Checkstyle 生命周期门禁；独立接口检查脚本已移除 | SRC-035、SRC-036 |
+| start 依靠传递依赖 / 显式装配清单 | 直接列出本服务实际运行模块，按需裁剪；不是全仓库依赖清单 | SRC-037 |
 
 不把历史版本日志中的旧选择当作新项目规则。规则变更应更新本文件版本、对应 checkstyle.xml、安装资源和项目快照，并重新验证正向构建与反向违规用例。
 

@@ -11,9 +11,18 @@
     <artifactId>ddd-start</artifactId>
 
     <dependencies>
+        <!-- 本服务的显式装配清单，仅声明实际参与运行的内部模块；版本由根 POM 管理。 -->
+        <dependency>
+            <groupId>com.ddd</groupId>
+            <artifactId>ddd-common</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.ddd</groupId>
             <artifactId>ddd-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ddd</groupId>
+            <artifactId>ddd-model</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ddd</groupId>

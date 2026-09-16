@@ -25,7 +25,9 @@ mvn clean test
 | `ddd-application` | 用例编排、`command`、`param`、`result`、assembler 和外部能力端口。 | 依赖 domain、model、common；不得向 Controller 返回领域模型。 |
 | `ddd-infrastructure` | MyBatis-Plus Mapper、PO、基础仓储和领域仓储实现。 | 依赖 domain、common；禁止自定义 SQL。 |
 | `ddd-adaptor` | HTTP input/output 防腐层、assembler、converter、异常映射与外部协议模型。 | 依赖 application、client、model、common。 |
-| `ddd-start` | Spring Boot 启动、模块装配、领域服务扫描、Mapper 扫描、日志、schema 与集成测试。 | 只负责组装，业务模块不得反向依赖。 |
+| `ddd-start` | Spring Boot 启动、模块装配、领域服务扫描、Mapper 扫描、日志、schema 与集成测试。 | 显式声明本服务运行的内部模块；只负责组装，业务模块不得反向依赖。 |
+
+`ddd-start/pom.xml` 是显式装配清单：当前完整模板直接声明其余七个模块，版本统一由根 POM 管理。这不表示 start 要调用每一层的业务类，只表示这些模块明确随服务参与运行。真实项目按服务边界裁剪，不引入无用途或其他服务模块；测试专用依赖使用 `test` scope。该规则通过 POM/依赖树审查与构建运行验证，不由 Checkstyle 自动校验。
 
 下图按运行时调用方向从左到右展示。`input` 和 `output` 同属 `ddd-adaptor` Maven module，但职责和方向不同，因此拆为两个节点。
 
