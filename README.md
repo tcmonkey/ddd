@@ -8,6 +8,7 @@
 
 ```bash
 mvn clean test
+java scripts/CheckInterfaceJavadoc.java .
 ```
 
 工程使用 JDK 17、Spring Boot 3.x、Maven、MyBatis-Plus 与 H2。启动模块为 `ddd-start`，测试会覆盖写、域内读、规则计算、纯计算、外部读和幂等重放链路。
@@ -174,6 +175,7 @@ success = false  → code/message 为本项目内部错误信息，data=null
 ## 代码编写规则
 
 - 所有公开类型、字段和对外契约使用中文多行 Javadoc，并带 `@author AIGenerator`。
+- 自行声明的接口方法必须逐项说明用途、`@param`、`@return` 和作者；由 `scripts/CheckInterfaceJavadoc.java` 基于 Java 语法树检查覆盖率，遗漏时返回非零退出码。
 - 流程型方法必须拆成清晰的局部步骤，使用 `// 1.`、`// 2.` 编号说明“获取/组装 → 调用 → 解析/转换”；不要写嵌套的一行调用链。
 - 方法或构造器签名仅在超过 120 字符时换行；Java 源码行宽不超过 120 字符。
 - Spring 管理的组件统一采用单一构造器注入；domain 通过无 Spring 依赖的 `@DomainService` 标记和 `ddd-start` 扫描装配。

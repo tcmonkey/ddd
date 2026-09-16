@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 37,
+  "revision": 38,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-16T15:31:46+08:00"
+    "updated_at": "2026-09-16T15:45:26+08:00"
   },
   "handoff": {
-    "summary": "按用户澄清删除无额外语义的 DddExternalReadParam：DddExternalReadCommand 直接传入 OutAdaptor，output converter 直接从 Command 构造第三方请求。DddApplicationAssembler 保留并只负责 Command 到 Domain Param、Aggregate/DO 到 Application Result；若未来出现真正独立的外部调用参数，放入 application/adaptor。README、技术方案、计划、自测和决策记录已同步。",
-    "next_action": "用户继续审阅 Application assembler、Domain Param 与 OutAdaptor Command 的职责边界；确认后进入代码审查或继续迭代模板。"
+    "summary": "补齐 DddRuleRepository 接口方法的中文 Javadoc，明确参数、聚合返回值、规则缺失与非法数据的领域异常和作者。新增基于 JDK 语法树的 CheckInterfaceJavadoc 校验脚本，全工程6个自行声明的接口方法通过；临时缺失注释接口被准确定位并返回退出码1。修正此前仅检查已有注释格式、未验证覆盖率的自测结论。",
+    "next_action": "用户继续审阅 DDD 模板；后续接口变更执行 java scripts/CheckInterfaceJavadoc.java . 检查方法注释覆盖率。"
   },
-  "last_updated": "2026-09-16T15:31:46+08:00"
+  "last_updated": "2026-09-16T15:45:26+08:00"
 }
