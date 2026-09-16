@@ -19,7 +19,7 @@ import com.ddd.model.ddd.DddExternalReadDO;
 @Component
 public class DddOutputConverter {
     /**
-     * 将应用层外部读取命令转换为第三方协议请求。
+     * 将 Application Command 转换为第三方协议请求。
      *
      * @param command 外部读取应用命令
      * @return 第三方协议请求
@@ -27,7 +27,7 @@ public class DddOutputConverter {
      * @author AIGenerator
      */
     public DddExternalRequest toExternalRequest(DddExternalReadCommand command) {
-        // 1. 校验应用命令是否具备外部调用所需的标识。
+        // 1. 校验 Application Command 是否具备外部调用所需的标识。
         if (command == null || command.id() == null || command.id().isBlank()) {
             throw new AdaptorException(AdaptorErrorCode.ADAPTOR_REQUEST_INVALID);
         }

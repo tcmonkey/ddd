@@ -114,7 +114,8 @@ class DddControllerTest {
                 .andExpect(jsonPath("$.data.name").value("DDD_EXTERNAL_ddd-001"))
                 .andExpect(jsonPath("$.data.category").value("DEFAULT"));
 
-        Result<DddExternalReadDO> invalidOutputResult = outputAdaptor.query(new DddExternalReadCommand(" "));
+        DddExternalReadCommand invalidCommand = new DddExternalReadCommand(" ");
+        Result<DddExternalReadDO> invalidOutputResult = outputAdaptor.query(invalidCommand);
         assertFalse(invalidOutputResult.success());
         assertEquals("ADAPTOR_REQUEST_INVALID", invalidOutputResult.code());
     }

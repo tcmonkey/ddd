@@ -1,7 +1,7 @@
 package com.ddd.domain.ddd.repository;
 
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
-import com.ddd.domain.ddd.model.value.DddIdValue;
+import com.ddd.domain.ddd.model.param.DddReadParam;
 
 /**
  * DDD 聚合根的领域仓储模板。
@@ -16,12 +16,12 @@ public interface DddRepository {
     /**
      * 按业务标识查询聚合根。
      *
-     * @param id 业务标识值对象
+     * @param param 域内读取领域参数
      * @return 已恢复的聚合根；数据不存在时返回当前值为零的空聚合根
      *
      * @author AIGenerator
      */
-    DddAggregate findById(DddIdValue id);
+    DddAggregate findById(DddReadParam param);
 
     /**
      * 保存聚合根及其完整实体快照。

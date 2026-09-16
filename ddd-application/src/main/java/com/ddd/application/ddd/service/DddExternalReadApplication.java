@@ -3,6 +3,7 @@ package com.ddd.application.ddd.service;
 import org.springframework.stereotype.Service;
 
 import com.ddd.application.ddd.adaptor.DddOutputAdaptor;
+import com.ddd.application.ddd.assembler.DddApplicationAssembler;
 import com.ddd.application.ddd.command.DddExternalReadCommand;
 import com.ddd.application.ddd.result.DddExternalResult;
 import com.ddd.common.result.Result;
@@ -19,9 +20,11 @@ import com.ddd.model.ddd.DddExternalReadDO;
 @Service
 public final class DddExternalReadApplication {
     private final DddOutputAdaptor outputAdaptor;
+    private final DddApplicationAssembler assembler;
 
-    public DddExternalReadApplication(DddOutputAdaptor outputAdaptor) {
+    public DddExternalReadApplication(DddOutputAdaptor outputAdaptor, DddApplicationAssembler assembler) {
         this.outputAdaptor = outputAdaptor;
+        this.assembler = assembler;
     }
 
     /**
@@ -33,15 +36,15 @@ public final class DddExternalReadApplication {
      * @author AIGenerator
      */
     public Result<DddExternalResult> query(DddExternalReadCommand command) {
-        // 1. 调用输出适配端口获取项目内部模型。
+        // 1. 调用输出适配端口获取项目内部 DO。
         Result<DddExternalReadDO> externalResult = outputAdaptor.query(command);
         if (!externalResult.success()) {
             return Result.failure(externalResult.code(), externalResult.message());
         }
 
-        // 2. 将内部模型转换为应用层结果，避免向 Controller 泄漏模型。
+        // 2. 将内部 DO 转换为应用层结果，避免向 Controller 泄漏领域模型。
         DddExternalReadDO dataObject = externalResult.data();
-        DddExternalResult result = new DddExternalResult(dataObject.id(), dataObject.name(), dataObject.category());
+        DddExternalResult result = assembler.toResult(dataObject);
         return Result.success(result);
     }
 }

@@ -48,7 +48,7 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
     @Override
     public Result<DddExternalReadDO> query(DddExternalReadCommand command) {
         try {
-            // 1. 将应用命令转换为第三方协议请求。
+            // 1. 将 Application 命令转换为第三方协议请求。
             DddExternalRequest externalRequest = converter.toExternalRequest(command);
 
             // 2. 调用外部系统并取得外部协议响应。

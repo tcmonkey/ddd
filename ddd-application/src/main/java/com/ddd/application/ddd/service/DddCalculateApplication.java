@@ -2,6 +2,7 @@ package com.ddd.application.ddd.service;
 
 import org.springframework.stereotype.Service;
 
+import com.ddd.application.ddd.assembler.DddApplicationAssembler;
 import com.ddd.application.ddd.command.DddCalculateCommand;
 import com.ddd.application.ddd.result.DddCalculateResult;
 import com.ddd.common.result.Result;
@@ -17,9 +18,12 @@ import com.ddd.model.ddd.DddCalculateDO;
 @Service
 public final class DddCalculateApplication {
     private final DddCalculateDomainService calculateDomainService;
+    private final DddApplicationAssembler assembler;
 
-    public DddCalculateApplication(DddCalculateDomainService calculateDomainService) {
+    public DddCalculateApplication(DddCalculateDomainService calculateDomainService,
+                                   DddApplicationAssembler assembler) {
         this.calculateDomainService = calculateDomainService;
+        this.assembler = assembler;
     }
 
     /**
@@ -31,16 +35,18 @@ public final class DddCalculateApplication {
      * @author AIGenerator
      */
     public Result<DddCalculateResult> execute(DddCalculateCommand command) {
-        // 1. 将应用命令转换为领域参数并调用无状态领域服务。
-        DddCalculateParam param = new DddCalculateParam(command.baseValue(), command.factor());
+        // 1. 将应用命令组装为纯计算领域参数。
+        DddCalculateParam param = assembler.toDomainParam(command);
+
+        // 2. 调用无状态领域服务。
         Result<DddCalculateDO> domainResult = calculateDomainService.calculate(param);
         if (!domainResult.success()) {
             return Result.failure(domainResult.code(), domainResult.message());
         }
 
-        // 2. 将领域内部数据对象转换为应用层结果。
+        // 3. 将领域内部数据对象转换为应用层结果。
         DddCalculateDO dataObject = domainResult.data();
-        DddCalculateResult result = new DddCalculateResult(dataObject.calculatedValue());
+        DddCalculateResult result = assembler.toResult(dataObject);
         return Result.success(result);
     }
 }

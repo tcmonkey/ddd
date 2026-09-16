@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 35,
+  "revision": 37,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-16T12:38:28+08:00"
+    "updated_at": "2026-09-16T15:31:46+08:00"
   },
   "handoff": {
-    "summary": "正式固化 PO/DO/Result 与 Command/Param 边界：删除旧 DddModel/领域决策类型，新增四类 DO；DomainService 和 OutAdaptor 公开返回 Result<XXDO>；域内读与外部读均由 Controller 创建 Command，外部读 Command 原样传至 OutAdaptor 并由 converter 转为私有第三方请求。README、技术方案、计划、自测和决策记录已同步。",
-    "next_action": "用户审阅新的 PO/DO/Result、对象入参与 OutAdaptor 转换约定；确认后继续进行代码审查或迭代模板规则。"
+    "summary": "按用户澄清删除无额外语义的 DddExternalReadParam：DddExternalReadCommand 直接传入 OutAdaptor，output converter 直接从 Command 构造第三方请求。DddApplicationAssembler 保留并只负责 Command 到 Domain Param、Aggregate/DO 到 Application Result；若未来出现真正独立的外部调用参数，放入 application/adaptor。README、技术方案、计划、自测和决策记录已同步。",
+    "next_action": "用户继续审阅 Application assembler、Domain Param 与 OutAdaptor Command 的职责边界；确认后进入代码审查或继续迭代模板。"
   },
-  "last_updated": "2026-09-16T12:38:28+08:00"
+  "last_updated": "2026-09-16T15:31:46+08:00"
 }

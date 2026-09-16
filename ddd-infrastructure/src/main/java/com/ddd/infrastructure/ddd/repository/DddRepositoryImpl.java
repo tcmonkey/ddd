@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
+import com.ddd.domain.ddd.model.param.DddReadParam;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRepository;
@@ -43,8 +44,9 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
     }
 
     @Override
-    public DddAggregate findById(DddIdValue id) {
+    public DddAggregate findById(DddReadParam param) {
         // 1. 使用主键查询主聚合的持久化快照。
+        DddIdValue id = DddAggregate.idOf(param.id());
         DddPO stored = getById(id.value());
         if (stored == null) {
             // 2. 不存在时返回可用于首次写入的空聚合。
