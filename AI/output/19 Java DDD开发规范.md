@@ -161,7 +161,7 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 - 接口与实现类的公开方法 Javadoc 统一由 Maven Checkstyle 门禁检查，不再维护独立接口诊断脚本。
 - 不得声称 Checkstyle 通过等于架构、功能、性能或生产验收通过；其余 R/P 规则进入代码审查及专项测试。
 
-新项目使用 solo-delivery 的 Java DDD 模板时，AI 在根 POM 建好、正式编码前自动执行 Skill 的 `scripts/install_java_ddd_checks.py --project <项目根>`，生成根 checkstyle.xml、继承执行的 Maven 配置和本规范快照 `AI/output/19 Java DDD开发规范.md`，无需用户每次重复指定。没有执行能力的宿主按同一资源生成文件，不能谎称构建已执行。
+新项目使用 solo 的 Java DDD 模板时，AI 在根 POM 建好、正式编码前自动执行 Skill 的 `scripts/install_java_ddd_checks.py --project <项目根>`，生成根 checkstyle.xml、继承执行的 Maven 配置和本规范快照 `AI/output/19 Java DDD开发规范.md`，无需用户每次重复指定。没有执行能力的宿主按同一资源生成文件，不能谎称构建已执行。
 
 ## 11. 历史约定收敛结论
 

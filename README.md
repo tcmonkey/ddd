@@ -198,7 +198,7 @@ mvn clean package
 
 接口与实现类的公开方法注释统一由 Maven Checkstyle 门禁检查，不再维护独立的接口注释检查脚本。
 
-使用 solo-delivery 的 Java DDD 模板生成新项目时，AI 在根 POM 建好、正式编码前自动运行 Skill 的安装器，携带相同门禁与规范快照。配置与项目脱离 Skill 也可独立构建，不需要用户每次手动补 checkstyle.xml；已有冲突配置会保留并要求显式协调。
+使用 solo 的 Java DDD 模板生成新项目时，AI 在根 POM 建好、正式编码前自动运行 Skill 的安装器，携带相同门禁与规范快照。配置与项目脱离 Skill 也可独立构建，不需要用户每次手动补 checkstyle.xml；已有冲突配置会保留并要求显式协调。
 
 ## 文档与交接
 
