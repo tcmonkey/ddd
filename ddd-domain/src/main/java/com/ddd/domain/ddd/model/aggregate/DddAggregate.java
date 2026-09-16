@@ -67,18 +67,6 @@ public final class DddAggregate {
     }
 
     /**
-     * 将原始标识封装为聚合查询所需的领域标识。
-     *
-     * @param rawId 原始根实体标识
-     * @return 校验后的领域标识
-     *
-     * @author AIGenerator
-     */
-    public static DddIdValue idOf(String rawId) {
-        return new DddIdValue(rawId);
-    }
-
-    /**
      * 获取输入聚合中唯一的待处理操作。
      *
      * <p>领域服务通过聚合访问根实体行为，避免直接面向实体编排过程。</p>

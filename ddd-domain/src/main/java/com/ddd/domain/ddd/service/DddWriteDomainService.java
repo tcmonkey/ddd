@@ -13,7 +13,6 @@ import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
-import com.ddd.domain.ddd.model.param.DddReadParam;
 import com.ddd.domain.ddd.model.param.DddWriteParam;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRepository;
@@ -56,8 +55,8 @@ public final class DddWriteDomainService {
             DddOperationEntity pendingOperation = inputAggregate.requiredPendingOperation();
 
             // 2. 加载已持久化聚合，用于执行幂等判断和状态变更。
-            DddReadParam readParam = new DddReadParam(inputAggregate.id().value());
-            DddAggregate aggregate = dddRepository.findById(readParam);
+            String aggregateId = inputAggregate.id().value();
+            DddAggregate aggregate = dddRepository.findById(aggregateId);
             Optional<DddOperationEntity> existingOperation = aggregate.findOperation(pendingOperation.operationId());
             DddOperationEntity existing = existingOperation.orElse(null);
             if (existing != null) {

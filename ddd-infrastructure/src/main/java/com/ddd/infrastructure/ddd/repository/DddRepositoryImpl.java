@@ -7,18 +7,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
-import com.ddd.domain.ddd.model.param.DddReadParam;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRepository;
 import com.ddd.infrastructure.DddBaseRepository;
-import com.ddd.infrastructure.exception.InfrastructureErrorCode;
-import com.ddd.infrastructure.exception.InfrastructureException;
 import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
+import com.ddd.infrastructure.exception.InfrastructureErrorCode;
+import com.ddd.infrastructure.exception.InfrastructureException;
 
 /**
  * DDD 聚合根的 MyBatis-Plus 仓储实现模板。
@@ -43,14 +43,23 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * 根据业务标识读取并恢复完整聚合。
+     *
+     * @param id 聚合根业务标识
+     * @return 已恢复的聚合；数据不存在时返回可首次写入的空聚合
+     * @throws DomainException 当业务标识不满足领域约束时抛出
+     *
+     * @author AIGenerator
+     */
     @Override
-    public DddAggregate findById(DddReadParam param) {
-        // 1. 使用主键查询主聚合的持久化快照。
-        DddIdValue id = DddAggregate.idOf(param.id());
-        DddPO stored = getById(id.value());
+    public DddAggregate findById(String id) {
+        // 1. 校验业务标识并使用主键查询持久化快照。
+        DddIdValue aggregateId = new DddIdValue(id);
+        DddPO stored = getById(id);
         if (stored == null) {
             // 2. 不存在时返回可用于首次写入的空聚合。
-            DddEntity entity = DddEntity.open(id);
+            DddEntity entity = DddEntity.open(aggregateId);
             DddAggregate aggregate = DddAggregate.of(entity);
             return aggregate;
         }
@@ -64,6 +73,14 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
         return aggregate;
     }
 
+    /**
+     * 保存聚合根及完整子实体快照，按业务标识区分新增与更新。
+     *
+     * @param aggregate 待保存的完整聚合
+     * @return 保存成功返回 true，乐观锁冲突或持久化失败返回 false
+     *
+     * @author AIGenerator
+     */
     @Override
     public Boolean save(DddAggregate aggregate) {
         // 1. 查询现有快照，用于区分插入与带版本的更新。

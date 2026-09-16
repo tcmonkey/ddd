@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.ddd.application.ddd.command.DddCalculateCommand;
-import com.ddd.application.ddd.command.DddReadCommand;
 import com.ddd.application.ddd.command.DddRuleCommand;
 import com.ddd.application.ddd.command.DddWriteCommand;
 import com.ddd.application.ddd.result.DddCalculateResult;
@@ -17,7 +16,6 @@ import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
 import com.ddd.domain.ddd.model.entity.DddOperationEntity;
 import com.ddd.domain.ddd.model.param.DddCalculateParam;
-import com.ddd.domain.ddd.model.param.DddReadParam;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.model.param.DddWriteParam;
 import com.ddd.model.ddd.DddCalculateDO;
@@ -29,7 +27,7 @@ import com.ddd.model.ddd.DddWriteDO;
  * Application 的参数组装与结果转换防腐层。
  *
  * <p>Controller assembler 只处理 HTTP 协议，本类只处理 Application Command、
- * Domain/OutAdaptor Param、Domain/OutAdaptor DO 与 Application Result 的转换，
+ * Domain Param、Domain/OutAdaptor DO 与 Application Result 的转换，
  * 避免应用服务混入重复的对象组装逻辑。</p>
  *
  * @author AIGenerator
@@ -90,23 +88,6 @@ public class DddApplicationAssembler {
 
         // 2. 组装领域参数。
         DddCalculateParam param = new DddCalculateParam(baseValue, factor);
-        return param;
-    }
-
-    /**
-     * 将域内读取应用命令转换为领域查询参数。
-     *
-     * @param command 域内读取应用命令
-     * @return 域内读取领域参数
-     *
-     * @author AIGenerator
-     */
-    public DddReadParam toDomainParam(DddReadCommand command) {
-        // 1. 读取域内查询所需的聚合标识。
-        String id = command.id();
-
-        // 2. 组装领域查询参数。
-        DddReadParam param = new DddReadParam(id);
         return param;
     }
 

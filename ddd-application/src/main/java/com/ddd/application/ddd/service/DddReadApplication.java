@@ -11,7 +11,6 @@ import com.ddd.application.ddd.result.DddReadResult;
 import com.ddd.common.result.Result;
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
-import com.ddd.domain.ddd.model.param.DddReadParam;
 import com.ddd.domain.ddd.repository.DddRepository;
 
 /**
@@ -43,11 +42,11 @@ public final class DddReadApplication {
      */
     public Result<DddReadResult> query(DddReadCommand command) {
         try {
-            // 1. 将应用命令组装为领域读取参数。
-            DddReadParam param = assembler.toDomainParam(command);
+            // 1. 从应用命令提取仓储查询所需的标识。
+            String id = command.id();
 
-            // 2. 按领域参数读取完整聚合。
-            DddAggregate aggregate = dddRepository.findById(param);
+            // 2. 按业务标识读取完整聚合。
+            DddAggregate aggregate = dddRepository.findById(id);
 
             // 3. 将聚合转换为应用层只读结果。
             DddReadResult result = assembler.toResult(aggregate);

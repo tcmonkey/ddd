@@ -125,7 +125,7 @@ ddd-start
 - 只编排用例，保留 `command`、`param`、`result`，不持有领域状态。
 - `DddApplicationAssembler` 统一处理 `Command → Domain Param`、`Aggregate/XXDO → Application Result`；Application Service 不直接创建领域 Param，也不手写字段转换。
 - 调用 DomainService 或 domain 的 repository 端口；调用外部能力时，只依赖 Application 自己声明的 `DddOutputAdaptor`。
-- 任一跨 Application 边界输入均使用 `XXCommand`，即使只有一个标识；Application 通过 assembler 将 Command 组装为 Domain `XXParam`。OutAdaptor 没有额外调用语义时直接接收 Application Command。
+- 任一跨 Application 边界输入均使用 `XXCommand`，即使只有一个标识；调用 DomainService 时通过 assembler 组装 Domain `XXParam`。OutAdaptor 无额外调用语义时直接接收 Command；按 ID 调用 Repository 时直接提取标识，不创建领域 Param。
 - 成功时把 `Result<XXDO>` 转换为 Application Result；不得让 Controller 接触 Aggregate、Entity、Value Object 或 `XXDO`。
 
 ### domain
@@ -134,6 +134,14 @@ ddd-start
 - `DddAggregate` 只持有 `DddEntity` 根实体；根实体持有 id、当前值、版本和 `DddOperationEntity` 子实体，并完成状态修改。
 - DomainService 只通过 Aggregate 的语义方法协作根实体，例如 `findOperation`、`confirm`、`currentValue`，不得写 `aggregate.entity().xxx()` 进行过程式编排。
 - `repository` 是领域端口：查询返回 Aggregate，保存返回 `Boolean`，不返回 `Optional`。
+
+### Repository 入参及分页约定
+
+- Repository 是服务入口对象入参规则的例外：按 ID 查询、删除可接收 `String`、`Long` 等标识类型，按 IDs 批量操作接收标识集合；不复用 DomainService 的 `XXParam`。
+- 新增、修改接收完整 Aggregate，修改依据聚合标识及版本定位；当前 `save` 保留已有新增/更新语义。
+- 分页接收 domain 自有的分页查询对象（页码、页大小、筛选和排序），返回 domain 自有的分页结果（总数、页码、页大小、Aggregate 列表）；不得让 MyBatis-Plus `Page/IPage` 或 PO 越过仓储边界。
+- 普通分页由 Application 调用仓储，再经 assembler 转为 Application Result；涉及领域规则时由 DomainService 编排，仍使用同一域内分页契约。影响总数的筛选必须在分页前完成，不能查一页后过滤却沿用未过滤总数。
+- infrastructure 负责域内分页对象与 MyBatis-Plus 分页对象的双向转换，并校验页大小、排序白名单。当前尚无分页用例，以上为后续代码生成约定，未新增占位分页实现。
 
 ### infrastructure
 
