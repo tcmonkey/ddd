@@ -65,18 +65,18 @@ public class DddController {
     /**
      * 接收写模式请求，并将处理委托给写应用服务。
      *
-     * @param request 写模式请求
+     * @param dddWriteRequest 写模式请求
      * @return 写模式处理结果
      *
      * @author AIGenerator
      */
     @PostMapping("/write")
-    public Result<DddWriteResponse> write(@Valid @RequestBody DddWriteRequest request) {
+    public Result<DddWriteResponse> write(@Valid @RequestBody DddWriteRequest dddWriteRequest) {
         // 1. 将 HTTP 请求转换为应用命令。
-        DddWriteCommand command = assembler.toCommand(request);
+        DddWriteCommand dddWriteCommand = assembler.toCommand(dddWriteRequest);
 
         // 2. 调用写入应用服务。
-        Result<DddWriteResult> applicationResult = writeApplication.execute(command);
+        Result<DddWriteResult> applicationResult = writeApplication.write(dddWriteCommand);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }
@@ -97,10 +97,10 @@ public class DddController {
     @GetMapping("/{id}")
     public Result<DddReadResponse> query(@PathVariable("id") String id) {
         // 1. 将 HTTP 路径标识转换为应用命令。
-        DddReadCommand command = assembler.toReadCommand(id);
+        DddReadCommand dddReadCommand = assembler.toReadCommand(id);
 
         // 2. 调用域内读取应用服务。
-        Result<DddReadResult> applicationResult = readApplication.query(command);
+        Result<DddReadResult> applicationResult = readApplication.query(dddReadCommand);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }
@@ -113,18 +113,18 @@ public class DddController {
     /**
      * 执行不依赖聚合和仓储的纯计算模式。
      *
-     * @param request 纯计算请求
+     * @param dddCalculateRequest 纯计算请求
      * @return 纯计算结果
      *
      * @author AIGenerator
      */
     @PostMapping("/calculate")
-    public Result<DddCalculateResponse> calculate(@Valid @RequestBody DddCalculateRequest request) {
+    public Result<DddCalculateResponse> calculate(@Valid @RequestBody DddCalculateRequest dddCalculateRequest) {
         // 1. 将 HTTP 请求转换为应用命令。
-        DddCalculateCommand command = assembler.toCommand(request);
+        DddCalculateCommand dddCalculateCommand = assembler.toCommand(dddCalculateRequest);
 
         // 2. 调用纯计算应用服务。
-        Result<DddCalculateResult> applicationResult = calculateApplication.execute(command);
+        Result<DddCalculateResult> applicationResult = calculateApplication.calculate(dddCalculateCommand);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }
@@ -137,18 +137,18 @@ public class DddController {
     /**
      * 按领域规则执行计算模式。
      *
-     * @param request 规则计算请求
+     * @param dddRuleRequest 规则计算请求
      * @return 规则计算结果
      *
      * @author AIGenerator
      */
     @PostMapping("/rule")
-    public Result<DddRuleResponse> calculateRule(@Valid @RequestBody DddRuleRequest request) {
+    public Result<DddRuleResponse> calculateRule(@Valid @RequestBody DddRuleRequest dddRuleRequest) {
         // 1. 将 HTTP 请求转换为应用命令。
-        DddRuleCommand command = assembler.toCommand(request);
+        DddRuleCommand dddRuleCommand = assembler.toCommand(dddRuleRequest);
 
         // 2. 调用规则计算应用服务。
-        Result<DddRuleResult> applicationResult = ruleApplication.execute(command);
+        Result<DddRuleResult> applicationResult = ruleApplication.calculate(dddRuleCommand);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }
@@ -169,10 +169,10 @@ public class DddController {
     @GetMapping("/{id}/external")
     public Result<DddExternalReadResponse> queryExternal(@PathVariable("id") String id) {
         // 1. 将 HTTP 路径标识转换为应用命令。
-        DddExternalReadCommand command = assembler.toExternalReadCommand(id);
+        DddExternalReadCommand dddExternalReadCommand = assembler.toExternalReadCommand(id);
 
         // 2. 调用外部读取应用服务。
-        Result<DddExternalResult> applicationResult = externalReadApplication.query(command);
+        Result<DddExternalResult> applicationResult = externalReadApplication.query(dddExternalReadCommand);
         if (!applicationResult.success()) {
             return Result.failure(applicationResult.code(), applicationResult.message());
         }

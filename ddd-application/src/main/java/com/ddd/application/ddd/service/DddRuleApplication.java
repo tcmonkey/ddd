@@ -31,17 +31,17 @@ public final class DddRuleApplication {
     /**
      * 按规则聚合根计算业务值。
      *
-     * @param command 规则编码和基础值
+     * @param dddRuleCommand 规则编码和基础值
      * @return 规则计算结果
      *
      * @author AIGenerator
      */
-    public Result<DddRuleResult> execute(DddRuleCommand command) {
+    public Result<DddRuleResult> calculate(DddRuleCommand dddRuleCommand) {
         // 1. 将应用命令组装为规则计算领域参数。
-        DddRuleParam param = assembler.toDomainParam(command);
+        DddRuleParam param = assembler.toDomainParam(dddRuleCommand);
 
         // 2. 调用规则领域服务取得领域内部数据对象。
-        Result<DddRuleCalculateDO> domainResult = dddRuleDomainService.execute(param);
+        Result<DddRuleCalculateDO> domainResult = dddRuleDomainService.calculate(param);
         if (!domainResult.success()) {
             return Result.failure(domainResult.code(), domainResult.message());
         }

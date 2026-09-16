@@ -40,26 +40,26 @@ public class DddWriteApplication {
      *
      * <p>本层只传递原始命令数据；聚合及其根实体负责封装值对象和子操作实体。</p>
      *
-     * @param command 写入应用命令
+     * @param dddWriteCommand 写入应用命令
      * @return 写入或幂等重放结果
      *
      * @author AIGenerator
      */
     @Transactional
-    public Result<DddWriteResult> execute(DddWriteCommand command) {
+    public Result<DddWriteResult> write(DddWriteCommand dddWriteCommand) {
         try {
             // 1. 将应用命令组装为领域写入参数。
-            DddWriteParam param = assembler.toDomainParam(command);
+            DddWriteParam param = assembler.toDomainParam(dddWriteCommand);
 
             // 2. 调用领域服务完成写入决策。
-            Result<DddWriteDO> domainResult = dddWriteDomainService.execute(param);
+            Result<DddWriteDO> domainResult = dddWriteDomainService.write(param);
             if (!domainResult.success()) {
                 return Result.failure(domainResult.code(), domainResult.message());
             }
 
             // 3. 将领域内部数据对象转换为应用层结果。
             DddWriteDO dataObject = domainResult.data();
-            DddWriteResult result = assembler.toResult(command, dataObject);
+            DddWriteResult result = assembler.toResult(dddWriteCommand, dataObject);
             return Result.success(result);
         } catch (DomainException exception) {
             LOG.warn("DDD 写入应用组装失败, code={}", exception.errorCode().code());

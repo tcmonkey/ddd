@@ -15,10 +15,10 @@ public interface DddOutputAdaptor {
     /**
      * 查询指定标识对应的外部数据。
      *
-     * @param command 外部读取应用命令
+     * @param dddExternalReadCommand 外部读取应用命令
      * @return 转换后的项目内部数据对象操作结果
      *
      * @author AIGenerator
      */
-    Result<DddExternalReadDO> query(DddExternalReadCommand command);
+    Result<DddExternalReadDO> query(DddExternalReadCommand dddExternalReadCommand);
 }

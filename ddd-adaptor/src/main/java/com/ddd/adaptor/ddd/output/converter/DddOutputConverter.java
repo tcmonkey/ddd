@@ -21,19 +21,20 @@ public class DddOutputConverter {
     /**
      * 将 Application Command 转换为第三方协议请求。
      *
-     * @param command 外部读取应用命令
+     * @param dddExternalReadCommand 外部读取应用命令
      * @return 第三方协议请求
      *
      * @author AIGenerator
      */
-    public DddExternalRequest toExternalRequest(DddExternalReadCommand command) {
+    public DddExternalRequest toExternalRequest(DddExternalReadCommand dddExternalReadCommand) {
         // 1. 校验 Application Command 是否具备外部调用所需的标识。
-        if (command == null || command.id() == null || command.id().isBlank()) {
+        if (dddExternalReadCommand == null || dddExternalReadCommand.id() == null
+                || dddExternalReadCommand.id().isBlank()) {
             throw new AdaptorException(AdaptorErrorCode.ADAPTOR_REQUEST_INVALID);
         }
 
         // 2. 将项目内部命令映射为第三方协议请求。
-        DddExternalRequest request = new DddExternalRequest(command.id());
+        DddExternalRequest request = new DddExternalRequest(dddExternalReadCommand.id());
         return request;
     }
 

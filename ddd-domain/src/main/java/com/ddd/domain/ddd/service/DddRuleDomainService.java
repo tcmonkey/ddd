@@ -39,7 +39,7 @@ public final class DddRuleDomainService {
      *
      * @author AIGenerator
      */
-    public Result<DddRuleCalculateDO> execute(DddRuleParam param) {
+    public Result<DddRuleCalculateDO> calculate(DddRuleParam param) {
         try {
             // 1. 加载规则聚合，规则不存在时由仓储明确拒绝。
             DddRuleAggregate rule = dddRuleRepository.getRequiredByRuleCode(param.ruleCode());

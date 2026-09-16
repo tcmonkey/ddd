@@ -40,16 +40,16 @@ public class DddOutputAdaptorImpl implements DddOutputAdaptor {
      * 作为未来接入第三方服务的
      * 可替换模板。</p>
      *
-     * @param command 外部读取应用命令
+     * @param dddExternalReadCommand 外部读取应用命令
      * @return 项目内部数据对象
      *
      * @author AIGenerator
      */
     @Override
-    public Result<DddExternalReadDO> query(DddExternalReadCommand command) {
+    public Result<DddExternalReadDO> query(DddExternalReadCommand dddExternalReadCommand) {
         try {
             // 1. 将 Application 命令转换为第三方协议请求。
-            DddExternalRequest externalRequest = converter.toExternalRequest(command);
+            DddExternalRequest externalRequest = converter.toExternalRequest(dddExternalReadCommand);
 
             // 2. 调用外部系统并取得外部协议响应。
             DddExternalResponse externalResponse = invokeRemote(externalRequest);

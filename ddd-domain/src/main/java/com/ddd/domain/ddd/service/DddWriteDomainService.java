@@ -48,7 +48,7 @@ public final class DddWriteDomainService {
      *
      * @author AIGenerator
      */
-    public Result<DddWriteDO> execute(DddWriteParam param) {
+    public Result<DddWriteDO> write(DddWriteParam param) {
         try {
             // 1. 从输入聚合取得待处理操作，保持领域服务只与聚合协作。
             DddAggregate inputAggregate = param.aggregate();

@@ -35,15 +35,15 @@ public final class DddReadApplication {
     /**
      * 按聚合根标识查询域内数据，并将领域实体转换为应用层结果。
      *
-     * @param command 域内读取应用命令
+     * @param dddReadCommand 域内读取应用命令
      * @return 域内读取结果
      *
      * @author AIGenerator
      */
-    public Result<DddReadResult> query(DddReadCommand command) {
+    public Result<DddReadResult> query(DddReadCommand dddReadCommand) {
         try {
             // 1. 从应用命令提取仓储查询所需的标识。
-            String id = command.id();
+            String id = dddReadCommand.id();
 
             // 2. 按业务标识读取完整聚合。
             DddAggregate aggregate = dddRepository.findById(id);

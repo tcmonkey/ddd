@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 39,
+  "revision": 40,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-16T16:10:17+08:00"
+    "updated_at": "2026-09-16T16:47:53+08:00"
   },
   "handoff": {
-    "summary": "仓储findById改为String标识，删除DddReadParam及冗余映射；固化ID/IDs、Aggregate写入和域内分页契约。Maven测试3/3、接口Javadoc六方法、相关模块Javadoc通过。",
-    "next_action": "用户评审仓储参数边界；真实分页需求出现时按域内分页契约实现，继续收敛DDD参考模板。"
+    "summary": "四层入口改为具体Request/Command参数名，DomainService保留param；写/计算使用业务动作名，调用与Javadoc同步。Java DDD接口命名规范沉淀到Skill按需参考及便携产物；测试3/3、接口Javadoc、相关Javadoc、Skill验证通过。",
+    "next_action": "用户评审入口命名与已沉淀规范；继续收敛Java DDD模板，注释脚本自动接入Maven尚未实施。"
   },
-  "last_updated": "2026-09-16T16:10:17+08:00"
+  "last_updated": "2026-09-16T16:47:53+08:00"
 }

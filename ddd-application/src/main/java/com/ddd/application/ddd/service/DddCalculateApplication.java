@@ -29,14 +29,14 @@ public final class DddCalculateApplication {
     /**
      * 调用无状态领域服务执行数值计算，并转换为应用层结果。
      *
-     * @param command 纯计算应用命令
+     * @param dddCalculateCommand 纯计算应用命令
      * @return 纯计算应用结果
      *
      * @author AIGenerator
      */
-    public Result<DddCalculateResult> execute(DddCalculateCommand command) {
+    public Result<DddCalculateResult> calculate(DddCalculateCommand dddCalculateCommand) {
         // 1. 将应用命令组装为纯计算领域参数。
-        DddCalculateParam param = assembler.toDomainParam(command);
+        DddCalculateParam param = assembler.toDomainParam(dddCalculateCommand);
 
         // 2. 调用无状态领域服务。
         Result<DddCalculateDO> domainResult = calculateDomainService.calculate(param);

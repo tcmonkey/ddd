@@ -30,14 +30,14 @@ public final class DddExternalReadApplication {
     /**
      * 查询外部数据并转换为应用层结果。
      *
-     * @param command 外部读取应用命令
+     * @param dddExternalReadCommand 外部读取应用命令
      * @return 外部数据查询结果
      *
      * @author AIGenerator
      */
-    public Result<DddExternalResult> query(DddExternalReadCommand command) {
+    public Result<DddExternalResult> query(DddExternalReadCommand dddExternalReadCommand) {
         // 1. 调用输出适配端口获取项目内部 DO。
-        Result<DddExternalReadDO> externalResult = outputAdaptor.query(command);
+        Result<DddExternalReadDO> externalResult = outputAdaptor.query(dddExternalReadCommand);
         if (!externalResult.success()) {
             return Result.failure(externalResult.code(), externalResult.message());
         }
