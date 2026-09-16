@@ -1,6 +1,6 @@
 # Java DDD 开发规范
 
-版本：1.1。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。
+版本：1.2。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。
 
 ## 1. 使用方式与规则优先级
 
@@ -126,10 +126,12 @@ start        Application / config / resources / 按需 aop
 | FMT-003 | 方法/构造器签名一行放得下时不提前换行，只有超过截止线才换行；record 组件按可读性布局。 | P：最大行宽自动；无必要换行需评审 |
 | FMT-004 | 方法体/PO getter/setter 不压成单行，多语句分行；控制结构有大括号，操作符和标点空格一致。 | C：相应语法规则 |
 | FMT-005 | 多职责流程显式按组装→调用→解析/转换拆为局部变量，用编号行内注释；禁止嵌套一行跨层调用。单一访问/纯计算无需凑步骤。 | P：同一行多语句/方法体自动；嵌套调用和编号语义需评审 |
-| MAV-001 | 根 POM 集中管理依赖/BOM/插件版本；module dependency/plugin 禁止 version，唯独 parent.version 是 Maven 必需字段。各 dependency/plugin 使用多行 XML。 | R：Checkstyle 不解析 POM |
+| MAV-001 | 根 POM 集中管理依赖/BOM/插件版本；module dependency/plugin 禁止 version。Maven 3 子模块保留 parent.version，但采用 MAV-005 的 ${revision}，不重复硬编码项目版本。各 dependency/plugin 使用多行 XML。 | R：Checkstyle 不解析 POM |
 | MAV-002 | 基础平台使用根 Spring Boot parent 或经批准的 BOM 方案；新项目重新确认版本，不把当前 3.3.12/JDK17 当作永久生产标准。 | R |
 | MAV-003 | 根 POM 的 build/plugins 实际声明并绑定 Checkstyle check 到 validate，子模块继承；只写 pluginManagement 不会触发检查。插件与引擎版本只在根管理。 | 安装器＋Maven 构建验证 |
 | MAV-004 | 项目根必须携带 checkstyle.xml，独立于 Skill 安装目录；编译/测试/打包默认先检查主源码，违规构建失败。禁止在默认构建中关闭检查。 | Maven 构建验证 |
+| MAV-005 | Maven 3 同版本多模块工程以根 properties/revision 单点声明项目版本，根 project.version 与各子模块 parent.version 均为 ${revision}；子模块不重复声明 revision 或自身 version。根管理内部模块依赖仍用 ${project.version}，不将其用于 parent.version。允许命令行 -Drevision 覆盖；外部 Spring Boot parent 的版本保持根集中声明。 | R：POM、默认/覆盖版本构建验证 |
+| MAV-006 | 根 build/plugins 声明 flatten-maven-plugin 并固定版本，子模块继承；updatePomFile=true、flattenMode=resolveCiFriendliesOnly，flatten 绑定 process-resources、clean 绑定 clean。Maven 3 install/deploy 使用已解析 CI 版本占位符的 POM，源码 POM 不被改写；.flattened-pom.xml 加入 Git 忽略且不进入 Skill 快照。发布适配须验证安装后独立消费者，无须发布到远程验证。 | R：安装/消费及 clean 行为验证；Checkstyle 不检查 |
 
 ## 9. 生产适配与交付
 
@@ -187,6 +189,7 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 | 通用 request/command/execute / 具体参数与动作 | 四层签名及完整类型变量名，明确业务动作 | SRC-034 |
 | 手动接口 Javadoc 检查 / 构建约束 | Checkstyle 生命周期门禁；独立接口检查脚本已移除 | SRC-035、SRC-036 |
 | start 依靠传递依赖 / 显式装配清单 | 直接列出本服务实际运行模块，按需裁剪；不是全仓库依赖清单 | SRC-037 |
+| 子模块固定 parent 版本 / 单点版本 | 根 revision + 子模块 ${revision}；Maven 3 使用 Flatten 适配发布 | SRC-038 细化 SRC-015 |
 
 不把历史版本日志中的旧选择当作新项目规则。规则变更应更新本文件版本、对应 checkstyle.xml、安装资源和项目快照，并重新验证正向构建与反向违规用例。
 

@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 43,
+  "revision": 44,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -129,11 +129,11 @@
   "last_actor": {
     "platform": "codex",
     "model": "gpt-5",
-    "updated_at": "2026-09-16T19:40:47+08:00"
+    "updated_at": "2026-09-16T19:52:50+08:00"
   },
   "handoff": {
-    "summary": "已将start调整为本服务显式装配清单，补齐common/model直接依赖；同步solo规则MOD-009、阶段指引、代码快照v1.1和便携包。原工程及独立快照副本mvn clean test各3/3通过，有效依赖树、版本与快照一致性核对通过。",
-    "next_action": "用户评审start装配清单与solo规范；真实项目按服务边界裁剪模块，正式CR与独立测试待执行。"
+    "summary": "已将根和八个子模块改为revision单点版本，根配置Flatten 1.8.0用于Maven3安装发布并忽略生成POM；同步solo规范MAV-005/006、阶段指引、快照v1.2和便携包。默认及覆盖版本测试各3/3，临时仓库9份安装POM、独立client消费者编译运行及clean清理通过；规范检查器5项回归通过。未执行远程deploy。",
+    "next_action": "用户继续评审Java DDD模板；后续升级只改根revision或传-Drevision，保持开发自测与独立CR/验收测试分离。"
   },
-  "last_updated": "2026-09-16T19:40:47+08:00"
+  "last_updated": "2026-09-16T19:52:50+08:00"
 }

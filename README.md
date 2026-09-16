@@ -12,6 +12,18 @@ mvn clean test
 
 工程使用 JDK 17、Spring Boot 3.x、Maven、MyBatis-Plus 与 H2。启动模块为 `ddd-start`，测试会覆盖写、域内读、规则计算、纯计算、外部读和幂等重放链路。
 
+## 项目版本与发布 POM
+
+项目版本只在根 `pom.xml` 的 `properties/revision` 中定义，当前为 `0.0.1-SNAPSHOT`。根 `version` 与所有子模块的 `parent/version` 使用 `${revision}`；内部模块依赖版本仍由根以 `${project.version}` 管理。后续升级只改根 revision，无须逐个修改子模块。
+
+也可以临时覆盖版本，不改文件：
+
+```bash
+mvn clean package -Drevision=0.0.2-SNAPSHOT
+```
+
+根 POM 配置继承的 Flatten 插件，在 `process-resources` 阶段生成 `.flattened-pom.xml`，供 Maven 3 的 `install/deploy` 使用，解析 `${revision}` 等 CI 版本占位符。`resolveCiFriendliesOnly` 保留其他 POM 结构；源码 `pom.xml` 不被改写。生成文件被 Git 忽略，`mvn clean` 自动清理；发布前从根执行完整生命周期，不直接跳过生成步骤。外部 Spring Boot parent 的版本仍在根独立管理，不随项目 revision 改变。
+
 ## Maven 模块
 
 根工程 `ddd` 只聚合模块并集中管理版本。当前共有 8 个 Maven module：
