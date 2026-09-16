@@ -20,6 +20,11 @@ import com.ddd.model.ddd.DddCalculateDO;
  */
 @DomainService
 public final class DddCalculateDomainService {
+    /**
+     * 当前类的日志记录器。
+     *
+     * @author AIGenerator
+     */
     private static final Logger LOG = LoggerFactory.getLogger(DddCalculateDomainService.class);
 
     /**

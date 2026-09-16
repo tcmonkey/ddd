@@ -13,6 +13,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.ddd.infrastructure.**.mapper")
 public class Application {
 
+    /**
+     * 启动 Java DDD 模板的 Spring Boot 应用。
+     *
+     * @param args 启动命令行参数
+     *
+     * @author AIGenerator
+     */
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

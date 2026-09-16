@@ -176,18 +176,46 @@ public final class DddEntity {
         return operationEntities.stream().filter(item -> item.operationId().equals(operationId)).findFirst();
     }
 
+    /**
+     * 读取实体的业务唯一标识。
+     *
+     * @return 处理或校验后的结果
+     *
+     * @author AIGenerator
+     */
     public DddIdValue id() {
         return id;
     }
 
+    /**
+     * 读取实体当前累计数值。
+     *
+     * @return 处理或校验后的结果
+     *
+     * @author AIGenerator
+     */
     public DddValue currentValue() {
         return currentValue;
     }
 
+    /**
+     * 读取实体的乐观锁版本。
+     *
+     * @return 处理或校验后的结果
+     *
+     * @author AIGenerator
+     */
     public long version() {
         return version;
     }
 
+    /**
+     * 获取不可变的已记录操作实体快照。
+     *
+     * @return 处理或校验后的结果
+     *
+     * @author AIGenerator
+     */
     public List<DddOperationEntity> operationEntities() {
         return List.copyOf(operationEntities);
     }

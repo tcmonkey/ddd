@@ -25,10 +25,27 @@ import com.ddd.model.ddd.DddExternalReadDO;
  */
 @Component
 public class DddOutputAdaptorImpl implements DddOutputAdaptor {
+    /**
+     * 当前类的日志记录器。
+     *
+     * @author AIGenerator
+     */
     private static final Logger LOG = LoggerFactory.getLogger(DddOutputAdaptorImpl.class);
 
+    /**
+     * 外部协议与内部模型的转换组件。
+     *
+     * @author AIGenerator
+     */
     private final DddOutputConverter converter;
 
+    /**
+     * 创建并初始化 DddOutputAdaptorImpl，校验或装配其所需输入。
+     *
+     * @param converter 外部协议与内部模型的转换组件
+     *
+     * @author AIGenerator
+     */
     public DddOutputAdaptorImpl(DddOutputConverter converter) {
         this.converter = converter;
     }

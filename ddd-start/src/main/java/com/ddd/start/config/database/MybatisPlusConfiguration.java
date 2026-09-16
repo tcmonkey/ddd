@@ -12,6 +12,13 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class MybatisPlusConfiguration {
+    /**
+     * 创建包含乐观锁能力的 MyBatis-Plus 拦截器。
+     *
+     * @return 已注册乐观锁插件的拦截器
+     *
+     * @author AIGenerator
+     */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();

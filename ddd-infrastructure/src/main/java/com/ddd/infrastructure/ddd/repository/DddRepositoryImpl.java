@@ -35,10 +35,22 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      *
      * @author AIGenerator
      */
-    private static final TypeReference<List<DddOperationEntity>> OPERATION_ENTITY_TYPE = new TypeReference<>() {};
+    private static final TypeReference<List<DddOperationEntity>> OPERATION_ENTITY_TYPE = new TypeReference<>() { };
 
+    /**
+     * 领域快照序列化与恢复所需的 JSON 转换器。
+     *
+     * @author AIGenerator
+     */
     private final ObjectMapper objectMapper;
 
+    /**
+     * 创建并初始化 DddRepositoryImpl，校验或装配其所需输入。
+     *
+     * @param objectMapper 领域快照序列化与恢复所需的 JSON 转换器
+     *
+     * @author AIGenerator
+     */
     public DddRepositoryImpl(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }

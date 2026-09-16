@@ -28,6 +28,17 @@ public record DddOperationEntity(
         String ruleCode,
         DddValue value,
         Instant occurredAt) {
+    /**
+     * 创建并初始化 DddOperationEntity，校验或装配其所需输入。
+     *
+     * @param operationId 操作幂等标识
+     * @param baseValue 待规则计算的原始领域值
+     * @param ruleCode 规则编码
+     * @param value 需校验的领域数值
+     * @param occurredAt 操作确认时间，待处理阶段尚未赋值
+     *
+     * @author AIGenerator
+     */
     public DddOperationEntity {
         if (operationId == null || baseValue == null || ruleCode == null || ruleCode.isBlank()) {
             throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);

@@ -10,6 +10,11 @@ package com.ddd.common.error;
  * @author AIGenerator
  */
 public abstract class BaseException extends RuntimeException {
+    /**
+     * 本异常关联的模块错误码。
+     *
+     * @author AIGenerator
+     */
     private final ErrorCode errorCode;
 
     protected BaseException(ErrorCode errorCode) {

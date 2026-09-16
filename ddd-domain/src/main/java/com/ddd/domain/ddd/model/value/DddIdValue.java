@@ -11,6 +11,13 @@ import com.ddd.domain.ddd.exception.DomainException;
  * @author AIGenerator
  */
 public record DddIdValue(String value) {
+    /**
+     * 创建并初始化 DddIdValue，校验或装配其所需输入。
+     *
+     * @param value 需校验的领域数值
+     *
+     * @author AIGenerator
+     */
     public DddIdValue {
         if (value == null || value.isBlank()) {
             throw new DomainException(DomainErrorCode.DOMAIN_ID_INVALID);

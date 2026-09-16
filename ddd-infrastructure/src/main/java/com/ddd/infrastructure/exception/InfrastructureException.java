@@ -10,10 +10,25 @@ import com.ddd.common.error.BaseException;
  * @author AIGenerator
  */
 public class InfrastructureException extends BaseException {
+    /**
+     * 创建并初始化 InfrastructureException，校验或装配其所需输入。
+     *
+     * @param errorCode 本异常关联的模块错误码
+     *
+     * @author AIGenerator
+     */
     public InfrastructureException(InfrastructureErrorCode errorCode) {
         super(errorCode);
     }
 
+    /**
+     * 创建并初始化 InfrastructureException，校验或装配其所需输入。
+     *
+     * @param errorCode 本异常关联的模块错误码
+     * @param cause 原始异常根因，用于保留可追溯堆栈
+     *
+     * @author AIGenerator
+     */
     public InfrastructureException(InfrastructureErrorCode errorCode, Throwable cause) {
         super(errorCode, cause);
     }

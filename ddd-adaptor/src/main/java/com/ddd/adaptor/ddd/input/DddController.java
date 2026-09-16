@@ -44,13 +44,55 @@ import com.ddd.client.ddd.response.DddWriteResponse;
 @RestController
 @RequestMapping("/api/ddd")
 public class DddController {
+    /**
+     * 写入用例的应用服务。
+     *
+     * @author AIGenerator
+     */
     private final DddWriteApplication writeApplication;
+    /**
+     * 域内读取用例的应用服务。
+     *
+     * @author AIGenerator
+     */
     private final DddReadApplication readApplication;
+    /**
+     * 纯计算用例的应用服务。
+     *
+     * @author AIGenerator
+     */
     private final DddCalculateApplication calculateApplication;
+    /**
+     * 规则计算用例的应用服务。
+     *
+     * @author AIGenerator
+     */
     private final DddRuleApplication ruleApplication;
+    /**
+     * 外部读取用例的应用服务。
+     *
+     * @author AIGenerator
+     */
     private final DddExternalReadApplication externalReadApplication;
+    /**
+     * 本层参数组装与结果转换组件。
+     *
+     * @author AIGenerator
+     */
     private final DddInputAssembler assembler;
 
+    /**
+     * 创建并初始化 DddController，校验或装配其所需输入。
+     *
+     * @param writeApplication 写入用例的应用服务
+     * @param readApplication 域内读取用例的应用服务
+     * @param calculateApplication 纯计算用例的应用服务
+     * @param ruleApplication 规则计算用例的应用服务
+     * @param externalReadApplication 外部读取用例的应用服务
+     * @param assembler 本层参数组装与结果转换组件
+     *
+     * @author AIGenerator
+     */
     public DddController(DddWriteApplication writeApplication, DddReadApplication readApplication,
                          DddCalculateApplication calculateApplication, DddRuleApplication ruleApplication,
                          DddExternalReadApplication externalReadApplication, DddInputAssembler assembler) {

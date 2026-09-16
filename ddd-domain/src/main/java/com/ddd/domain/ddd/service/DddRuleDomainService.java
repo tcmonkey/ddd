@@ -23,10 +23,27 @@ import com.ddd.model.ddd.DddRuleCalculateDO;
  */
 @DomainService
 public final class DddRuleDomainService {
+    /**
+     * 当前类的日志记录器。
+     *
+     * @author AIGenerator
+     */
     private static final Logger LOG = LoggerFactory.getLogger(DddRuleDomainService.class);
 
+    /**
+     * 规则聚合的领域仓储端口。
+     *
+     * @author AIGenerator
+     */
     private final DddRuleRepository dddRuleRepository;
 
+    /**
+     * 创建并初始化 DddRuleDomainService，校验或装配其所需输入。
+     *
+     * @param dddRuleRepository 规则聚合的领域仓储端口
+     *
+     * @author AIGenerator
+     */
     public DddRuleDomainService(DddRuleRepository dddRuleRepository) {
         this.dddRuleRepository = dddRuleRepository;
     }

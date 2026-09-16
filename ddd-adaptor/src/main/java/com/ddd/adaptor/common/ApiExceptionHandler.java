@@ -21,6 +21,11 @@ import com.ddd.domain.ddd.exception.DomainException;
  */
 @RestControllerAdvice
 public class ApiExceptionHandler {
+    /**
+     * 当前类的日志记录器。
+     *
+     * @author AIGenerator
+     */
     private static final Logger LOG = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     /**

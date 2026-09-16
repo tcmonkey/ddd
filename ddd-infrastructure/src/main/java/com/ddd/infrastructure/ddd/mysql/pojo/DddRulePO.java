@@ -34,26 +34,68 @@ public class DddRulePO {
      */
     private String reason;
 
+    /**
+     * 获取规则编码。
+     *
+     * @return 对应字段的当前值
+     *
+     * @author AIGenerator
+     */
     public String getRuleCode() {
         return ruleCode;
     }
 
+    /**
+     * 设置规则编码。
+     *
+     * @param ruleCode 规则编码
+     *
+     * @author AIGenerator
+     */
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
     }
 
+    /**
+     * 获取正数规则计算因子。
+     *
+     * @return 对应字段的当前值
+     *
+     * @author AIGenerator
+     */
     public Integer getFactor() {
         return factor;
     }
 
+    /**
+     * 设置正数规则计算因子。
+     *
+     * @param factor 正数规则计算因子
+     *
+     * @author AIGenerator
+     */
     public void setFactor(Integer factor) {
         this.factor = factor;
     }
 
+    /**
+     * 获取规则或领域决策说明。
+     *
+     * @return 对应字段的当前值
+     *
+     * @author AIGenerator
+     */
     public String getReason() {
         return reason;
     }
 
+    /**
+     * 设置规则或领域决策说明。
+     *
+     * @param reason 规则或领域决策说明
+     *
+     * @author AIGenerator
+     */
     public void setReason(String reason) {
         this.reason = reason;
     }

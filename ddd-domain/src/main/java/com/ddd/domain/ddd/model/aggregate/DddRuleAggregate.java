@@ -1,49 +1,79 @@
 package com.ddd.domain.ddd.model.aggregate;
 
-import com.ddd.domain.ddd.exception.DomainErrorCode;
-import com.ddd.domain.ddd.exception.DomainException;
+import com.ddd.domain.ddd.model.entity.DddRuleEntity;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.model.value.DddValue;
 
 /**
- * DDD 规则与计算模式使用的规则聚合根模板。
+ * 规则与计算模式的聚合容器，仅持有规则实体。
  *
- * @param ruleCode 选择或记录规则的编码
- * @param factor 乘法计算因子，必须为正数
- * @param reason 规则或领域决策的说明
+ * <p>规则状态和计算行为内聚在 Entity，聚合只提供场景语义入口。</p>
  *
  * @author AIGenerator
  */
-public record DddRuleAggregate(
-        String ruleCode,
-        int factor,
-        String reason) {
-    public DddRuleAggregate {
-        if (ruleCode == null || ruleCode.isBlank()) {
-            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
-        }
-        if (factor <= 0) {
-            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
-        }
+public final class DddRuleAggregate {
+    /**
+     * 本场景的完整规则实体。
+     *
+     * @author AIGenerator
+     */
+    private final DddRuleEntity entity;
+
+    /**
+     * 由规则快照创建聚合，状态校验委托规则实体。
+     *
+     * @param ruleCode 规则编码
+     * @param factor 正数计算因子
+     * @param reason 规则说明
+     *
+     * @author AIGenerator
+     */
+    public DddRuleAggregate(String ruleCode, int factor, String reason) {
+        this.entity = new DddRuleEntity(ruleCode, factor, reason);
     }
 
     /**
-     * 根据规则计算业务值，不依赖写模式的操作标识。
+     * 以聚合语义入口委托实体进行规则计算。
      *
-     * @param param 规则计算领域参数
-     * @return 计算后的值对象
+     * @param param 规则计算参数
+     * @return 计算后的领域值
      *
      * @author AIGenerator
      */
     public DddValue evaluate(DddRuleParam param) {
-        // 1. 校验参数所属规则与当前聚合一致。
-        if (!ruleCode.equals(param.ruleCode())) {
-            throw new DomainException(DomainErrorCode.DOMAIN_RULE_INVALID);
-        }
+        return entity.evaluate(param);
+    }
 
-        // 2. 在聚合内将原始数值封装为值对象并完成规则计算。
-        DddValue baseValue = DddValue.positive(param.baseValue());
-        DddValue calculatedValue = baseValue.multiply(factor);
-        return calculatedValue;
+    /**
+     * 获取聚合的规则编码。
+     *
+     * @return 规则实体的编码
+     *
+     * @author AIGenerator
+     */
+    public String ruleCode() {
+        return entity.ruleCode();
+    }
+
+    /**
+     * 获取规则计算因子。
+     *
+     * @return 规则实体的正数因子
+     *
+     * @author AIGenerator
+     */
+    public int factor() {
+        return entity.factor();
+    }
+
+    /**
+     * 获取规则说明。
+     *
+     * @return 规则实体的业务说明
+     *
+     * @author AIGenerator
+     */
+    public String reason() {
+        return entity.reason();
     }
 }

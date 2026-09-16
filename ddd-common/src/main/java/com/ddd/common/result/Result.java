@@ -15,6 +15,7 @@ import com.ddd.common.error.ErrorCode;
  * @param message 可向上层暴露的友好说明
  * @param data 成功时的数据；失败时为空
  *
+ * @param <T> 成功结果的数据类型
  * @author AIGenerator
  */
 public record Result<T>(

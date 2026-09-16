@@ -8,7 +8,6 @@
 
 ```bash
 mvn clean test
-java scripts/CheckInterfaceJavadoc.java .
 ```
 
 工程使用 JDK 17、Spring Boot 3.x、Maven、MyBatis-Plus 与 H2。启动模块为 `ddd-start`，测试会覆盖写、域内读、规则计算、纯计算、外部读和幂等重放链路。
@@ -180,19 +179,26 @@ success = false  → code/message 为本项目内部错误信息，data=null
 | 纯计算 | `POST /api/ddd/calculate` | Controller → `DddCalculateApplication` → `DddCalculateDomainService` | 无，不查询仓储、不创建聚合。 |
 | 外部读 | `GET /api/ddd/{id}/external` | Controller → `DddExternalReadCommand` → `DddExternalReadApplication` → `DddOutputAdaptor` → converter → 第三方请求/响应 → `DddExternalReadDO` | 无。 |
 
-## 代码编写规则
+## 开发规范与 Maven 门禁
 
-- 公开入口的签名、参数命名、转换责任及例外遵循 [Java DDD 接口命名规范](../AIGenerator/core/references/Java%20DDD接口命名规范.md)。该规范已纳入 solo-delivery 的开发阶段按需读取入口。
-- Controller 请求体参数使用完整类型对应的 lowerCamelCase（如 `dddWriteRequest`），Application/OutAdaptor 的 Command 参数同样使用 `dddWriteCommand` 等明确名称；DomainService 入参统一叫 `param`。业务方法使用 `write/query/calculate` 等动作名，不统一叫 `execute`。
-- 所有公开类型、字段和对外契约使用中文多行 Javadoc，并带 `@author AIGenerator`。
-- 自行声明的接口方法必须逐项说明用途、`@param`、`@return` 和作者；由 `scripts/CheckInterfaceJavadoc.java` 基于 Java 语法树检查覆盖率，遗漏时返回非零退出码。
-- 流程型方法必须拆成清晰的局部步骤，使用 `// 1.`、`// 2.` 编号说明“获取/组装 → 调用 → 解析/转换”；不要写嵌套的一行调用链。
-- 方法或构造器签名仅在超过 120 字符时换行；Java 源码行宽不超过 120 字符。
-- Spring 管理的组件统一采用单一构造器注入；domain 通过无 Spring 依赖的 `@DomainService` 标记和 `ddd-start` 扫描装配。
-- `XXPO` 仅用于 infrastructure 中的数据库映射；`XXDO` 仅用于项目内部的无行为数据传递，DomainService 和 OutAdaptor 的公开成功结果统一为 `Result<XXDO>`；Application 必须转换为自己的 `XXResult`。
-- 任何跨 Application、DomainService 或 OutAdaptor 公开边界的入参都使用 `XXCommand` 或 `XXParam` 对象；禁止传递裸 `String`、数字、布尔值或其他基本类型。Application assembler 将 Command 转为 Domain Param；OutAdaptor 无额外参数语义时直接接收 Application Command，再由 converter 转为第三方请求对象。
-- 所有版本在根 `pom.xml` 管理，子模块 dependency/plugin 不声明版本（Maven 必需的 parent version 除外）。
-- 不创建无真实用途的 Controller、RPC 接口、Configuration 或内存式仓储；按真实需求裁剪模块与调用模式。
+统一生效规范为 [19 Java DDD开发规范](AI/output/19%20Java%20DDD开发规范.md)。它按主题整理最终约定，明确必须项、例外、生产适配，以及 Checkstyle/评审各自能保障的范围；历史沟通仅保留追溯，不作为并列规则。
+
+项目根携带 [checkstyle.xml](checkstyle.xml)，根 POM 将 Checkstyle 的 `check` 绑定到 `validate`，各 module 继承：
+
+```bash
+mvn validate
+mvn clean compile
+mvn clean test
+mvn clean package
+```
+
+上述生命周期命令在编译前自动检查生产源码，违规构建失败。只在 pluginManagement 中声明插件不会生效，因此门禁实际声明在根 build/plugins；依赖、插件和 Checkstyle 引擎版本仍由根集中管理。
+
+当前自动检查格式、类型命名后缀、公开入口输入/输出及参数名形式、Javadoc、字段注入、常见框架 import 与 SQL 注解。它不验证完整 Maven 依赖图、真实领域内聚、转换语义、所有 SQL 调用、业务日志或功能/性能。测试源码、生成源码和 scripts 不在本版 Checkstyle 范围内；完整边界见规范第 10 节。
+
+接口与实现类的公开方法注释统一由 Maven Checkstyle 门禁检查，不再维护独立的接口注释检查脚本。
+
+使用 solo-delivery 的 Java DDD 模板生成新项目时，AI 在根 POM 建好、正式编码前自动运行 Skill 的安装器，携带相同门禁与规范快照。配置与项目脱离 Skill 也可独立构建，不需要用户每次手动补 checkstyle.xml；已有冲突配置会保留并要求显式协调。
 
 ## 文档与交接
 
