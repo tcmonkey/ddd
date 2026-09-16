@@ -1,12 +1,175 @@
 {
-  "schema_version": "1.4",
-  "template_version": "0.7.0",
+  "schema_version": "1.5",
+  "template_version": "0.8.0",
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 44,
+  "revision": 46,
   "current_phase": "code_review",
   "phases": {
+    "intake": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "requirements": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T20:57:39+08:00"
+    },
+    "product": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T21:44:10+08:00"
+    },
+    "ui": {
+      "status": "skipped",
+      "required": false,
+      "approved_at": null
+    },
+    "technical": {
+      "status": "approved",
+      "required": true,
+      "approved_at": "2026-09-14T23:29:04+08:00"
+    },
+    "planning": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "development": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null
+    },
+    "developer_self_test": {
+      "status": "complete",
+      "required": true,
+      "approved_at": null,
+      "note": "沿用归档开发自测证据；非新一轮测试"
+    },
+    "code_review": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "testing": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "release_preparation": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    },
+    "initial_release": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null,
+      "note": "不得由旧发布检查单推断实际发布完成"
+    },
+    "observation": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null,
+      "note": "不得由旧发布检查单推断实际发布完成"
+    },
+    "rollout": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null,
+      "note": "不得由旧发布检查单推断实际发布完成"
+    },
+    "full_release": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null,
+      "note": "不得由旧发布检查单推断实际发布完成"
+    },
+    "effect_evaluation": {
+      "status": "not_started",
+      "required": true,
+      "approved_at": null
+    }
+  },
+  "approvals": [
+    {
+      "gate": "scope",
+      "phase": "requirements",
+      "artifact_version": "0.2",
+      "approved_at": "2026-09-14T17:44:35+08:00",
+      "approved_by": "user",
+      "source": "SRC-002"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.3",
+      "approved_at": "2026-09-14T20:34:06+08:00",
+      "approved_by": "user",
+      "source": "SRC-003"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T20:57:39+08:00",
+      "approved_by": "user",
+      "source": "SRC-004"
+    },
+    {
+      "gate": "scope-amendment",
+      "phase": "requirements",
+      "artifact_version": "0.5",
+      "approved_at": "2026-09-14T21:44:10+08:00",
+      "approved_by": "user",
+      "source": "SRC-006"
+    },
+    {
+      "gate": "product",
+      "phase": "product",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T21:44:10+08:00",
+      "approved_by": "user",
+      "source": "SRC-006"
+    },
+    {
+      "gate": "technical",
+      "phase": "technical",
+      "artifact_version": "0.4",
+      "approved_at": "2026-09-14T23:29:04+08:00",
+      "approved_by": "user",
+      "source": "SRC-007"
+    }
+  ],
+  "open_questions": [
+    "Q-006",
+    "Q-007"
+  ],
+  "runtime": {
+    "platform": "codex",
+    "model": "unknown",
+    "capabilities": {
+      "filesystem": "read-write",
+      "shell": "available",
+      "python": "python3",
+      "repository": "local",
+      "browser": "available",
+      "persistence": "durable"
+    }
+  },
+  "last_actor": {
+    "platform": "codex",
+    "model": "unknown",
+    "updated_at": "2026-09-16T22:41:13+08:00"
+  },
+  "handoff": {
+    "summary": "solo升级0.8：12份编号规范、9份按需主模板，分离自测/CR及五个发布阶段并补齐效果评估；同步初始化/迁移/校验/事务交接和portable。ddd重整为6份有效输出，19份原文及6条审批保留，Java/POM/配置与89个对应快照文件不变。流程10项、检查机制5项、Maven validate、3宿主入口/隔离安装、portable烟测及SHA/链接校验通过；未执行独立CR、测试或生产发布。",
+    "next_action": "用户阅读00工作台与04技术方案重整版，确认是否开展独立CR，并明确最终验收范围为模板发行或服务部署；未执行阶段按需生成文档。"
+  },
+  "last_updated": "2026-09-16T22:41:13+08:00",
+  "legacy_phase_evidence": {
     "intake": {
       "status": "complete",
       "required": true,
@@ -63,77 +226,6 @@
       "approved_at": null
     }
   },
-  "approvals": [
-    {
-      "gate": "scope",
-      "phase": "requirements",
-      "artifact_version": "0.2",
-      "approved_at": "2026-09-14T17:44:35+08:00",
-      "approved_by": "user",
-      "source": "SRC-002"
-    },
-    {
-      "gate": "scope-amendment",
-      "phase": "requirements",
-      "artifact_version": "0.3",
-      "approved_at": "2026-09-14T20:34:06+08:00",
-      "approved_by": "user",
-      "source": "SRC-003"
-    },
-    {
-      "gate": "scope-amendment",
-      "phase": "requirements",
-      "artifact_version": "0.4",
-      "approved_at": "2026-09-14T20:57:39+08:00",
-      "approved_by": "user",
-      "source": "SRC-004"
-    },
-    {
-      "gate": "scope-amendment",
-      "phase": "requirements",
-      "artifact_version": "0.5",
-      "approved_at": "2026-09-14T21:44:10+08:00",
-      "approved_by": "user",
-      "source": "SRC-006"
-    },
-    {
-      "gate": "product",
-      "phase": "product",
-      "artifact_version": "0.4",
-      "approved_at": "2026-09-14T21:44:10+08:00",
-      "approved_by": "user",
-      "source": "SRC-006"
-    },
-    {
-      "gate": "technical",
-      "phase": "technical",
-      "artifact_version": "0.4",
-      "approved_at": "2026-09-14T23:29:04+08:00",
-      "approved_by": "user",
-      "source": "SRC-007"
-    }
-  ],
-  "open_questions": [],
-  "runtime": {
-    "platform": "codex",
-    "model": "gpt-5",
-    "capabilities": {
-      "filesystem": "read-write",
-      "shell": "available",
-      "python": "python3",
-      "repository": "available",
-      "browser": "available",
-      "persistence": "durable"
-    }
-  },
-  "last_actor": {
-    "platform": "codex",
-    "model": "gpt-5",
-    "updated_at": "2026-09-16T19:52:50+08:00"
-  },
-  "handoff": {
-    "summary": "已将根和八个子模块改为revision单点版本，根配置Flatten 1.8.0用于Maven3安装发布并忽略生成POM；同步solo规范MAV-005/006、阶段指引、快照v1.2和便携包。默认及覆盖版本测试各3/3，临时仓库9份安装POM、独立client消费者编译运行及clean清理通过；规范检查器5项回归通过。未执行远程deploy。",
-    "next_action": "用户继续评审Java DDD模板；后续升级只改根revision或传-Drevision，保持开发自测与独立CR/验收测试分离。"
-  },
-  "last_updated": "2026-09-16T19:52:50+08:00"
+  "artifact_layout": "consolidated-lazy",
+  "artifact_overrides": {}
 }

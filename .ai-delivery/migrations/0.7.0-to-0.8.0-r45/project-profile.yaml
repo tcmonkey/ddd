@@ -1,12 +1,10 @@
-schema_version: "1.5"
-template_version: "0.8.0"
+schema_version: "1.4"
+template_version: "0.7.0"
 project:
   name: "ddd"
   root: "/Users/monkey/Documents/kit/workspace/ddd"
-  repository: "local"
+  repository: "unavailable"
 delivery:
-  lazy_artifacts: true
-  separate_development_plan: false
   mode: "full"
   interaction: "guided"
   ui_required: false
@@ -14,7 +12,7 @@ delivery:
   output_dir: "AI/output"
   current_phase: "code_review"
 compatibility:
-  artifact_layout: "consolidated-lazy"
+  artifact_layout: "AI-directories"
   state_owner: ".ai-delivery"
   skill_standard: "agent-skills"
   runtime_binding: "dynamic"
@@ -26,9 +24,5 @@ quality:
   require_independent_testing: true
   performance_testing: "auto"
   require_release_approval: true
-  release_observation: "metrics-baseline-threshold-window"
-  rollout_requires_approval: true
-  require_full_release_confirmation: true
-  require_effect_evaluation: "when-released"
 created_at: "2026-09-14T17:33:49+08:00"
-updated_at: "2026-09-16T22:29:28+08:00"
+updated_at: "2026-09-15T15:29:41+08:00"
