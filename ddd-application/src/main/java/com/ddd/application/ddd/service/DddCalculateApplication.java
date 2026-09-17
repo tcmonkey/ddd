@@ -17,27 +17,9 @@ import com.ddd.model.ddd.DddCalculateDO;
  */
 @Service
 public final class DddCalculateApplication {
-    /**
-     * 纯计算用例的领域服务。
-     *
-     * @author AIGenerator
-     */
     private final DddCalculateDomainService calculateDomainService;
-    /**
-     * 本层参数组装与结果转换组件。
-     *
-     * @author AIGenerator
-     */
     private final DddApplicationAssembler assembler;
 
-    /**
-     * 创建并初始化 DddCalculateApplication，校验或装配其所需输入。
-     *
-     * @param calculateDomainService 纯计算用例的领域服务
-     * @param assembler 本层参数组装与结果转换组件
-     *
-     * @author AIGenerator
-     */
     public DddCalculateApplication(DddCalculateDomainService calculateDomainService,
                                    DddApplicationAssembler assembler) {
         this.calculateDomainService = calculateDomainService;

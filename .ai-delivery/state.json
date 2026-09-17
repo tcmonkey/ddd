@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 46,
+  "revision": 48,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -46,7 +46,7 @@
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "沿用归档开发自测证据；非新一轮测试"
+      "note": "归档证据保留；SRC-040/041 工程与临时快照各3/3、门禁机制7/7通过，含注入字段豁免、业务字段/接口反向及双编码命名违规，见DT-034～039；非独立CR或验收测试"
     },
     "code_review": {
       "status": "not_started",
@@ -162,13 +162,13 @@
   "last_actor": {
     "platform": "codex",
     "model": "unknown",
-    "updated_at": "2026-09-16T22:41:13+08:00"
+    "updated_at": "2026-09-17T00:15:56+08:00"
   },
   "handoff": {
-    "summary": "solo升级0.8：12份编号规范、9份按需主模板，分离自测/CR及五个发布阶段并补齐效果评估；同步初始化/迁移/校验/事务交接和portable。ddd重整为6份有效输出，19份原文及6条审批保留，Java/POM/配置与89个对应快照文件不变。流程10项、检查机制5项、Maven validate、3宿主入口/隔离安装、portable烟测及SHA/链接校验通过；未执行独立CR、测试或生产发布。",
-    "next_action": "用户阅读00工作台与04技术方案重整版，确认是否开展独立CR，并明确最终验收范围为模板发行或服务部署；未执行阶段按需生成文档。"
+    "summary": "SRC-041已完成：十个扫描组件的21个构造器注入依赖字段去掉重复注释，保留业务属性/常量/日志说明及final和构造器注入；新增DOC-006/JavadocVariable窄范围豁免，solo Spring生成统一遵循不限ddd。同步规范1.5、参考快照1.4、技能指引/回归、项目文档与portable。工程和临时快照各3/3、门禁7/7通过，普通状态/静态常量缺注释仍拒绝；89文件/规范/配置/包SHA一致，结构/Skill/差异检查通过。业务逻辑/POM/资源未改，未执行独立CR/验收/发布。",
+    "next_action": "用户审阅Controller简化后的注入字段及DOC-006公共约定；后续明确独立CR与最终模板发行或服务部署验收范围。"
   },
-  "last_updated": "2026-09-16T22:41:13+08:00",
+  "last_updated": "2026-09-17T00:15:56+08:00",
   "legacy_phase_evidence": {
     "intake": {
       "status": "complete",

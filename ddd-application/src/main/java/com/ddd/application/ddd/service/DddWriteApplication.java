@@ -32,27 +32,9 @@ public class DddWriteApplication {
      */
     private static final Logger LOG = LoggerFactory.getLogger(DddWriteApplication.class);
 
-    /**
-     * 写入用例的领域服务。
-     *
-     * @author AIGenerator
-     */
     private final DddWriteDomainService dddWriteDomainService;
-    /**
-     * 本层参数组装与结果转换组件。
-     *
-     * @author AIGenerator
-     */
     private final DddApplicationAssembler assembler;
 
-    /**
-     * 创建并初始化 DddWriteApplication，校验或装配其所需输入。
-     *
-     * @param dddWriteDomainService 写入用例的领域服务
-     * @param assembler 本层参数组装与结果转换组件
-     *
-     * @author AIGenerator
-     */
     public DddWriteApplication(DddWriteDomainService dddWriteDomainService, DddApplicationAssembler assembler) {
         this.dddWriteDomainService = dddWriteDomainService;
         this.assembler = assembler;

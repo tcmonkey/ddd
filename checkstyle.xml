@@ -4,6 +4,8 @@
 <!-- Java DDD 开发规范 v1.0；适用于采用本模板的项目，不等于完整架构验证。 -->
 <module name="Checker">
     <property name="charset" value="UTF-8"/>
+    <property name="localeLanguage" value="en"/>
+    <property name="localeCountry" value="US"/>
     <property name="severity" value="error"/>
     <property name="fileExtensions" value="java"/>
     <module name="FileTabCharacter"/>
@@ -14,29 +16,34 @@
     </module>
     <module name="RegexpSingleline">
         <property name="format" value="\s+$"/>
-        <message key="regexp.exceeded" value="FMT-TRAILING: 禁止行尾空白"/>
+        <message key="regexp.exceeded" value="FMT-TRAILING: Trailing whitespace is forbidden"/>
     </module>
     <module name="RegexpMultiline">
         <property name="format" value="(?s)/\*\*(?!(?:(?!\*/).)*@author\s+\S+)(?:(?!\*/).)*\*/"/>
-        <message key="regexp.exceeded" value="DOC-AUTHOR: 每个 Javadoc 必须有非空 @author"/>
+        <message key="regexp.exceeded" value="DOC-AUTHOR: Each Javadoc must have a non-empty @author"/>
     </module>
     <module name="RegexpMultiline">
         <property name="format" value="/\*\*[^\r\n]*\*/"/>
-        <message key="regexp.exceeded" value="DOC-MULTILINE: Javadoc 必须为多行"/>
+        <message key="regexp.exceeded" value="DOC-MULTILINE: Javadoc must span multiple lines"/>
     </module>
     <module name="RegexpMultiline">
         <property name="format" value="(?s)/\*\*(?!(?:(?!\*/).)*\p{IsHan})(?:(?!\*/).)*\*/"/>
-        <message key="regexp.exceeded" value="DOC-CHINESE: Javadoc 必须包含中文说明；语义完整性仍需评审"/>
+        <message key="regexp.exceeded" value="DOC-CHINESE: Javadoc must include a Chinese description; review its meaning"/>
     </module>
     <module name="RegexpMultiline">
         <property name="format" value="(?m)^\s*(?:public\s+)?Result&lt;[^;\r\n]+&gt;\s+\w+\(\s*(?:@[\w.]+(?:\([^)]*\))?\s+)*([A-Z])([a-zA-Z0-9]*(?:Command|Request))\s+(?!(?i:\1)\2\b)[a-zA-Z]\w*"/>
-        <message key="regexp.exceeded" value="NAM-TYPE-PARAM: Request/Command 参数名必须为完整类型对应的 lowerCamelCase"/>
+        <message key="regexp.exceeded" value="NAM-TYPE-PARAM: Request/Command parameter name must match its full type in lowerCamelCase"/>
     </module>
     <module name="TreeWalker">
+        <!-- DOC-005：仅豁免扫描组件中单一、仅 this 字段赋值的纯注入构造器；字段/参数对应关系需评审。 -->
+        <module name="SuppressionXpathSingleFilter">
+            <property name="checks" value="MissingJavadocMethod"/>
+            <property name="query" value="//CTOR_DEF[parent::OBJBLOCK/parent::CLASS_DEF/MODIFIERS/ANNOTATION//IDENT[@text=('Component','Service','Repository','Controller','RestController','Configuration','DomainService')] and count(parent::OBJBLOCK/CTOR_DEF)=1 and PARAMETERS/PARAMETER_DEF and count(parent::OBJBLOCK/VARIABLE_DEF[MODIFIERS/FINAL and not(MODIFIERS/LITERAL_STATIC)])>=count(PARAMETERS/PARAMETER_DEF) and count(SLIST/EXPR)=count(PARAMETERS/PARAMETER_DEF) and count(SLIST/SEMI)=count(PARAMETERS/PARAMETER_DEF) and not(SLIST/*[not(self::EXPR or self::SEMI or self::RCURLY)]) and not(SLIST/EXPR[not(ASSIGN and count(*)=1)]) and not(SLIST/EXPR/ASSIGN[not(count(*)=2 and DOT[count(*)=2 and LITERAL_THIS and IDENT] and IDENT)])]/descendant-or-self::node()"/>
+        </module>
         <module name="RegexpSinglelineJava">
             <property name="format" value="\{[^\r\n]*;\s*\}"/>
             <property name="ignoreComments" value="true"/>
-            <message key="regexp.exceeded" value="FMT-BLOCK: 方法体和状态操作不能压成单行"/>
+            <message key="regexp.exceeded" value="FMT-BLOCK: Do not compress method bodies or state changes into one line"/>
         </module>
         <module name="AvoidStarImport"/>
         <module name="RedundantImport"/>
@@ -66,150 +73,155 @@
             <property name="validateThrows" value="false"/>
         </module>
         <module name="JavadocVariable"/>
+        <!-- DOC-006：纯装配构造器所在组件的未初始化 final 注入字段不要求文档。 -->
+        <module name="SuppressionXpathSingleFilter">
+            <property name="checks" value="JavadocVariable"/>
+            <property name="query" value="//VARIABLE_DEF[MODIFIERS/FINAL and not(MODIFIERS/LITERAL_STATIC) and not(ASSIGN) and parent::OBJBLOCK/CTOR_DEF[parent::OBJBLOCK/parent::CLASS_DEF/MODIFIERS/ANNOTATION//IDENT[@text=('Component','Service','Repository','Controller','RestController','Configuration','DomainService')] and count(parent::OBJBLOCK/CTOR_DEF)=1 and PARAMETERS/PARAMETER_DEF and count(parent::OBJBLOCK/VARIABLE_DEF[MODIFIERS/FINAL and not(MODIFIERS/LITERAL_STATIC)])>=count(PARAMETERS/PARAMETER_DEF) and count(SLIST/EXPR)=count(PARAMETERS/PARAMETER_DEF) and count(SLIST/SEMI)=count(PARAMETERS/PARAMETER_DEF) and not(SLIST/*[not(self::EXPR or self::SEMI or self::RCURLY)]) and not(SLIST/EXPR[not(ASSIGN and count(*)=1)]) and not(SLIST/EXPR/ASSIGN[not(count(*)=2 and DOT[count(*)=2 and LITERAL_THIS and IDENT] and IDENT)])]]/descendant-or-self::node()"/>
+        </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Aggregate"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='aggregate']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Aggregate$'))]"/>
-            <message key="matchxpath.match" value="NAM-Aggregate: aggregate 包类型必须以 Aggregate 结尾"/>
+            <message key="matchxpath.match" value="NAM-Aggregate: Types in aggregate packages must end with Aggregate"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Entity"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='entity']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Entity$'))]"/>
-            <message key="matchxpath.match" value="NAM-Entity: entity 包类型必须以 Entity 结尾"/>
+            <message key="matchxpath.match" value="NAM-Entity: Types in entity packages must end with Entity"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Value"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='value']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Value$'))]"/>
-            <message key="matchxpath.match" value="NAM-Value: value 包类型必须以 Value 结尾"/>
+            <message key="matchxpath.match" value="NAM-Value: Types in value packages must end with Value"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Param"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='param']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Param$'))]"/>
-            <message key="matchxpath.match" value="NAM-Param: param 包类型必须以 Param 结尾"/>
+            <message key="matchxpath.match" value="NAM-Param: Types in param packages must end with Param"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Command"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='command']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Command$'))]"/>
-            <message key="matchxpath.match" value="NAM-Command: command 包类型必须以 Command 结尾"/>
+            <message key="matchxpath.match" value="NAM-Command: Types in command packages must end with Command"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Request"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='request']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Request$'))]"/>
-            <message key="matchxpath.match" value="NAM-Request: request 包类型必须以 Request 结尾"/>
+            <message key="matchxpath.match" value="NAM-Request: Types in request packages must end with Request"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Response"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='response']]/*[self::CLASS_DEF or self::RECORD_DEF or self::INTERFACE_DEF]/IDENT[not(matches(@text,'Response$'))]"/>
-            <message key="matchxpath.match" value="NAM-Response: response 包类型必须以 Response 结尾"/>
+            <message key="matchxpath.match" value="NAM-Response: Types in response packages must end with Response"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-Application"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='service']]/*[self::CLASS_DEF]/IDENT[not(matches(@text,'Application$'))]"/>
-            <message key="matchxpath.match" value="NAM-Application: 应用服务必须以 Application 结尾"/>
+            <message key="matchxpath.match" value="NAM-Application: Application service names must end with Application"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-DomainService"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and PACKAGE_DEF//IDENT[@text='service']]/*[self::CLASS_DEF]/IDENT[not(matches(@text,'DomainService$'))]"/>
-            <message key="matchxpath.match" value="NAM-DomainService: 领域服务必须以 DomainService 结尾"/>
+            <message key="matchxpath.match" value="NAM-DomainService: Domain service names must end with DomainService"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-APP-INPUT"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC][count(PARAMETERS/PARAMETER_DEF)!=1 or not(PARAMETERS/PARAMETER_DEF/TYPE/IDENT[matches(@text,'Command$')])]"/>
-            <message key="matchxpath.match" value="SIG-APP-INPUT: 入口接收一个 XxCommand 对象"/>
+            <message key="matchxpath.match" value="SIG-APP-INPUT: Accept exactly one XxCommand object"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-APP-OUTPUT"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC][not(TYPE/IDENT[@text='Result']) or not(TYPE/TYPE_ARGUMENTS/TYPE_ARGUMENT/IDENT[matches(@text,'Result$')])]"/>
-            <message key="matchxpath.match" value="SIG-APP-OUTPUT: 入口返回 Result&lt;XxResult>"/>
+            <message key="matchxpath.match" value="SIG-APP-OUTPUT: Return Result&lt;XxResult>"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-APP-PARAM"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC]/PARAMETERS/PARAMETER_DEF/IDENT[not(matches(@text,'^[a-z][a-zA-Z0-9]*Command$'))]"/>
-            <message key="matchxpath.match" value="NAM-APP-PARAM: Command 入参为明确的 xxCommand；类型前缀一致需评审"/>
+            <message key="matchxpath.match" value="NAM-APP-PARAM: Use the explicit xxCommand parameter name; review type prefix alignment"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-APP-ACTION"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC]/IDENT[@text='execute']"/>
-            <message key="matchxpath.match" value="NAM-APP-ACTION: 使用具体业务动作名，不统一 execute"/>
+            <message key="matchxpath.match" value="NAM-APP-ACTION: Use a specific business action instead of execute"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-DOM-INPUT"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC][count(PARAMETERS/PARAMETER_DEF)!=1 or not(PARAMETERS/PARAMETER_DEF/TYPE/IDENT[matches(@text,'Param$')])]"/>
-            <message key="matchxpath.match" value="SIG-DOM-INPUT: 入口接收一个 XxParam 对象"/>
+            <message key="matchxpath.match" value="SIG-DOM-INPUT: Accept exactly one XxParam object"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-DOM-OUTPUT"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC][not(TYPE/IDENT[@text='Result']) or not(TYPE/TYPE_ARGUMENTS/TYPE_ARGUMENT/IDENT[matches(@text,'DO$')])]"/>
-            <message key="matchxpath.match" value="SIG-DOM-OUTPUT: 入口返回 Result&lt;XxDO>"/>
+            <message key="matchxpath.match" value="SIG-DOM-OUTPUT: Return Result&lt;XxDO>"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-DOM-PARAM"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC]/PARAMETERS/PARAMETER_DEF/IDENT[@text!='param']"/>
-            <message key="matchxpath.match" value="NAM-DOM-PARAM: DomainService 入参统一 param"/>
+            <message key="matchxpath.match" value="NAM-DOM-PARAM: DomainService parameter name must be param"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-DOM-ACTION"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and PACKAGE_DEF//IDENT[@text='service']]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC]/IDENT[@text='execute']"/>
-            <message key="matchxpath.match" value="NAM-DOM-ACTION: 使用具体业务动作名，不统一 execute"/>
+            <message key="matchxpath.match" value="NAM-DOM-ACTION: Use a specific business action instead of execute"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-OUT-INPUT"/>
             <property name="query" value="(/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='adaptor'] and PACKAGE_DEF//IDENT[@text='output'] and not(PACKAGE_DEF//IDENT[@text=('converter','model')])]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC] | /COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='adaptor']]//INTERFACE_DEF//METHOD_DEF)[count(PARAMETERS/PARAMETER_DEF)!=1 or not(PARAMETERS/PARAMETER_DEF/TYPE/IDENT[matches(@text,'Command$')])]"/>
-            <message key="matchxpath.match" value="SIG-OUT-INPUT: 入口接收一个 XxCommand 对象"/>
+            <message key="matchxpath.match" value="SIG-OUT-INPUT: Accept exactly one XxCommand object"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-OUT-OUTPUT"/>
             <property name="query" value="(/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='adaptor'] and PACKAGE_DEF//IDENT[@text='output'] and not(PACKAGE_DEF//IDENT[@text=('converter','model')])]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC] | /COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='adaptor']]//INTERFACE_DEF//METHOD_DEF)[not(TYPE/IDENT[@text='Result']) or not(TYPE/TYPE_ARGUMENTS/TYPE_ARGUMENT/IDENT[matches(@text,'DO$')])]"/>
-            <message key="matchxpath.match" value="SIG-OUT-OUTPUT: 入口返回 Result&lt;XxDO>"/>
+            <message key="matchxpath.match" value="SIG-OUT-OUTPUT: Return Result&lt;XxDO>"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-OUT-PARAM"/>
             <property name="query" value="(/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='adaptor'] and PACKAGE_DEF//IDENT[@text='output'] and not(PACKAGE_DEF//IDENT[@text=('converter','model')])]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC] | /COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='adaptor']]//INTERFACE_DEF//METHOD_DEF)/PARAMETERS/PARAMETER_DEF/IDENT[not(matches(@text,'^[a-z][a-zA-Z0-9]*Command$'))]"/>
-            <message key="matchxpath.match" value="NAM-OUT-PARAM: Command 入参为明确的 xxCommand；类型前缀一致需评审"/>
+            <message key="matchxpath.match" value="NAM-OUT-PARAM: Use the explicit xxCommand parameter name; review type prefix alignment"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-OUT-ACTION"/>
             <property name="query" value="(/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='adaptor'] and PACKAGE_DEF//IDENT[@text='output'] and not(PACKAGE_DEF//IDENT[@text=('converter','model')])]//METHOD_DEF[MODIFIERS/LITERAL_PUBLIC] | /COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='application'] and PACKAGE_DEF//IDENT[@text='adaptor']]//INTERFACE_DEF//METHOD_DEF)/IDENT[@text='execute']"/>
-            <message key="matchxpath.match" value="NAM-OUT-ACTION: 使用具体业务动作名，不统一 execute"/>
+            <message key="matchxpath.match" value="NAM-OUT-ACTION: Use a specific business action instead of execute"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-CTL-OUTPUT"/>
             <property name="query" value="//CLASS_DEF[MODIFIERS/ANNOTATION//IDENT[@text='RestController']]//METHOD_DEF[MODIFIERS/ANNOTATION//IDENT[@text=('GetMapping','PostMapping','PutMapping','DeleteMapping','PatchMapping','RequestMapping')]][not(TYPE/IDENT[@text='Result']) or not(TYPE/TYPE_ARGUMENTS/TYPE_ARGUMENT/IDENT[matches(@text,'Response$')])]"/>
-            <message key="matchxpath.match" value="SIG-CTL-OUTPUT: Controller 业务入口返回 Result&lt;XxResponse>"/>
+            <message key="matchxpath.match" value="SIG-CTL-OUTPUT: Controller business endpoints must return Result&lt;XxResponse>"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SIG-CTL-BODY"/>
             <property name="query" value="//CLASS_DEF[MODIFIERS/ANNOTATION//IDENT[@text='RestController']]//METHOD_DEF[MODIFIERS/ANNOTATION//IDENT[@text=('GetMapping','PostMapping','PutMapping','DeleteMapping','PatchMapping','RequestMapping')]]/PARAMETERS/PARAMETER_DEF[MODIFIERS/ANNOTATION//IDENT[@text='RequestBody']][not(TYPE/IDENT[matches(@text,'Request$')]) or not(MODIFIERS/ANNOTATION//IDENT[@text='Valid'])]"/>
-            <message key="matchxpath.match" value="SIG-CTL-BODY: 请求体为 XxRequest 并使用 @Valid"/>
+            <message key="matchxpath.match" value="SIG-CTL-BODY: Use an XxRequest body with @Valid"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="NAM-CTL-PARAM"/>
             <property name="query" value="//CLASS_DEF[MODIFIERS/ANNOTATION//IDENT[@text='RestController']]//METHOD_DEF[MODIFIERS/ANNOTATION//IDENT[@text=('GetMapping','PostMapping','PutMapping','DeleteMapping','PatchMapping','RequestMapping')]]/PARAMETERS/PARAMETER_DEF[TYPE/IDENT[matches(@text,'Request$')]]/IDENT[not(matches(@text,'^[a-z][a-zA-Z0-9]*Request$'))]"/>
-            <message key="matchxpath.match" value="NAM-CTL-PARAM: Request 入参为明确的 xxRequest；类型前缀一致需评审"/>
+            <message key="matchxpath.match" value="NAM-CTL-PARAM: Use the explicit xxRequest parameter name; review type prefix alignment"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="DI-FIELD"/>
             <property name="query" value="//VARIABLE_DEF[MODIFIERS/ANNOTATION//IDENT[@text=('Autowired','Resource')]]"/>
-            <message key="matchxpath.match" value="DI-FIELD: 禁止自有代码字段注入，使用单一构造器"/>
+            <message key="matchxpath.match" value="DI-FIELD: Field injection is forbidden in owned code; use one constructor"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="SQL-CUSTOM"/>
             <property name="query" value="//ANNOTATION[.//IDENT[@text=('Select','Insert','Update','Delete','SelectProvider','InsertProvider','UpdateProvider','DeleteProvider')]]"/>
-            <message key="matchxpath.match" value="SQL-CUSTOM: 禁止自定义 SQL/Provider 注解"/>
+            <message key="matchxpath.match" value="SQL-CUSTOM: Custom SQL and SQL Provider annotations are forbidden"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="DEP-DOMAIN"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and not(PACKAGE_DEF//IDENT[@text='start'])]/IMPORT[.//IDENT[@text=('springframework','jakarta','baomidou','ibatis')]]"/>
-            <message key="matchxpath.match" value="DEP-DOMAIN: domain 禁止常见框架 import"/>
+            <message key="matchxpath.match" value="DEP-DOMAIN: Common framework imports are forbidden in domain"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="DEP-CLIENT"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='client']]/IMPORT[.//IDENT[@text='model']]"/>
-            <message key="matchxpath.match" value="DEP-CLIENT: client 禁止导入内部 model"/>
+            <message key="matchxpath.match" value="DEP-CLIENT: Client must not import internal model types"/>
         </module>
         <module name="MatchXpath">
             <property name="id" value="REPO-OPTIONAL"/>
             <property name="query" value="/COMPILATION_UNIT[PACKAGE_DEF//IDENT[@text='domain'] and PACKAGE_DEF//IDENT[@text='repository']]//METHOD_DEF[TYPE//IDENT[@text='Optional']]"/>
-            <message key="matchxpath.match" value="REPO-OPTIONAL: 仓储禁止 Optional 返回"/>
+            <message key="matchxpath.match" value="REPO-OPTIONAL: Repository must not return Optional"/>
         </module>
     </module>
 </module>

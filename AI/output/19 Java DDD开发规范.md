@@ -1,6 +1,6 @@
 # Java DDD 开发规范
 
-版本：1.3。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。本版仅更新交付文档约定，不改变 Java 编码规则或 Checkstyle。
+版本：1.5。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。本版补充构造器注入依赖字段的注释例外；该注释约定也是 solo 生成 Spring 项目的默认规则，不仅用于 ddd 示例。
 
 ## 1. 使用方式与规则优先级
 
@@ -93,7 +93,7 @@ start        Application / config / resources / 按需 aop
 
 | ID | 生效规则 | 检查 |
 |---|---|---|
-| DI-001 | 自有 Spring 组件统一单一构造器注入，依赖字段 final；禁止字段 Autowired/Resource。domain 使用自定义 DomainService 标记，start 定向扫描并构造装配。 | P：字段注解禁止；构造器数量/扫描需评审 |
+| DI-001 | 自有 Spring 组件统一单一构造器注入，依赖字段 final；禁止字段 Autowired/Resource。domain 使用自定义 DomainService 标记，start 定向扫描并构造装配。纯依赖装配构造器及其注入字段不写重复注释，见 DOC-005/006。 | P：字段注解禁止；构造器数量/扫描需评审 |
 | DI-002 | 无状态 assembler/converter 直接用 Component 扫描，不为已有扫描能力手动写重复 Bean；不创建无真实职责的 Configuration。 | R |
 | DI-003 | 当前取时间直接 Instant.now，不引入仅转发当前时间的 Clock Bean；需固定时钟测试、多时区策略时经方案确认后引入。 | R、按需 |
 | ERR-001 | common 统一 Result<T>；success/code/message/data 语义一致，不在 client/domain 各写一套 Result。XxResult 是应用业务 DTO，不是公共包装器。 | P：入口类型；统一实现与语义需评审 |
@@ -112,10 +112,12 @@ start        Application / config / resources / 按需 aop
 | NAM-002 | 对应包类型后缀：Aggregate、Entity（不用 Entiry）、Value、Param、Command、Request、Response；Application Service 为 XxApplication，DomainService 为 XxDomainService；DO/PO 为 XxDO/XxPO。 | P：已检查前八类后缀和服务名；DO/PO需评审 |
 | NAM-003 | Controller 的 Request、Application/OutAdaptor 的 Command 参数按完整类型 lowerCamelCase；DomainService 输入统一 param；OutAdaptor 接口和实现参数名一致。 | P：参数命名形式自动；简单签名前缀一致自动；复杂类型及接口/实现关联需评审 |
 | NAM-004 | 方法使用 create/query/write/cancel/calculate 等明确业务动作；不能机械统一 execute。不同业务动作不强制同名，同一职责上下层尽量一致。 | P：禁止入口 execute；业务动词语义需评审 |
-| DOC-001 | 所有公开声明的类型、字段/枚举常量和公开方法（含公开构造器、手写 getter/setter、Override）必须写多行中文 Javadoc，每个 Javadoc 必须有非空 author；默认 AIGenerator，真实项目可用实际维护者。 | P：缺失、中文存在、多行、author 自动；语义质量需评审 |
+| DOC-001 | 所有公开声明的类型、字段/枚举常量（构造器注入的依赖字段按 DOC-006 例外）和公开方法（含业务构造器、手写 getter/setter、Override；纯注入构造器按 DOC-005 例外）必须写多行中文 Javadoc，每个 Javadoc 必须有非空 author；默认 AIGenerator，真实项目可用实际维护者。 | P：缺失、中文存在、多行、author 自动；语义质量需评审 |
 | DOC-002 | 方法逐项 param，非 void 有 return，泛型参数有类型参数说明；record 的组件在类型 Javadoc 逐项 param。已声明私有方法的 Javadoc 也必须匹配参数/返回值。 | C：已有文档标签与公开缺失；私有文档是否必须存在需评审 |
 | DOC-003 | PO/Entity/Value 字段说明业务语义、映射或不变量；Controller/RPC 的契约说明用途、输入、输出、错误行为，不依靠实现类文档替代接口契约。 | P：字段文档存在；实际完整性需评审 |
 | DOC-004 | Javadoc 内容变更与参数名同步；接口约定不能因实现已注释而省略。自动生成的访问器不用重复声明，只检查实际源码。 | C：源码声明 |
+| DOC-005 | 被 Spring 扫描的组件（含 start 定向扫描的 DomainService），单一构造器仅将输入依赖赋给 final 字段时，不写重复的构造器 Javadoc/行内注释；类型仍需说明，注入依赖字段按 DOC-006 处理。构造器包含校验、初始化、计算、转换或其他行为则必须写 Javadoc，普通业务对象/异常构造器不在例外内。公开业务方法、Controller 入口、RPC/Repository 接口注释不能省略。 | P：窄范围构造器 AST 豁免；字段/参数对应关系与真实扫描需评审 |
+| DOC-006 | 被 Spring 扫描类中，通过构造器接收并保存的注入依赖字段不写重复 Javadoc/行内注释，以清晰类型名和字段名表达职责；不删除字段或 final，也不改变构造器注入方式。业务状态、配置语义字段、PO/Entity/Value 属性、常量与日志字段仍保留说明；不能因为类被扫描就豁免全部字段。复杂构造器中的注入依赖仍按此语义判断，但构造器行为注释按 DOC-005 保留。此约定用于 solo 后续生成的 Spring 项目，不局限 ddd 参考工程。 | P：纯装配组件的未初始化非静态 final 字段窄范围豁免；复杂构造器、真实扫描/依赖语义需评审与定向适配 |
 
 ## 8. 代码格式与版本管理
 
@@ -132,6 +134,7 @@ start        Application / config / resources / 按需 aop
 | MAV-004 | 项目根必须携带 checkstyle.xml，独立于 Skill 安装目录；编译/测试/打包默认先检查主源码，违规构建失败。禁止在默认构建中关闭检查。 | Maven 构建验证 |
 | MAV-005 | Maven 3 同版本多模块工程以根 properties/revision 单点声明项目版本，根 project.version 与各子模块 parent.version 均为 ${revision}；子模块不重复声明 revision 或自身 version。根管理内部模块依赖仍用 ${project.version}，不将其用于 parent.version。允许命令行 -Drevision 覆盖；外部 Spring Boot parent 的版本保持根集中声明。 | R：POM、默认/覆盖版本构建验证 |
 | MAV-006 | 根 build/plugins 声明 flatten-maven-plugin 并固定版本，子模块继承；updatePomFile=true、flattenMode=resolveCiFriendliesOnly，flatten 绑定 process-resources、clean 绑定 clean。Maven 3 install/deploy 使用已解析 CI 版本占位符的 POM，源码 POM 不被改写；.flattened-pom.xml 加入 Git 忽略且不进入 Skill 快照。发布适配须验证安装后独立消费者，无须发布到远程验证。 | R：安装/消费及 clean 行为验证；Checkstyle 不检查 |
+| MAV-007 | 源码、配置、文档仍为 UTF-8；Checkstyle 自定义诊断统一 ASCII 英文并保留稳定规则 ID，内置诊断固定 en/US，减少不同宿主/IDE 控制台解码差异。此约定只作用于规范门禁，不改中文 Javadoc、业务错误信息或日志；inputEncoding/charset 只是输入编码，不是控制台输出编码修复。门禁变更须验证正常 UTF-8 与 US-ASCII 输出下违规仍失败且消息可读。 | Maven 正/反向及编码兼容测试 |
 
 ## 9. 生产适配与交付
 
@@ -162,6 +165,7 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 - 框架 import、字段注入及 SQL 注解检查只是风险特征，不验证 Maven 依赖图、所有原生 SQL 调用或真实 DDD 内聚。
 - 中文存在、作者标签、文档完整性不代表描述正确；业务动作、编号流程、领域边界、事务/日志仍需评审。
 - 接口与实现类的公开方法 Javadoc 统一由 Maven Checkstyle 门禁检查，不再维护独立接口诊断脚本。
+- DOC-005 对 MissingJavadocMethod、DOC-006 对 JavadocVariable 分别设置 SuppressionXpathSingleFilter：识别 Component、Service、Repository、Controller、RestController、Configuration、DomainService 标记；仅豁免单一、非空参数、只有 this 字段直接赋值的构造器。检查参数/赋值数量与非静态 final 字段数量；不做跨节点类型/字段归属解析，字段与参数的真实对应仍需评审。字段豁免进一步限定同一纯装配组件中未初始化、非静态 final 字段：它们在合法 Java 构造器中必须被赋值。已初始化的状态字段、静态常量及可变字段不豁免；真实依赖语义及复杂注入构造器需评审并按确认添加定向例外。其他自定义扫描标记需经确认增加窄范围适配，不以全局排除 CTOR_DEF 代替；已有 Javadoc 仍检查中文/作者/标签。
 - 不得声称 Checkstyle 通过等于架构、功能、性能或生产验收通过；其余 R/P 规则进入代码审查及专项测试。
 
 新项目使用 solo 的 Java DDD 模板时，AI 在根 POM 建好、正式编码前自动执行 Skill 的 `scripts/install_java_ddd_checks.py --project <项目根>`，生成根 checkstyle.xml、继承执行的 Maven 配置和本规范快照 `AI/output/19 Java DDD开发规范.md`，无需用户每次重复指定。没有执行能力的宿主按同一资源生成文件，不能谎称构建已执行。
@@ -187,10 +191,13 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 | OutAdaptor 再加重复 Param / 直接 Command | 无独立语义直接 Application Command | SRC-031 覆盖 030 的冗余转换 |
 | Repository 使用领域读取 Param / 标识类型 | Repository CRUD 标识例外；分页自有域内对象 | SRC-033 |
 | 通用 request/command/execute / 具体参数与动作 | 四层签名及完整类型变量名，明确业务动作 | SRC-034 |
+| 所有构造器一律注释 / 纯装配例外 | 纯依赖注入构造器无注释；业务行为构造器、公开方法和接口契约保留 | SRC-040 细化 DOC-001 与 SRC-014/018 |
+| 注入字段继续注释 / 去重复 | 构造器注入依赖字段不写重复注释；业务属性、常量、日志仍注释 | SRC-041，DOC-006，适用于 solo Spring 代码生成 |
+| 中文门禁诊断 / 跨宿主可读 | ASCII 英文诊断 + 稳定规则 ID，源码/中文 Javadoc 仍 UTF-8 | SRC-040，MAV-007 |
 | 手动接口 Javadoc 检查 / 构建约束 | Checkstyle 生命周期门禁；独立接口检查脚本已移除 | SRC-035、SRC-036 |
 | start 依靠传递依赖 / 显式装配清单 | 直接列出本服务实际运行模块，按需裁剪；不是全仓库依赖清单 | SRC-037 |
 | 子模块固定 parent 版本 / 单点版本 | 根 revision + 子模块 ${revision}；Maven 3 使用 Flatten 适配发布 | SRC-038 细化 SRC-015 |
 
 不把历史版本日志中的旧选择当作新项目规则。规则变更应更新本文件版本、对应 checkstyle.xml、安装资源和项目快照，并重新验证正向构建与反向违规用例。
 
-实现参考：[Maven 插件生命周期接入](https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)、[Checkstyle MatchXpath](https://checkstyle.org/checks/coding/matchxpath.html)、[Javadoc 方法检查](https://checkstyle.org/checks/javadoc/javadocmethod.html)。这些资料用于解释检查能力；本项目的业务架构与偏好来自用户确认，不由第三方文档替代决定。
+实现参考：[Maven 插件生命周期接入](https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)、[Checkstyle MatchXpath](https://checkstyle.org/checks/coding/matchxpath.html)、[Javadoc 方法检查](https://checkstyle.org/checks/javadoc/javadocmethod.html)、[构造器缺失注释检查](https://checkstyle.org/checks/javadoc/missingjavadocmethod.html)、[窄范围 XPath 豁免](https://checkstyle.org/filters/suppressionxpathsinglefilter.html)、[Checker 编码与诊断语言](https://checkstyle.org/config.html)。这些资料用于解释检查能力；本项目的业务架构与偏好来自用户确认，不由第三方文档替代决定。

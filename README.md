@@ -210,7 +210,9 @@ mvn clean package
 
 当前自动检查格式、类型命名后缀、公开入口输入/输出及参数名形式、Javadoc、字段注入、常见框架 import 与 SQL 注解。它不验证完整 Maven 依赖图、真实领域内聚、转换语义、所有 SQL 调用、业务日志或功能/性能。测试源码、生成源码和 scripts 不在本版 Checkstyle 范围内；完整边界见规范第 10 节。
 
-接口与实现类的公开方法注释统一由 Maven Checkstyle 门禁检查，不再维护独立的接口注释检查脚本。
+接口与实现类的公开方法注释统一由 Maven Checkstyle 门禁检查，不再维护独立的接口注释检查脚本。Spring 扫描组件的单一纯依赖注入构造器（DOC-005）及构造器注入依赖字段（DOC-006）不写重复注释；业务属性、常量和日志字段仍保留说明；含校验/初始化/转换逻辑的构造器、Controller 业务方法及接口契约仍写多行中文 Javadoc。豁免分别针对窄范围 MissingJavadocMethod/JavadocVariable，不全局关闭构造器检查。
+
+Checkstyle 的自定义诊断使用 ASCII 英文并保留规则 ID，内置语言固定 en/US（MAV-007）；Java 源码/配置/中文注释仍为 UTF-8。例：`NAM-TYPE-PARAM: Request/Command parameter name must match its full type in lowerCamelCase` 表示参数名应与完整类型对应；`DddRuleRequest` 必须命名为 `dddRuleRequest`，不能改为 `dddRuleRequestParam`。这是门禁输出的编码兼容策略，不代表全局修改 IntelliJ 控制台设置。
 
 使用 solo 的 Java DDD 模板生成新项目时，AI 在根 POM 建好、正式编码前自动运行 Skill 的安装器，携带相同门禁与规范快照。配置与项目脱离 Skill 也可独立构建，不需要用户每次手动补 checkstyle.xml；已有冲突配置会保留并要求显式协调。
 

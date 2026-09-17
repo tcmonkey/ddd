@@ -19,27 +19,9 @@ import com.ddd.model.ddd.DddExternalReadDO;
  */
 @Service
 public final class DddExternalReadApplication {
-    /**
-     * Application 声明的外部数据读取端口。
-     *
-     * @author AIGenerator
-     */
     private final DddOutputAdaptor outputAdaptor;
-    /**
-     * 本层参数组装与结果转换组件。
-     *
-     * @author AIGenerator
-     */
     private final DddApplicationAssembler assembler;
 
-    /**
-     * 创建并初始化 DddExternalReadApplication，校验或装配其所需输入。
-     *
-     * @param outputAdaptor Application 声明的外部数据读取端口
-     * @param assembler 本层参数组装与结果转换组件
-     *
-     * @author AIGenerator
-     */
     public DddExternalReadApplication(DddOutputAdaptor outputAdaptor, DddApplicationAssembler assembler) {
         this.outputAdaptor = outputAdaptor;
         this.assembler = assembler;

@@ -37,27 +37,9 @@ public final class DddWriteDomainService {
      */
     private static final Logger LOG = LoggerFactory.getLogger(DddWriteDomainService.class);
 
-    /**
-     * 完整业务聚合的领域仓储端口。
-     *
-     * @author AIGenerator
-     */
     private final DddRepository dddRepository;
-    /**
-     * 规则聚合的领域仓储端口。
-     *
-     * @author AIGenerator
-     */
     private final DddRuleRepository dddRuleRepository;
 
-    /**
-     * 创建并初始化 DddWriteDomainService，校验或装配其所需输入。
-     *
-     * @param dddRepository 完整业务聚合的领域仓储端口
-     * @param dddRuleRepository 规则聚合的领域仓储端口
-     *
-     * @author AIGenerator
-     */
     public DddWriteDomainService(DddRepository dddRepository, DddRuleRepository dddRuleRepository) {
         this.dddRepository = dddRepository;
         this.dddRuleRepository = dddRuleRepository;

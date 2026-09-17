@@ -29,27 +29,9 @@ public final class DddReadApplication {
      */
     private static final Logger LOG = LoggerFactory.getLogger(DddReadApplication.class);
 
-    /**
-     * 完整业务聚合的领域仓储端口。
-     *
-     * @author AIGenerator
-     */
     private final DddRepository dddRepository;
-    /**
-     * 本层参数组装与结果转换组件。
-     *
-     * @author AIGenerator
-     */
     private final DddApplicationAssembler assembler;
 
-    /**
-     * 创建并初始化 DddReadApplication，校验或装配其所需输入。
-     *
-     * @param dddRepository 完整业务聚合的领域仓储端口
-     * @param assembler 本层参数组装与结果转换组件
-     *
-     * @author AIGenerator
-     */
     public DddReadApplication(DddRepository dddRepository, DddApplicationAssembler assembler) {
         this.dddRepository = dddRepository;
         this.assembler = assembler;

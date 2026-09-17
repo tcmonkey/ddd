@@ -20,27 +20,9 @@ import com.ddd.model.ddd.DddRuleCalculateDO;
  */
 @Service
 public final class DddRuleApplication {
-    /**
-     * 规则计算用例的领域服务。
-     *
-     * @author AIGenerator
-     */
     private final DddRuleDomainService dddRuleDomainService;
-    /**
-     * 本层参数组装与结果转换组件。
-     *
-     * @author AIGenerator
-     */
     private final DddApplicationAssembler assembler;
 
-    /**
-     * 创建并初始化 DddRuleApplication，校验或装配其所需输入。
-     *
-     * @param dddRuleDomainService 规则计算用例的领域服务
-     * @param assembler 本层参数组装与结果转换组件
-     *
-     * @author AIGenerator
-     */
     public DddRuleApplication(DddRuleDomainService dddRuleDomainService, DddApplicationAssembler assembler) {
         this.dddRuleDomainService = dddRuleDomainService;
         this.assembler = assembler;
