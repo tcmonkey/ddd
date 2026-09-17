@@ -1,0 +1,23 @@
+................
+----------------------------------------------------------------------
+Ran 16 tests in 9.554s
+
+OK
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-ba4ce_ly/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-ba4ce_ly/toolkit/dist/claude-code/solo
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-ba4ce_ly/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-ba4ce_ly/toolkit/dist/claude-code/solo
+[claude-code] conflict/error: Generated files were modified; preserve/reconcile them first: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-ba4ce_ly/home/.claude/skills/solo
+[codex] plan (symlink): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/toolkit/dist/codex/solo
+[codex] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/toolkit/dist/codex/solo
+[codex] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/toolkit/dist/codex/solo
+[codex] conflict/error: Existing managed copy: update with --install-mode copy: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u33lhpzz/home/.agents/skills/solo
+[codex] conflict/error: Refusing to overwrite an unowned directory: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-83853sv5/home/.agents/skills/solo
+[claude-code] conflict/error: Refusing to overwrite an unowned directory: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-83853sv5/home/.claude/skills/solo
+[qwen-code] conflict/error: Refusing to overwrite an unowned directory: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-83853sv5/home/.qwen/skills/solo
+[codex] conflict/error: Foreign symlink conflict: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-83853sv5/foreign-link-home/.agents/skills/solo -> /private/var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-83853sv5/foreign-skill
+[codex] install/update (symlink): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/toolkit/dist/codex/solo
+[codex] remove obsolete owned link: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/home/.codex/skills/solo
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/toolkit/dist/claude-code/solo
+[qwen-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/home/.qwen/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-aqjy1rk1/toolkit/dist/qwen-code/solo
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-dqsx129t/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-dqsx129t/toolkit/dist/claude-code/solo
+[claude-code] remove obsolete owned link: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-dqsx129t/home/.claude/skills/solo-delivery
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-dqsx129t/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-dqsx129t/toolkit/dist/claude-code/solo

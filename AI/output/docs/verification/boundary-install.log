@@ -1,0 +1,347 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ddd                                                                [pom]
+[INFO] ddd-common                                                         [jar]
+[INFO] ddd-client                                                         [jar]
+[INFO] ddd-model                                                          [jar]
+[INFO] ddd-domain                                                         [jar]
+[INFO] ddd-application                                                    [jar]
+[INFO] ddd-infrastructure                                                 [jar]
+[INFO] ddd-adaptor                                                        [jar]
+[INFO] ddd-start                                                          [jar]
+[INFO] 
+[INFO] ----------------------------< com.ddd:ddd >-----------------------------
+[INFO] Building ddd 0.0.1-SNAPSHOT                                        [1/9]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd ---
+[INFO] Generating flattened POM of project com.ddd:ddd:pom:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd/0.0.1-SNAPSHOT/ddd-0.0.1-SNAPSHOT.pom
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-common >-------------------------
+[INFO] Building ddd-common 0.0.1-SNAPSHOT                                 [2/9]
+[INFO]   from ddd-common/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-common ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-common ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-common/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-common/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-common ---
+[INFO] Generating flattened POM of project com.ddd:ddd-common:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-common ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-common ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-common/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-common ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-common ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-common ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-common/target/ddd-common-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-common ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-common/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-common/0.0.1-SNAPSHOT/ddd-common-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-common/target/ddd-common-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-common/0.0.1-SNAPSHOT/ddd-common-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-client >-------------------------
+[INFO] Building ddd-client 0.0.1-SNAPSHOT                                 [3/9]
+[INFO]   from ddd-client/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-client ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-client ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-client/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-client/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-client ---
+[INFO] Generating flattened POM of project com.ddd:ddd-client:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-client ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 8 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-client ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-client/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-client ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-client ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-client ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-client/target/ddd-client-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-client ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-client/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-client/0.0.1-SNAPSHOT/ddd-client-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-client/target/ddd-client-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-client/0.0.1-SNAPSHOT/ddd-client-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-model >--------------------------
+[INFO] Building ddd-model 0.0.1-SNAPSHOT                                  [4/9]
+[INFO]   from ddd-model/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-model ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-model ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-model/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-model/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-model ---
+[INFO] Generating flattened POM of project com.ddd:ddd-model:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-model ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-model ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-model/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-model ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-model ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-model ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-model/target/ddd-model-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-model ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-model/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-model/0.0.1-SNAPSHOT/ddd-model-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-model/target/ddd-model-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-model/0.0.1-SNAPSHOT/ddd-model-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-domain >-------------------------
+[INFO] Building ddd-domain 0.0.1-SNAPSHOT                                 [5/9]
+[INFO]   from ddd-domain/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-domain ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-domain ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-domain/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-domain/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-domain ---
+[INFO] Generating flattened POM of project com.ddd:ddd-domain:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-domain ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 19 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-domain ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-domain/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-domain ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-domain ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-domain ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-domain/target/ddd-domain-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-domain ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-domain/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-domain/0.0.1-SNAPSHOT/ddd-domain-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-domain/target/ddd-domain-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-domain/0.0.1-SNAPSHOT/ddd-domain-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] ----------------------< com.ddd:ddd-application >-----------------------
+[INFO] Building ddd-application 0.0.1-SNAPSHOT                            [6/9]
+[INFO]   from ddd-application/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-application ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-application ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-application/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-application/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-application ---
+[INFO] Generating flattened POM of project com.ddd:ddd-application:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-application ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 18 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-application ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-application/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-application ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-application ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-application ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-application/target/ddd-application-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-application ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-application/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-application/0.0.1-SNAPSHOT/ddd-application-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-application/target/ddd-application-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-application/0.0.1-SNAPSHOT/ddd-application-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------------< com.ddd:ddd-infrastructure >---------------------
+[INFO] Building ddd-infrastructure 0.0.1-SNAPSHOT                         [7/9]
+[INFO]   from ddd-infrastructure/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-infrastructure ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-infrastructure ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-infrastructure/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-infrastructure/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-infrastructure ---
+[INFO] Generating flattened POM of project com.ddd:ddd-infrastructure:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-infrastructure ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 10 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-infrastructure ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-infrastructure/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-infrastructure ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-infrastructure ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-infrastructure ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-infrastructure/target/ddd-infrastructure-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-infrastructure ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-infrastructure/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-infrastructure/0.0.1-SNAPSHOT/ddd-infrastructure-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-infrastructure/target/ddd-infrastructure-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-infrastructure/0.0.1-SNAPSHOT/ddd-infrastructure-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] ------------------------< com.ddd:ddd-adaptor >-------------------------
+[INFO] Building ddd-adaptor 0.0.1-SNAPSHOT                                [8/9]
+[INFO]   from ddd-adaptor/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-adaptor ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-adaptor ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-adaptor/src/main/resources
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-adaptor/src/main/resources
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-adaptor ---
+[INFO] Generating flattened POM of project com.ddd:ddd-adaptor:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-adaptor ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 10 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-adaptor ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-adaptor/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-adaptor ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-adaptor ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-adaptor ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-adaptor/target/ddd-adaptor-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-adaptor ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-adaptor/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-adaptor/0.0.1-SNAPSHOT/ddd-adaptor-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-adaptor/target/ddd-adaptor-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-adaptor/0.0.1-SNAPSHOT/ddd-adaptor-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-start >--------------------------
+[INFO] Building ddd-start 0.0.1-SNAPSHOT                                  [9/9]
+[INFO]   from ddd-start/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-start ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ddd-start ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- flatten:1.8.0:flatten (flatten) @ ddd-start ---
+[INFO] Generating flattened POM of project com.ddd:ddd-start:jar:0.0.1-SNAPSHOT...
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-start ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ddd-start ---
+[INFO] skip non existing resourceDirectory /Users/monkey/Documents/kit/workspace/ddd/ddd-start/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-start ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ ddd-start ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ ddd-start ---
+[INFO] Building jar: /Users/monkey/Documents/kit/workspace/ddd/ddd-start/target/ddd-start-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:3.3.12:repackage (repackage) @ ddd-start ---
+[INFO] Replacing main artifact /Users/monkey/Documents/kit/workspace/ddd/ddd-start/target/ddd-start-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/monkey/Documents/kit/workspace/ddd/ddd-start/target/ddd-start-0.0.1-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ ddd-start ---
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-start/.flattened-pom.xml to /Users/monkey/.m2/repository/com/ddd/ddd-start/0.0.1-SNAPSHOT/ddd-start-0.0.1-SNAPSHOT.pom
+[INFO] Installing /Users/monkey/Documents/kit/workspace/ddd/ddd-start/target/ddd-start-0.0.1-SNAPSHOT.jar to /Users/monkey/.m2/repository/com/ddd/ddd-start/0.0.1-SNAPSHOT/ddd-start-0.0.1-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ddd 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] ddd ................................................ SUCCESS [  1.412 s]
+[INFO] ddd-common ......................................... SUCCESS [  0.529 s]
+[INFO] ddd-client ......................................... SUCCESS [  0.484 s]
+[INFO] ddd-model .......................................... SUCCESS [  0.127 s]
+[INFO] ddd-domain ......................................... SUCCESS [  0.434 s]
+[INFO] ddd-application .................................... SUCCESS [  0.246 s]
+[INFO] ddd-infrastructure ................................. SUCCESS [  0.368 s]
+[INFO] ddd-adaptor ........................................ SUCCESS [  0.282 s]
+[INFO] ddd-start .......................................... SUCCESS [  0.826 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.001 s
+[INFO] Finished at: 2026-09-17T23:43:37+08:00
+[INFO] ------------------------------------------------------------------------

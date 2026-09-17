@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 48,
+  "revision": 50,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -40,13 +40,14 @@
     "development": {
       "status": "complete",
       "required": true,
-      "approved_at": null
+      "approved_at": null,
+      "note": "当前四层入口与工程目录整改完成；实际构建/回归及限制见AI/output/05和docs/verification/boundary-summary.json"
     },
     "developer_self_test": {
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "归档证据保留；SRC-040/041 工程与临时快照各3/3、门禁机制7/7通过，含注入字段豁免、业务字段/接口反向及双编码命名违规，见DT-034～039；非独立CR或验收测试"
+      "note": "当前根4条回归通过；最终源码独立快照4条通过，包括H2保存后转换失败回滚及mock提交故障；公共门禁7/流程10/启动14/安装16通过，非独立CR或生产验收"
     },
     "code_review": {
       "status": "not_started",
@@ -162,13 +163,13 @@
   "last_actor": {
     "platform": "codex",
     "model": "unknown",
-    "updated_at": "2026-09-17T00:15:56+08:00"
+    "updated_at": "2026-09-17T23:53:04+08:00"
   },
   "handoff": {
-    "summary": "SRC-041已完成：十个扫描组件的21个构造器注入依赖字段去掉重复注释，保留业务属性/常量/日志说明及final和构造器注入；新增DOC-006/JavadocVariable窄范围豁免，solo Spring生成统一遵循不限ddd。同步规范1.5、参考快照1.4、技能指引/回归、项目文档与portable。工程和临时快照各3/3、门禁7/7通过，普通状态/静态常量缺注释仍拒绝；89文件/规范/配置/包SHA一致，结构/Skill/差异检查通过。业务逻辑/POM/资源未改，未执行独立CR/验收/发布。",
-    "next_action": "用户审阅Controller简化后的注入字段及DOC-006公共约定；后续明确独立CR与最终模板发行或服务部署验收范围。"
+    "summary": "SRC-043三项约束已同步规范1.7、参考快照1.5及solo发行包。14主入口各自完整捕获，无throws/重抛；写应用TransactionTemplate包含commit，领域失败标回滚，保存后转换异常先回滚再安全返回。根4条回归及最终独立快照4条通过；独立消费者、门禁7/流程10/启动14/安装16通过。93源文件、规范/三份配置、三个宿主135/134/134及portable134资源哈希一致；技术/开发3.4、工作台1.4及AI/output证据已更新。开发与当前自测完成，独立CR/testing/发布未开始，生产并发幂等风险仍开放。",
+    "next_action": "用户审阅04第6章、05第6章及19规范；后续以实际使用范围开展独立CR，验证并发/幂等/生产数据库及协议适配，不把开发回归当独立验收或发布。"
   },
-  "last_updated": "2026-09-17T00:15:56+08:00",
+  "last_updated": "2026-09-17T23:53:04+08:00",
   "legacy_phase_evidence": {
     "intake": {
       "status": "complete",
@@ -227,5 +228,14 @@
     }
   },
   "artifact_layout": "consolidated-lazy",
-  "artifact_overrides": {}
+  "artifact_overrides": {},
+  "authorizations": [
+    {
+      "id": "AUTH-BOUNDARY-001",
+      "source": "SRC-043",
+      "actor": "user",
+      "scope": "三个工程边界约束沉淀solo及ddd；全面检查并修改hello-travel与ddd四层主入口，执行相关开发回归与目录迁移",
+      "executed": "完整捕获/失败回滚/错误分类、同级前端、AI/output已完成；保留历史审批、未开始CR/发布"
+    }
+  ]
 }

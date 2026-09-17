@@ -1,0 +1,34 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< verification:ddd-boundary-consumer >-----------------
+[INFO] Building ddd-boundary-consumer 1
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ ddd-boundary-consumer ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /tmp/ddd-boundary-consumer/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ddd-boundary-consumer ---
+[INFO] Recompiling the module because of changed source code.
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 1 source file with javac [debug release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ ddd-boundary-consumer ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /tmp/ddd-boundary-consumer/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ddd-boundary-consumer ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ ddd-boundary-consumer ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.5.0:jar (default-jar) @ ddd-boundary-consumer ---
+[INFO] Building jar: /tmp/ddd-boundary-consumer/target/ddd-boundary-consumer-1.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.097 s
+[INFO] Finished at: 2026-09-17T23:45:43+08:00
+[INFO] ------------------------------------------------------------------------

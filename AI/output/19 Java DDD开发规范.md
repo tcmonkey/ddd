@@ -1,6 +1,6 @@
 # Java DDD 开发规范
 
-版本：1.5。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。本版补充构造器注入依赖字段的注释例外；该注释约定也是 solo 生成 Spring 项目的默认规则，不仅用于 ddd 示例。
+版本：1.7。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。本版落实四层主入口逐层异常捕获、同级独立前端项目和AI输出归档约定（ERR-004/006/007、MOD-010、DEL-006）。构造器注入依赖字段的注释例外继续生效，也是 solo 生成 Spring 项目的默认规则，不仅用于 ddd 示例。
 
 ## 1. 使用方式与规则优先级
 
@@ -22,6 +22,7 @@
 | MOD-006 | domain 只依赖 common/model/JDK，禁止 Spring、Jakarta、MyBatis 等框架。 | P：禁止常见框架 import；POM、全限定类型/传递依赖需评审 |
 | MOD-007 | application 依赖 domain/model/common；infrastructure 实现 domain 仓储端口；adaptor 依赖 application/client/model/common。start 只负责启动和装配，业务模块禁止反向依赖 start。 | R |
 | MOD-008 | 同一 adaptor module 区分 input/output：input 放协议入口及 assembler，output 放外部能力实现、converter 和私有第三方模型。 | R |
+| MOD-010 | 生成有前端的项目时，默认以用户项目名为服务端目录，自动创建同级`<项目名>-app`为独立前端项目，拥有自己的package.json、lockfile、源码、构建与README；禁止默认嵌套到服务端frontend/web目录。用户明确其他布局或已有仓库约定优先；目标已存在先检查保留，不覆盖。同步启动脚本、代理、文档和项目目录引用；不把服务端凭据复制到前端。 | R：目录与独立构建验证 |
 | MOD-009 | start 的 POM 是本服务的显式装配清单，直接声明实际随服务运行的内部模块，不仅依靠传递依赖。完整模板列出 common、client、model、domain、application、infrastructure、adaptor；真实项目按服务边界裁剪，不引入无用途、其他服务或仅工具用途的模块。测试专用依赖使用 test scope，运行专用依赖按需使用 runtime scope；所有依赖版本仍由根 POM 管理。业务模块不得反向依赖 start。 | R：核对 POM、有效依赖树和运行验证，Checkstyle 不检查 |
 
 按业务子域组织包，推荐骨架：
@@ -99,7 +100,9 @@ start        Application / config / resources / 按需 aop
 | ERR-001 | common 统一 Result<T>；success/code/message/data 语义一致，不在 client/domain 各写一套 Result。XxResult 是应用业务 DTO，不是公共包装器。 | P：入口类型；统一实现与语义需评审 |
 | ERR-002 | DomainService/OutAdaptor 公共入口返回 Result<XXDO>；错误码用 Domain/Application/Infrastructure/AdaptorErrorCode 枚举，实现 common ErrorCode。禁止 ExternalErrorCode 等歧义模块名。 | P：返回签名；枚举与错误映射需评审 |
 | ERR-003 | common BaseException 统一携带内部 ErrorCode；DomainException、InfrastructureException、AdaptorException 按实际私有抛出需求定义，Application 不为凑层级创建无用途异常。 | R |
-| ERR-004 | DomainService/OutAdaptor 主调用入口捕获预期及未预期异常，内部私有方法/Entity/Aggregate 不重复 catch/log；Application 判断 Result，并按方案保留或转换错误码。不得 catch 后返回成功、吞异常或暴露原始技术堆栈。 | R |
+| ERR-004 | Controller/RPC/输入端口、Application Service、DomainService及OutAdaptor实现的每个主调用入口，必须在本方法中用try-catch覆盖参数转换、校验、调用和结果转换；捕获已分类业务异常及Exception，不向上抛出。接口声明无方法体不写catch，实现类必须写；内部Entity/Aggregate/仓储/私有协作可抛异常，但由本层主入口捕获，不能以全局异常处理器或上层catch替代。 | P：实体实现入口完整外层try/catch语法已检查；错误分类/覆盖语义需评审 |
+| ERR-006 | 对外及四层主入口禁止声明throws、catch后重抛、捕获后返回成功或泄漏异常消息/堆栈；失败统一Result.failure，保留或明确转换稳定错误分类。HTTP失败按协议设置状态，不能为了禁止抛出而全部变成200。SSE/流式协议已提交时使用安全错误帧及关闭连接，入口仍须捕获；方法进入前的绑定/BeanValidation由协议兜底处理。 | P：throws及catch重抛已检查；Result/状态/流终止需专项验证 |
+| ERR-007 | 捕获与事务边界必须相容：应用入口的catch包住TransactionTemplate执行及commit，内部异常先触发回滚再转换Result；事务内部收到失败Result须明确rollbackOnly或转为内部异常中断。禁止catch吞掉错误使部分写入提交，禁止在公开入口依靠注解代理于方法返回后才捕获提交失败。 | R：事务失败/提交失败回归验证 |
 | ERR-005 | 第三方原始响应/错误/堆栈留在可追溯日志，向上返回友好内部错误；不得在多层重复打印同一异常。HTTP 全局异常处理器仅兜底协议校验与未处理异常。 | R |
 | LOG-001 | start 提供 logback-spring.xml：UTF-8、时间、线程、级别、类、traceId 字段；按部署需要启用滚动文件。敏感信息不得原样记录。 | R |
 | LOG-002 | 模板仅提供 traceId 输出占位，尚无 MDC 填充/监控指标；真实项目必须按方案补齐链路、关键业务日志和观测指标，不能把配置文件等同完整可观测能力。 | R、生产适配 |
@@ -146,6 +149,15 @@ start        Application / config / resources / 按需 aop
 | DEL-001 | 人类文档使用 Markdown、编号中文名，输入在 AI/input、输出在 AI/output；SKILL.md/checkstyle.xml/pom.xml/机器状态等协议文件保留标准名。 | R |
 | DEL-002 | 变更同步技术方案（默认内含计划）、开发交付记录、交付工作台与必要的 README；测试、发布运行、效果评估文档按阶段生成。编码→开发自测→CR→独立测试保持独立状态，发布准备→初始发布→观测→放量→完整确认各有真实证据，文档合并不合并职责或验收。 | R |
 | DEL-003 | 发现规范与实际代码矛盾时主动指出：能在已授权范围安全修正则修正；涉及业务/架构新决策则记录待确认。不等待用户逐类发现。 | R |
+| DEL-004 | 技术方案完整草案生成后、交付确认前，对整个方案进行风险相称的反思与反例推演，覆盖实际相关的架构/依赖、数据/契约、关键链路、并发/幂等、失败恢复、安全/隔离、资源及迁移/验证。记录具体发现、修订和重新推演；区分逻辑推演、已执行实验、待验证条件。仅DDL/编译/Checkstyle通过不证明整体可行；本规则不替代自测、CR或独立测试。 | R |
+| DEL-005 | 技术方案与开发计划默认不生成人天/工时估算或合计工期，实际排期由当事人依当前情况决定；保留任务依赖、实现结果和验证。用户明确请求估算时说明依据与不确定性，不作无依据承诺。 | R |
+
+
+### DEL-006 AI输出与运行资产区分
+
+AI生成的设计说明、接口说明、数据模型说明、SQL设计草稿、验证证据和补充资料，默认归入项目AI/output（如AI/output/docs、AI/output/database、AI/output/knowledge），主文档链接唯一来源；不得为此在代码根新增docs/database目录。AI输入归AI/input，机器状态归.ai-delivery。现有项目明确文档布局或用户明确指定其他位置优先。
+
+Flyway/Liquibase正式迁移、运行schema、配置、前端源码、自动化测试与启动/构建脚本是构建运行资产，保留实际模块约定位置，不能因AI生成就移入AI/output；项目根README作为运行入口保留。已执行迁移不得改写或维护第二份可编辑DDL。迁移AI资料目录时同步相对链接、脚本和忽略规则，保留历史证据日期/原命令，明确旧路径为归档记录。
 
 ## 10. 自动检查的真实边界与使用
 
@@ -197,7 +209,11 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 | 手动接口 Javadoc 检查 / 构建约束 | Checkstyle 生命周期门禁；独立接口检查脚本已移除 | SRC-035、SRC-036 |
 | start 依靠传递依赖 / 显式装配清单 | 直接列出本服务实际运行模块，按需裁剪；不是全仓库依赖清单 | SRC-037 |
 | 子模块固定 parent 版本 / 单点版本 | 根 revision + 子模块 ${revision}；Maven 3 使用 Flatten 适配发布 | SRC-038 细化 SRC-015 |
+| 默认估工时 / 当事人排期 | 默认不生成人天/工时或合计工期；显式估算请求需依据与不确定性 | SRC-042，DEL-005 |
+| 局部表结构检查 / 整份方案生成后推演 | 主动贯穿整个技术方案的实际风险，回改矛盾并区分推理、实验和待验证 | SRC-042，DEL-004 |
 
-不把历史版本日志中的旧选择当作新项目规则。规则变更应更新本文件版本、对应 checkstyle.xml、安装资源和项目快照，并重新验证正向构建与反向违规用例。
+不把历史版本日志中的旧选择当作新项目规则。规则变更更新本文件版本、受影响的安装资源/项目文档及快照说明；影响自动检查或源码时同步对应 checkstyle.xml/代码并验证正向构建与反向违规用例。仅R级交付文档规则修改时验证文档与发行包一致性、相关流程回归，不虚构门禁覆盖或重复宣称Java运行验证。
 
 实现参考：[Maven 插件生命周期接入](https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)、[Checkstyle MatchXpath](https://checkstyle.org/checks/coding/matchxpath.html)、[Javadoc 方法检查](https://checkstyle.org/checks/javadoc/javadocmethod.html)、[构造器缺失注释检查](https://checkstyle.org/checks/javadoc/missingjavadocmethod.html)、[窄范围 XPath 豁免](https://checkstyle.org/filters/suppressionxpathsinglefilter.html)、[Checker 编码与诊断语言](https://checkstyle.org/config.html)。这些资料用于解释检查能力；本项目的业务架构与偏好来自用户确认，不由第三方文档替代决定。
+
+1.7：用户要求四层主入口逐层捕获及禁止向上抛出，同级-app前端、AI文档集中输出；新增语法门禁与事务回滚验证。历史源码/审批保留为原时点证据。

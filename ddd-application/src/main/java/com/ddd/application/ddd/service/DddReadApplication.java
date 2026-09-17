@@ -1,22 +1,21 @@
 package com.ddd.application.ddd.service;
 
+import com.ddd.application.ddd.assembler.DddApplicationAssembler;
+import com.ddd.application.ddd.command.DddReadCommand;
+import com.ddd.application.ddd.result.DddReadResult;
+import com.ddd.application.exception.ApplicationErrorCode;
+import com.ddd.common.result.Result;
+import com.ddd.domain.ddd.model.aggregate.DddAggregate;
+import com.ddd.domain.ddd.repository.DddRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.ddd.application.exception.ApplicationErrorCode;
-import com.ddd.application.ddd.assembler.DddApplicationAssembler;
-import com.ddd.application.ddd.command.DddReadCommand;
-import com.ddd.application.ddd.result.DddReadResult;
-import com.ddd.common.result.Result;
-import com.ddd.domain.ddd.exception.DomainException;
-import com.ddd.domain.ddd.model.aggregate.DddAggregate;
-import com.ddd.domain.ddd.repository.DddRepository;
-
 /**
  * DDD 域内读模式的应用服务模板。
  *
- * <p>仅转换聚合根数据，不承载业务规则。</p>
+ * <p>仅转换聚合根数据，不承载业务规则。
  *
  * @author AIGenerator
  */
@@ -42,7 +41,6 @@ public final class DddReadApplication {
      *
      * @param dddReadCommand 域内读取应用命令
      * @return 域内读取结果
-     *
      * @author AIGenerator
      */
     public Result<DddReadResult> query(DddReadCommand dddReadCommand) {
@@ -56,7 +54,7 @@ public final class DddReadApplication {
             // 3. 将聚合转换为应用层只读结果。
             DddReadResult result = assembler.toResult(aggregate);
             return Result.success(result);
-        } catch (DomainException exception) {
+        } catch (com.ddd.common.error.BaseException exception) {
             LOG.warn("DDD 域内查询失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());
         } catch (Exception exception) {

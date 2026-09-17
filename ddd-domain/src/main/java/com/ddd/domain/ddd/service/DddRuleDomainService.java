@@ -1,23 +1,21 @@
 package com.ddd.domain.ddd.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ddd.common.result.Result;
 import com.ddd.domain.annotation.DomainService;
 import com.ddd.domain.ddd.exception.DomainErrorCode;
-import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
 import com.ddd.domain.ddd.model.param.DddRuleParam;
 import com.ddd.domain.ddd.model.value.DddValue;
 import com.ddd.domain.ddd.repository.DddRuleRepository;
 import com.ddd.model.ddd.DddRuleCalculateDO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 规则聚合查询和计算的领域服务。
  *
- * <p>规则读取、领域计算和错误结果转换均在本公开入口完成，
- * Application 只接收领域决策结果。</p>
+ * <p>规则读取、领域计算和错误结果转换均在本公开入口完成， Application 只接收领域决策结果。
  *
  * @author AIGenerator
  */
@@ -41,7 +39,6 @@ public final class DddRuleDomainService {
      *
      * @param param 规则计算领域参数
      * @return 规则计算领域决策
-     *
      * @author AIGenerator
      */
     public Result<DddRuleCalculateDO> calculate(DddRuleParam param) {
@@ -51,10 +48,11 @@ public final class DddRuleDomainService {
 
             // 2. 让规则聚合完成计算并生成领域决策。
             DddValue calculatedValue = rule.evaluate(param);
-            DddRuleCalculateDO result = new DddRuleCalculateDO(rule.ruleCode(), rule.factor(), calculatedValue.value(),
-                    rule.reason());
+            DddRuleCalculateDO result =
+                    new DddRuleCalculateDO(
+                            rule.ruleCode(), rule.factor(), calculatedValue.value(), rule.reason());
             return Result.success(result);
-        } catch (DomainException exception) {
+        } catch (com.ddd.common.error.BaseException exception) {
             LOG.warn("DDD 规则领域处理失败, code={}", exception.errorCode().code());
             return Result.failure(exception.errorCode());
         } catch (Exception exception) {

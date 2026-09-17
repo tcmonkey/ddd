@@ -1,0 +1,32 @@
+{
+  "recorded_at": "2026-09-17T23:51:50.034857+08:00",
+  "scope": "authorized_boundary_correction_not_independent_CR_or_production_acceptance",
+  "main_entries": 14,
+  "whole_body_try_catch": 14,
+  "declares_throws": 0,
+  "rethrows_from_catch": 0,
+  "junit_test_methods": 4,
+  "test_failures": 0,
+  "test_errors": 0,
+  "norm_version": "1.7",
+  "snapshot_version": "1.5",
+  "snapshot_source_files_byte_identical": 93,
+  "host_resource_counts": {
+    "codex": 135,
+    "claude-code": 134,
+    "qwen-code": 134
+  },
+  "portable_core_files_sha_verified": 134,
+  "checkstyle_three_copies_byte_identical": true,
+  "secret_value_scan": "no_matches_in_deliverable_sources_docs_evidence",
+  "independent_installed_application_consumer": "BUILD_SUCCESS",
+  "external_end_to_end": "not_run",
+  "CR": "not_started",
+  "final_snapshot_junit_test_methods": 4,
+  "transaction_save_then_assembly_failure": "H2_real_rollback_pass",
+  "transaction_commit_failure": "mock_captured_pass",
+  "gate_regression_methods": 7,
+  "workflow_regression_methods": 10,
+  "startup_regression_methods": 14,
+  "installer_regression_methods": 16
+}

@@ -197,6 +197,8 @@ success = false  → code/message 为本项目内部错误信息，data=null
 
 统一生效规范为 [19 Java DDD开发规范](AI/output/19%20Java%20DDD开发规范.md)。它按主题整理最终约定，明确必须项、例外、生产适配，以及 Checkstyle/评审各自能保障的范围；历史沟通仅保留追溯，不作为并列规则。
 
+规范1.6增加DEL-004/005：整份技术方案生成后必须主动反思推演可行性，回改发现的矛盾并记录证据及待验证条件；方案和计划默认不估工时/人天，实际排期由当事人依据当前情况决定。这两项为人工评审规则，不能以Checkstyle通过替代。
+
 项目根携带 [checkstyle.xml](checkstyle.xml)，根 POM 将 Checkstyle 的 `check` 绑定到 `validate`，各 module 继承：
 
 ```bash
@@ -219,3 +221,7 @@ Checkstyle 的自定义诊断使用 ASCII 英文并保留规则 ID，内置语�
 ## 文档与交接
 
 `AI/input` 保存用户输入、规范和附件索引；`AI/output` 保存需求、产品、技术、计划、自测、决策与交接记录；`.ai-delivery` 保存机器状态。后续修改模板时，应同步更新技术方案、开发计划、自测报告与交接记录。
+
+## 最新工程边界约束（2026-09-17）
+
+Java规范1.7：Controller、Application、DomainService及OutAdaptor实现主入口必须各自完整try-catch，禁止向上抛出、throws和catch重抛；事务完成/回滚后才转换结果，提交失败也必须捕获。默认Checkstyle新增ERR-BOUNDARY-CATCH/THROWS/RETHROW，错误语义与事务仍需专项验证。有前端时自动建立同级`<项目名>-app`独立项目；AI设计/接口/数据库说明与证据归AI/output，正式迁移、源码、测试和运行脚本保留构建位置。参考快照1.5同步当前ddd源码与新增失败回归。

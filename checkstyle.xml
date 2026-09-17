@@ -35,6 +35,21 @@
         <message key="regexp.exceeded" value="NAM-TYPE-PARAM: Request/Command parameter name must match its full type in lowerCamelCase"/>
     </module>
     <module name="TreeWalker">
+        <module name="MatchXpath">
+            <property name="id" value="ERR-BOUNDARY-CATCH"/>
+            <property name="query" value="//METHOD_DEF[SLIST and MODIFIERS/LITERAL_PUBLIC and ((MODIFIERS/ANNOTATION//IDENT[@text=(&#x27;GetMapping&#x27;,&#x27;PostMapping&#x27;,&#x27;PutMapping&#x27;,&#x27;DeleteMapping&#x27;,&#x27;PatchMapping&#x27;,&#x27;RequestMapping&#x27;)] and ancestor::CLASS_DEF/MODIFIERS/ANNOTATION//IDENT[@text=(&#x27;Controller&#x27;,&#x27;RestController&#x27;)]) or (TYPE//IDENT[@text=&#x27;Result&#x27;] and ((/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=(&#x27;application&#x27;,&#x27;domain&#x27;)] and /COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;service&#x27;]) or (/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;adaptor&#x27;] and /COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;output&#x27;] and not(/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=(&#x27;model&#x27;,&#x27;converter&#x27;)])))))][count(SLIST/LITERAL_TRY)!=1 or SLIST/*[not(self::LITERAL_TRY or self::RCURLY)] or not(SLIST/LITERAL_TRY/LITERAL_CATCH/PARAMETER_DEF/TYPE//IDENT[@text=&#x27;Exception&#x27;])]/IDENT"/>
+            <message key="matchxpath.match" value="ERR-BOUNDARY-CATCH: Main boundary implementations must enclose their body in try-catch including Exception"/>
+        </module>
+        <module name="MatchXpath">
+            <property name="id" value="ERR-BOUNDARY-THROWS"/>
+            <property name="query" value="//METHOD_DEF[SLIST and MODIFIERS/LITERAL_PUBLIC and ((MODIFIERS/ANNOTATION//IDENT[@text=(&#x27;GetMapping&#x27;,&#x27;PostMapping&#x27;,&#x27;PutMapping&#x27;,&#x27;DeleteMapping&#x27;,&#x27;PatchMapping&#x27;,&#x27;RequestMapping&#x27;)] and ancestor::CLASS_DEF/MODIFIERS/ANNOTATION//IDENT[@text=(&#x27;Controller&#x27;,&#x27;RestController&#x27;)]) or (TYPE//IDENT[@text=&#x27;Result&#x27;] and ((/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=(&#x27;application&#x27;,&#x27;domain&#x27;)] and /COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;service&#x27;]) or (/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;adaptor&#x27;] and /COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;output&#x27;] and not(/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=(&#x27;model&#x27;,&#x27;converter&#x27;)])))))][LITERAL_THROWS]/IDENT"/>
+            <message key="matchxpath.match" value="ERR-BOUNDARY-THROWS: Main boundary implementations must not declare throws"/>
+        </module>
+        <module name="MatchXpath">
+            <property name="id" value="ERR-BOUNDARY-RETHROW"/>
+            <property name="query" value="//METHOD_DEF[SLIST and MODIFIERS/LITERAL_PUBLIC and ((MODIFIERS/ANNOTATION//IDENT[@text=(&#x27;GetMapping&#x27;,&#x27;PostMapping&#x27;,&#x27;PutMapping&#x27;,&#x27;DeleteMapping&#x27;,&#x27;PatchMapping&#x27;,&#x27;RequestMapping&#x27;)] and ancestor::CLASS_DEF/MODIFIERS/ANNOTATION//IDENT[@text=(&#x27;Controller&#x27;,&#x27;RestController&#x27;)]) or (TYPE//IDENT[@text=&#x27;Result&#x27;] and ((/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=(&#x27;application&#x27;,&#x27;domain&#x27;)] and /COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;service&#x27;]) or (/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;adaptor&#x27;] and /COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=&#x27;output&#x27;] and not(/COMPILATION_UNIT/PACKAGE_DEF//IDENT[@text=(&#x27;model&#x27;,&#x27;converter&#x27;)])))))]/SLIST/LITERAL_TRY/LITERAL_CATCH/SLIST//LITERAL_THROW"/>
+            <message key="matchxpath.match" value="ERR-BOUNDARY-RETHROW: Main boundary catch blocks must return safe failure rather than rethrow"/>
+        </module>
         <!-- DOC-005：仅豁免扫描组件中单一、仅 this 字段赋值的纯注入构造器；字段/参数对应关系需评审。 -->
         <module name="SuppressionXpathSingleFilter">
             <property name="checks" value="MissingJavadocMethod"/>
