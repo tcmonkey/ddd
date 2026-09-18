@@ -1,12 +1,5 @@
 package com.ddd.infrastructure.ddd.repository;
 
-import java.util.List;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Repository;
-
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.aggregate.DddAggregate;
 import com.ddd.domain.ddd.model.entity.DddEntity;
@@ -19,23 +12,33 @@ import com.ddd.infrastructure.ddd.mysql.mapper.DddMapper;
 import com.ddd.infrastructure.ddd.mysql.pojo.DddPO;
 import com.ddd.infrastructure.exception.InfrastructureErrorCode;
 import com.ddd.infrastructure.exception.InfrastructureException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * DDD 聚合根的 MyBatis-Plus 仓储实现模板。
  *
- * <p>聚合根的基础 CRUD 由 {@link DddBaseRepository} 提供；根实体内子操作快照与主状态同存于
- * {@code ddd_data} 表，不在 Mapper 或 XML 中编写自定义 SQL。</p>
+ * <p>聚合根的基础 CRUD 由 {@link DddBaseRepository} 提供；根实体内子操作快照与主状态同存于 {@code ddd_data} 表，不在 Mapper 或 XML
+ * 中编写自定义 SQL。
  *
  * @author AIGenerator
  */
 @Repository
-public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> implements DddRepository {
+public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO>
+        implements DddRepository {
     /**
      * 领域实体快照的 JSON 类型，用于在基础设施层恢复聚合内部实体。
      *
      * @author AIGenerator
      */
-    private static final TypeReference<List<DddOperationEntity>> OPERATION_ENTITY_TYPE = new TypeReference<>() { };
+    private static final TypeReference<List<DddOperationEntity>> OPERATION_ENTITY_TYPE =
+            new TypeReference<>() {
+            };
 
     private final ObjectMapper objectMapper;
 
@@ -49,7 +52,6 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      * @param id 聚合根业务标识
      * @return 已恢复的聚合；数据不存在时返回可首次写入的空聚合
      * @throws DomainException 当业务标识不满足领域约束时抛出
-     *
      * @author AIGenerator
      */
     @Override
@@ -57,8 +59,8 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
         // 1. 校验业务标识并使用主键查询持久化快照。
         DddIdValue aggregateId = new DddIdValue(id);
         DddPO stored = getById(id);
+        // 2. 不存在时返回可用于首次写入的空聚合。
         if (stored == null) {
-            // 2. 不存在时返回可用于首次写入的空聚合。
             DddEntity entity = DddEntity.open(aggregateId);
             DddAggregate aggregate = DddAggregate.of(entity);
             return aggregate;
@@ -67,8 +69,10 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
         // 3. 已存在时恢复根实体和子操作快照，再封装为聚合。
         DddIdValue storedId = new DddIdValue(stored.getId());
         DddValue currentValue = new DddValue(stored.getCurrentValue());
-        List<DddOperationEntity> operationEntities = readOperationEntities(stored.getEntitiesJson());
-        DddEntity entity = DddEntity.restore(storedId, currentValue, stored.getVersion(), operationEntities);
+        List<DddOperationEntity> operationEntities =
+                readOperationEntities(stored.getEntitiesJson());
+        DddEntity entity =
+                DddEntity.restore(storedId, currentValue, stored.getVersion(), operationEntities);
         DddAggregate aggregate = DddAggregate.of(entity);
         return aggregate;
     }
@@ -78,15 +82,14 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      *
      * @param aggregate 待保存的完整聚合
      * @return 保存成功返回 true，乐观锁冲突或持久化失败返回 false
-     *
      * @author AIGenerator
      */
     @Override
     public Boolean save(DddAggregate aggregate) {
         // 1. 查询现有快照，用于区分插入与带版本的更新。
         DddPO stored = getById(aggregate.entity().id().value());
+        // 2. 首次写入使用当前实体版本创建主表记录。
         if (stored == null) {
-            // 2. 首次写入使用当前实体版本创建主表记录。
             DddPO insert = toDddPO(aggregate, aggregate.entity().version());
             return super.save(insert);
         }
@@ -102,7 +105,6 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      * @param aggregate 待保存的聚合根
      * @param version 插入时使用当前版本，更新时使用预期的旧版本
      * @return 主表持久化对象
-     *
      * @author AIGenerator
      */
     private DddPO toDddPO(DddAggregate aggregate, long version) {
@@ -124,17 +126,17 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      *
      * @param operationEntities 聚合内部实体
      * @return 实体 JSON 快照
-     *
      * @author AIGenerator
      */
     private String writeOperationEntities(List<DddOperationEntity> operationEntities) {
         try {
             // 1. 将聚合内子实体转换为可持久化的 JSON 快照。
             String entitiesJson = objectMapper.writeValueAsString(operationEntities);
+            // 2. 返回序列化成功的完整快照；序列化失败转换为基础设施异常。
             return entitiesJson;
         } catch (JsonProcessingException exception) {
-            throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_SERIALIZE_FAILED,
-                    exception);
+            throw new InfrastructureException(
+                    InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_SERIALIZE_FAILED, exception);
         }
     }
 
@@ -143,23 +145,28 @@ public class DddRepositoryImpl extends DddBaseRepository<DddMapper, DddPO> imple
      *
      * @param entitiesJson 主表中的实体 JSON 快照
      * @return 聚合内部实体
-     *
      * @author AIGenerator
      */
     private List<DddOperationEntity> readOperationEntities(String entitiesJson) {
         // 1. 在反序列化前校验快照内容完整性。
         if (entitiesJson == null || entitiesJson.isBlank()) {
-            throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
+            throw new InfrastructureException(
+                    InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
         }
+        // 2. 在解析边界内恢复快照，损坏的持久化数据必须明确失败。
         try {
-            // 2. 将 JSON 快照恢复为领域子实体集合。
-            List<DddOperationEntity> entities = objectMapper.readValue(entitiesJson, OPERATION_ENTITY_TYPE);
+            // 1. 将 JSON 快照恢复为领域子实体集合。
+            List<DddOperationEntity> entities =
+                    objectMapper.readValue(entitiesJson, OPERATION_ENTITY_TYPE);
+            // 2. 验证反序列化结果完整性，不接受空集合引用或缺失子实体。
             if (entities == null || entities.contains(null)) {
-                throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
+                throw new InfrastructureException(
+                        InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID);
             }
             return entities;
         } catch (JsonProcessingException exception) {
-            throw new InfrastructureException(InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID, exception);
+            throw new InfrastructureException(
+                    InfrastructureErrorCode.INFRASTRUCTURE_SNAPSHOT_INVALID, exception);
         }
     }
 }

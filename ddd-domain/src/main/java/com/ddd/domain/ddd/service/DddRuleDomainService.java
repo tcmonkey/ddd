@@ -1,6 +1,7 @@
 package com.ddd.domain.ddd.service;
 
 import com.ddd.common.result.Result;
+import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.annotation.DomainService;
 import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.model.aggregate.DddRuleAggregate;
@@ -43,8 +44,11 @@ public final class DddRuleDomainService {
      */
     public Result<DddRuleCalculateDO> calculate(DddRuleParam param) {
         try {
-            // 1. 加载规则聚合，规则不存在时由仓储明确拒绝。
-            DddRuleAggregate rule = dddRuleRepository.getRequiredByRuleCode(param.ruleCode());
+            // 1. 加载规则聚合，规则不存在时由本领域拒绝。
+            DddRuleAggregate rule = dddRuleRepository.findByRuleCode(param.ruleCode());
+            if (rule == null) {
+                throw new DomainException(DomainErrorCode.DOMAIN_RULE_NOT_FOUND);
+            }
 
             // 2. 让规则聚合完成计算并生成领域决策。
             DddValue calculatedValue = rule.evaluate(param);

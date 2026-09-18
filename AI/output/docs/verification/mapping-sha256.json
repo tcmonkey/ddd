@@ -1,0 +1,20 @@
+{
+  "mapping-backend.log": "4fe3428e63a60f39bb45a2fcf99c55ee9ed61b97777d6556d3dd46c3ca8ff95e",
+  "mapping-commands.md": "952eba292f56b1c56c0e83250c608fe2957d91e159067ae3d09df0624b0d595e",
+  "mapping-consumer.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "mapping-delivery.log": "1871d11e04769a63d00aec3378c4608532c4b7c6b2616ca422d26e6f686948ee",
+  "mapping-distribution.log": "c33f53ff519db45d5c529aaeb2561bd312a3c854d34ba7188b108efe0fd6d245",
+  "mapping-entry-audit.csv": "4b7bf7ccad1c83c80a49199df85b21f1ba34a2041ef52c965de6848db463c972",
+  "mapping-junit/backend/ddd-domain/TEST-com.ddd.domain.ddd.model.aggregate.DddAggregateTest.xml": "0c4ba0ef0749dfec4200c59400005f794658d66d564531234bb02215bb324e90",
+  "mapping-junit/backend/ddd-start/TEST-com.ddd.adaptor.ddd.input.BoundaryFailureTest.xml": "5e94b9da30d0b61d6fd73cf574653ff867a00b6af47232d42b710301ce24fdbe",
+  "mapping-junit/backend/ddd-start/TEST-com.ddd.adaptor.ddd.input.DddControllerTest.xml": "82f76b80535495c88f7a9537253b94b9208c407b483c11e8ff9e5ffe4c07e75d",
+  "mapping-junit/backend/ddd-start/TEST-com.ddd.adaptor.ddd.input.WriteRollbackTest.xml": "b12a2466620c320cd09ab86282f49c1843dfbd62d7fea0005a41a4823dbd0333",
+  "mapping-junit/snapshot/ddd-domain/TEST-com.ddd.domain.ddd.model.aggregate.DddAggregateTest.xml": "e80a409b96a116c6821564329417c5d97806c34c8adf17a714590d5b1eddbc07",
+  "mapping-junit/snapshot/ddd-start/TEST-com.ddd.adaptor.ddd.input.BoundaryFailureTest.xml": "5bd45a9991358fd9b171fdbb45186c98bf6275bc53d8b958ea80e90e814dbb01",
+  "mapping-junit/snapshot/ddd-start/TEST-com.ddd.adaptor.ddd.input.DddControllerTest.xml": "da990e950c58e6c272663a0a7203203bdfb67646dba6c5d298487b78feb8c70a",
+  "mapping-junit/snapshot/ddd-start/TEST-com.ddd.adaptor.ddd.input.WriteRollbackTest.xml": "db7e169952475b912f3d8776a8b587d054e584c19496a10dd2ff4eca7f086bf7",
+  "mapping-snapshot.log": "45ea4c1cc5e19aaa027b5dbfc920c81a5659f8fe60f0757a43a2bbb1a4db48cb",
+  "mapping-solo-guards.log": "54ac093f12cbaa9b5eeae7507090cf8e342a829b0f5438d77122a6e578ca6872",
+  "mapping-solo-installation.log": "37538a9bdfc5dfcaee7d3ca0e6bbd95838002c3fa9618d70f68cdc81ec822f6b",
+  "mapping-summary.json": "0d36b397d88dac21c51f8acd0885b1b3288742320fb80d27c9562ff2ca25f2a0"
+}

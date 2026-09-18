@@ -1,0 +1,77 @@
+{
+  "date": "2026-09-18",
+  "sources": [
+    "SRC-025",
+    "SRC-026"
+  ],
+  "scope": "05编码质量整改及针对性回归，非完整06或独立CR",
+  "backend": {
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "frontend_tests": 4,
+  "ddd_backend": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ddd_snapshot": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_files": 292,
+  "methods_and_constructors": 816,
+  "flow_blocks": 399,
+  "quality_violations": 0,
+  "main_entries": {
+    "hello-travel": 50,
+    "ddd": 14,
+    "violations": 0
+  },
+  "class_responsibilities": {
+    "protocol_or_IO": 22,
+    "output_converter": 23,
+    "layer_assembler": 16,
+    "application_orchestration": 50,
+    "named_policy": 2,
+    "public_contract": 12,
+    "common_or_start": 11,
+    "domain_model_or_decision": 95,
+    "persistence_mapping": 53,
+    "internal_contract": 8
+  },
+  "constructor_sites": 818,
+  "public_guard_tests": 11,
+  "installer_tests": 16,
+  "norm_version": "1.9",
+  "snapshot_version": "1.7",
+  "snapshot_source_files_equal": 94,
+  "snapshot_local_metadata_exceptions": [
+    "README.md",
+    ".gitignore"
+  ],
+  "distribution_files": {
+    "codex": 138,
+    "claude-code": 137,
+    "qwen-code": 137
+  },
+  "core_portable_files_equal": 137,
+  "flyway_v1_sha256": "24c7e95ff500378edead0ef52a05b2038635288420e3498eec0f3119d8f0525f",
+  "independent_consumers": "hello-travel与ddd clean compile成功",
+  "not_executed": [
+    "完整06",
+    "独立CR/测试",
+    "真实百炼/嵌入/高德/SMTP",
+    "MySQL/Redis/Milvus写入",
+    "生产部署"
+  ],
+  "snapshot_build_note": "最初直接构建参考资产，产物已清理；最终修订在临时副本clean test成功，JUnit报告已归档；发行包不含构建产物",
+  "handoff_revision": 52,
+  "delivery_validation": "structurally_valid",
+  "skill_validation": "valid"
+}

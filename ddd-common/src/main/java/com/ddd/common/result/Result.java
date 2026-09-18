@@ -1,35 +1,29 @@
 package com.ddd.common.result;
 
-import java.util.function.Function;
-
 import com.ddd.common.error.ErrorCode;
+
+import java.util.function.Function;
 
 /**
  * 各模块共用的操作结果包装。
  *
- * <p>该类型不包含 HTTP 状态、第三方原始错误或技术堆栈，因此可以在 domain、application、
- * infrastructure、adaptor 和 client 协议之间安全复用。</p>
+ * <p>该类型不包含 HTTP 状态、第三方原始错误或技术堆栈，因此可以在 domain、application、 infrastructure、adaptor 和 client
+ * 协议之间安全复用。
  *
  * @param success 操作是否成功
  * @param code 稳定的项目内部结果编码
  * @param message 可向上层暴露的友好说明
  * @param data 成功时的数据；失败时为空
- *
  * @param <T> 成功结果的数据类型
  * @author AIGenerator
  */
-public record Result<T>(
-        boolean success,
-        String code,
-        String message,
-        T data) {
+public record Result<T>(boolean success, String code, String message, T data) {
     /**
      * 创建成功结果。
      *
      * @param data 成功数据
      * @param <T> 数据类型
      * @return 成功结果
-     *
      * @author AIGenerator
      */
     public static <T> Result<T> success(T data) {
@@ -42,7 +36,6 @@ public record Result<T>(
      * @param errorCode 产生失败的模块错误码
      * @param <T> 数据类型
      * @return 失败结果
-     *
      * @author AIGenerator
      */
     public static <T> Result<T> failure(ErrorCode errorCode) {
@@ -56,7 +49,6 @@ public record Result<T>(
      * @param message 友好错误文案
      * @param <T> 数据类型
      * @return 失败结果
-     *
      * @author AIGenerator
      */
     public static <T> Result<T> failure(String code, String message) {
@@ -69,13 +61,14 @@ public record Result<T>(
      * @param mapper 成功数据转换函数
      * @param <R> 转换后的数据类型
      * @return 转换后的结果
-     *
      * @author AIGenerator
      */
     public <R> Result<R> map(Function<? super T, ? extends R> mapper) {
+        // 1. 失败结果保留原始错误码和消息，不运行成功载荷转换。
         if (!success) {
             return Result.failure(code, message);
         }
+        // 2. 仅转换成功载荷，调用链边界负责转换函数的异常捕获。
         return Result.success(mapper.apply(data));
     }
 }

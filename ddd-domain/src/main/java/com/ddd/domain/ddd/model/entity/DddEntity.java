@@ -1,22 +1,20 @@
 package com.ddd.domain.ddd.model.entity;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.value.DddIdValue;
 import com.ddd.domain.ddd.model.value.DddOperationIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * DDD 聚合根实体模板。
  *
- * <p>根实体持有主状态和子操作实体，是聚合内唯一允许变更状态的位置。
- * 聚合容器只持有本实体，
- * 不再维护重复的 id、当前值或版本字段。</p>
+ * <p>根实体持有主状态和子操作实体，是聚合内唯一允许变更状态的位置。 聚合容器只持有本实体， 不再维护重复的 id、当前值或版本字段。
  *
  * @author AIGenerator
  */
@@ -49,8 +47,11 @@ public final class DddEntity {
      */
     private final List<DddOperationEntity> operationEntities;
 
-    private DddEntity(DddIdValue id, DddValue currentValue, long version,
-                      List<DddOperationEntity> operationEntities) {
+    private DddEntity(
+            DddIdValue id,
+            DddValue currentValue,
+            long version,
+            List<DddOperationEntity> operationEntities) {
         this.id = id;
         this.currentValue = currentValue;
         this.version = version;
@@ -62,7 +63,6 @@ public final class DddEntity {
      *
      * @param id 根实体业务标识
      * @return 新根实体
-     *
      * @author AIGenerator
      */
     public static DddEntity open(DddIdValue id) {
@@ -72,13 +72,11 @@ public final class DddEntity {
     /**
      * 创建仅携带待处理操作的有效输入实体。
      *
-     * <p>待处理操作是显式状态，而不是字段缺失的无效实体；
-     * 领域服务会在规则计算后将其确认。</p>
+     * <p>待处理操作是显式状态，而不是字段缺失的无效实体； 领域服务会在规则计算后将其确认。
      *
      * @param id 根实体业务标识
      * @param operation 待处理子操作实体
      * @return 输入阶段根实体
-     *
      * @author AIGenerator
      */
     public static DddEntity draft(DddIdValue id, DddOperationEntity operation) {
@@ -88,17 +86,17 @@ public final class DddEntity {
     /**
      * 根据原始写入数据创建仅携带待处理操作的根实体。
      *
-     * <p>值对象和子操作实体的创建收敛在实体内，避免 application 直接操作领域值对象。</p>
+     * <p>值对象和子操作实体的创建收敛在实体内，避免 application 直接操作领域值对象。
      *
      * @param rawId 原始根实体标识
      * @param rawOperationId 原始操作幂等标识
      * @param rawBaseValue 原始基础数值
      * @param ruleCode 规则编码
      * @return 输入阶段根实体
-     *
      * @author AIGenerator
      */
-    public static DddEntity draft(String rawId, String rawOperationId, int rawBaseValue, String ruleCode) {
+    public static DddEntity draft(
+            String rawId, String rawOperationId, int rawBaseValue, String ruleCode) {
         // 1. 将原始输入封装为领域值对象。
         DddIdValue id = new DddIdValue(rawId);
         DddOperationIdValue operationId = new DddOperationIdValue(rawOperationId);
@@ -118,11 +116,13 @@ public final class DddEntity {
      * @param version 乐观锁版本
      * @param operationEntities 子操作实体集合
      * @return 恢复后的根实体
-     *
      * @author AIGenerator
      */
-    public static DddEntity restore(DddIdValue id, DddValue currentValue, long version,
-                                    List<DddOperationEntity> operationEntities) {
+    public static DddEntity restore(
+            DddIdValue id,
+            DddValue currentValue,
+            long version,
+            List<DddOperationEntity> operationEntities) {
         return new DddEntity(id, currentValue, version, operationEntities);
     }
 
@@ -131,13 +131,14 @@ public final class DddEntity {
      *
      * @return 待处理子操作实体
      * @throws DomainException 当输入不恰好包含一个待处理操作时抛出
-     *
      * @author AIGenerator
      */
     public DddOperationEntity requiredPendingOperation() {
+        // 1. 验证输入恰好有一个待处理子操作，拒绝歧义或已确认操作。
         if (operationEntities.size() != 1 || !operationEntities.get(0).pending()) {
             throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
+        // 2. 返回已核验的唯一操作，领域服务无需展开实体列表。
         return operationEntities.get(0);
     }
 
@@ -149,18 +150,20 @@ public final class DddEntity {
      * @param occurredAt 操作确认时间
      * @return 已确认的子操作实体
      * @throws DomainException 当操作标识重复时抛出
-     *
      * @author AIGenerator
      */
-    public DddOperationEntity confirm(DddOperationEntity operation, DddValue calculatedValue,
-                                      Instant occurredAt) {
+    public DddOperationEntity confirm(
+            DddOperationEntity operation, DddValue calculatedValue, Instant occurredAt) {
+        // 1. 核验操作幂等标识未被确认，避免累计值重复增加。
         if (findOperation(operation.operationId()).isPresent()) {
             throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
+        // 2. 由子实体完成确认，再由根实体推进累计值、操作列表及版本。
         DddOperationEntity confirmed = operation.confirm(calculatedValue, occurredAt);
         currentValue = currentValue.add(confirmed.value());
         operationEntities.add(confirmed);
         version++;
+        // 3. 返回实际确认的实体供持久化与领域结果转换使用。
         return confirmed;
     }
 
@@ -169,18 +172,18 @@ public final class DddEntity {
      *
      * @param operationId 操作幂等标识
      * @return 已存在的子操作实体；不存在时为空
-     *
      * @author AIGenerator
      */
     public Optional<DddOperationEntity> findOperation(DddOperationIdValue operationId) {
-        return operationEntities.stream().filter(item -> item.operationId().equals(operationId)).findFirst();
+        return operationEntities.stream()
+                .filter(item -> item.operationId().equals(operationId))
+                .findFirst();
     }
 
     /**
      * 读取实体的业务唯一标识。
      *
      * @return 处理或校验后的结果
-     *
      * @author AIGenerator
      */
     public DddIdValue id() {
@@ -191,7 +194,6 @@ public final class DddEntity {
      * 读取实体当前累计数值。
      *
      * @return 处理或校验后的结果
-     *
      * @author AIGenerator
      */
     public DddValue currentValue() {
@@ -202,7 +204,6 @@ public final class DddEntity {
      * 读取实体的乐观锁版本。
      *
      * @return 处理或校验后的结果
-     *
      * @author AIGenerator
      */
     public long version() {
@@ -213,7 +214,6 @@ public final class DddEntity {
      * 获取不可变的已记录操作实体快照。
      *
      * @return 处理或校验后的结果
-     *
      * @author AIGenerator
      */
     public List<DddOperationEntity> operationEntities() {

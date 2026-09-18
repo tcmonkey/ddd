@@ -1,0 +1,7 @@
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 2.523s
+
+OK
+Recovered pending handoff transaction at revision 1
+迁移事务已完成，原文可从 migrations 归档恢复。

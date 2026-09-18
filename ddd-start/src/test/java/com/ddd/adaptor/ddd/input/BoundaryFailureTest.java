@@ -94,4 +94,25 @@ class BoundaryFailureTest {
         assertEquals("APPLICATION_PROCESS_FAILED", result.code());
         verify(manager).commit(any());
     }
+    @Test
+    void absentRuleIsClassifiedByDomainInsteadOfRepository() {
+        var repository = mock(com.ddd.domain.ddd.repository.DddRuleRepository.class);
+        when(repository.findByRuleCode("missing")).thenReturn(null);
+        var domain = new DddRuleDomainService(repository);
+        var result = domain.calculate(new com.ddd.domain.ddd.model.param.DddRuleParam("missing", 2));
+        assertFalse(result.success());
+        assertEquals("DOMAIN_RULE_NOT_FOUND", result.code());
+        verify(repository).findByRuleCode("missing");
+
+        var mainRepository = mock(com.ddd.domain.ddd.repository.DddRepository.class);
+        var aggregate = mock(com.ddd.domain.ddd.model.aggregate.DddAggregate.class);
+        when(mainRepository.findById("main")).thenReturn(aggregate);
+        when(aggregate.findOperation(any())).thenReturn(java.util.Optional.empty());
+        var input = com.ddd.domain.ddd.model.aggregate.DddAggregate.draft("main", "op", 2, "missing");
+        var writeResult = new DddWriteDomainService(mainRepository, repository)
+                .write(new com.ddd.domain.ddd.model.param.DddWriteParam(input));
+        assertFalse(writeResult.success());
+        assertEquals("DOMAIN_RULE_NOT_FOUND", writeResult.code());
+        org.mockito.Mockito.verify(mainRepository, org.mockito.Mockito.never()).save(any());
+    }
 }

@@ -1,25 +1,22 @@
 package com.ddd.domain.ddd.model.entity;
 
-import java.time.Instant;
-
 import com.ddd.domain.ddd.exception.DomainErrorCode;
 import com.ddd.domain.ddd.exception.DomainException;
 import com.ddd.domain.ddd.model.value.DddOperationIdValue;
 import com.ddd.domain.ddd.model.value.DddValue;
 
+import java.time.Instant;
+
 /**
  * 聚合根实体持有的单次操作子实体。
  *
- * <p>待处理状态只包含原始输入；确认后必须同时具有计算值和发生时间。
- * 该状态机使 application 可以先构造输入实体，再由领域服务与根实体完成初始化，
- * 而不会产生语义不完整的对象。</p>
+ * <p>待处理状态只包含原始输入；确认后必须同时具有计算值和发生时间。 该状态机使 application 可以先构造输入实体，再由领域服务与根实体完成初始化， 而不会产生语义不完整的对象。
  *
  * @param operationId 一次写操作的幂等标识
  * @param baseValue 参与规则计算的原始数值
  * @param ruleCode 规则编码
  * @param value 确认后的领域数值；待处理时为空
  * @param occurredAt 操作确认时间；待处理时为空
- *
  * @author AIGenerator
  */
 public record DddOperationEntity(
@@ -36,7 +33,6 @@ public record DddOperationEntity(
      * @param ruleCode 规则编码
      * @param value 需校验的领域数值
      * @param occurredAt 操作确认时间，待处理阶段尚未赋值
-     *
      * @author AIGenerator
      */
     public DddOperationEntity {
@@ -55,11 +51,10 @@ public record DddOperationEntity(
      * @param baseValue 原始数值
      * @param ruleCode 规则编码
      * @return 待处理子操作实体
-     *
      * @author AIGenerator
      */
-    public static DddOperationEntity pending(DddOperationIdValue operationId, DddValue baseValue,
-                                             String ruleCode) {
+    public static DddOperationEntity pending(
+            DddOperationIdValue operationId, DddValue baseValue, String ruleCode) {
         return new DddOperationEntity(operationId, baseValue, ruleCode, null, null);
     }
 
@@ -69,21 +64,22 @@ public record DddOperationEntity(
      * @param calculatedValue 规则计算后的领域值
      * @param occurredAt 操作确认时间
      * @return 已确认子操作实体
-     *
      * @author AIGenerator
      */
     public DddOperationEntity confirm(DddValue calculatedValue, Instant occurredAt) {
+        // 1. 只允许待处理操作确认，防止重复确认覆盖已产生的结果。
         if (!pending()) {
             throw new DomainException(DomainErrorCode.DOMAIN_OPERATION_INVALID);
         }
-        return new DddOperationEntity(operationId, baseValue, ruleCode, calculatedValue, occurredAt);
+        // 2. 创建保留原始标识和规则的新快照，附上计算值与确认时间。
+        return new DddOperationEntity(
+                operationId, baseValue, ruleCode, calculatedValue, occurredAt);
     }
 
     /**
      * 判断操作是否尚未完成规则计算和确认。
      *
      * @return 待处理返回 {@code true}
-     *
      * @author AIGenerator
      */
     public boolean pending() {

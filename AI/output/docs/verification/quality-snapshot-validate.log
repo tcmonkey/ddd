@@ -1,0 +1,124 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ddd                                                                [pom]
+[INFO] ddd-common                                                         [jar]
+[INFO] ddd-client                                                         [jar]
+[INFO] ddd-model                                                          [jar]
+[INFO] ddd-domain                                                         [jar]
+[INFO] ddd-application                                                    [jar]
+[INFO] ddd-infrastructure                                                 [jar]
+[INFO] ddd-adaptor                                                        [jar]
+[INFO] ddd-start                                                          [jar]
+[INFO] 
+[INFO] ----------------------------< com.ddd:ddd >-----------------------------
+[INFO] Building ddd 0.0.1-SNAPSHOT                                        [1/9]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- exec:3.6.3:exec (java-business-quality) @ ddd ---
+Java business quality: classes=76, methods=141, flow_blocks=57, violations=0
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-common >-------------------------
+[INFO] Building ddd-common 0.0.1-SNAPSHOT                                 [2/9]
+[INFO]   from ddd-common/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-common ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-client >-------------------------
+[INFO] Building ddd-client 0.0.1-SNAPSHOT                                 [3/9]
+[INFO]   from ddd-client/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-client ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-model >--------------------------
+[INFO] Building ddd-model 0.0.1-SNAPSHOT                                  [4/9]
+[INFO]   from ddd-model/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-model ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-domain >-------------------------
+[INFO] Building ddd-domain 0.0.1-SNAPSHOT                                 [5/9]
+[INFO]   from ddd-domain/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-domain ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] ----------------------< com.ddd:ddd-application >-----------------------
+[INFO] Building ddd-application 0.0.1-SNAPSHOT                            [6/9]
+[INFO]   from ddd-application/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-application ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] ---------------------< com.ddd:ddd-infrastructure >---------------------
+[INFO] Building ddd-infrastructure 0.0.1-SNAPSHOT                         [7/9]
+[INFO]   from ddd-infrastructure/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-infrastructure ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] ------------------------< com.ddd:ddd-adaptor >-------------------------
+[INFO] Building ddd-adaptor 0.0.1-SNAPSHOT                                [8/9]
+[INFO]   from ddd-adaptor/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-adaptor ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] -------------------------< com.ddd:ddd-start >--------------------------
+[INFO] Building ddd-start 0.0.1-SNAPSHOT                                  [9/9]
+[INFO]   from ddd-start/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (java-ddd-conventions) @ ddd-start ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ddd 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] ddd ................................................ SUCCESS [  2.409 s]
+[INFO] ddd-common ......................................... SUCCESS [  0.159 s]
+[INFO] ddd-client ......................................... SUCCESS [  0.099 s]
+[INFO] ddd-model .......................................... SUCCESS [  0.088 s]
+[INFO] ddd-domain ......................................... SUCCESS [  0.079 s]
+[INFO] ddd-application .................................... SUCCESS [  0.071 s]
+[INFO] ddd-infrastructure ................................. SUCCESS [  0.163 s]
+[INFO] ddd-adaptor ........................................ SUCCESS [  0.578 s]
+[INFO] ddd-start .......................................... SUCCESS [  0.234 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.222 s
+[INFO] Finished at: 2026-09-18T11:09:17+08:00
+[INFO] ------------------------------------------------------------------------

@@ -15,7 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public final class HttpResults {
     private HttpResults() {
-    }
+}
 
     /**
      * 保留标准错误并隔离未知故障中的堆栈与原始消息。
@@ -26,6 +26,7 @@ public final class HttpResults {
      * @author AIGenerator
      */
     public static <T> Result<T> capture(Exception exception) {
+        // 1. 尚未提交响应时设置失败状态，已提交响应不能重复修改。
         if (RequestContextHolder.getRequestAttributes()
                 instanceof ServletRequestAttributes attributes) {
             var response = attributes.getResponse();
@@ -33,6 +34,7 @@ public final class HttpResults {
                 response.setStatus(exception instanceof BaseException ? 400 : 500);
             }
         }
+        // 2. 保留已分类业务错误，未知故障统一映射为适配层失败。
         return Failures.capture(exception, AdaptorErrorCode.ADAPTOR_PROCESS_FAILED);
     }
 }

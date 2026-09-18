@@ -1,0 +1,16 @@
+test_business_quality_conflicts_preserve_project (__main__.GuardrailTest) ... ok
+test_business_quality_violations_stop_before_javac (__main__.GuardrailTest) ... ok
+test_conflicting_file_is_preserved_without_partial_pom_write (__main__.GuardrailTest) ... ok
+test_diagnostics_are_readable_with_different_output_charsets (__main__.GuardrailTest) ... ok
+test_domain_structure_violations_stop_before_javac (__main__.GuardrailTest) ... ok
+test_fresh_project_compiles_and_install_is_idempotent (__main__.GuardrailTest) ... ok
+test_implicit_public_interface_javadoc_is_enforced (__main__.GuardrailTest) ... ok
+test_mapping_and_exception_ownership_stop_before_compilation (__main__.GuardrailTest) ... ok
+test_pom_shapes_and_existing_plugin_conflict (__main__.GuardrailTest) ... ok
+test_pure_injection_constructors_and_fields_need_no_javadoc (__main__.GuardrailTest) ... ok
+test_violations_stop_compile_before_javac (__main__.GuardrailTest) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 124.455s
+
+OK

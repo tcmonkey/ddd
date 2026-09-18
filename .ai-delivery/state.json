@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 50,
+  "revision": 52,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -41,13 +41,13 @@
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "当前四层入口与工程目录整改完成；实际构建/回归及限制见AI/output/05和docs/verification/boundary-summary.json"
+      "note": "SRC-045规范1.9/快照1.7，映射与异常归属门禁同步；规则缺失判断归领域，公开错误码不变；根与快照全部模块各7项通过，独立消费者及94来源文件一致"
     },
     "developer_self_test": {
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "当前根4条回归通过；最终源码独立快照4条通过，包括H2保存后转换失败回滚及mock提交故障；公共门禁7/流程10/启动14/安装16通过，非独立CR或生产验收"
+      "note": "本轮相关开发回归：根/快照全部模块JUnit各7、公共门禁11/安装16、独立消费者、94来源及发行137核心资源一致；未执行独立CR或生产验收"
     },
     "code_review": {
       "status": "not_started",
@@ -163,13 +163,13 @@
   "last_actor": {
     "platform": "codex",
     "model": "unknown",
-    "updated_at": "2026-09-17T23:53:04+08:00"
+    "updated_at": "2026-09-18T16:13:10+08:00"
   },
   "handoff": {
-    "summary": "SRC-043三项约束已同步规范1.7、参考快照1.5及solo发行包。14主入口各自完整捕获，无throws/重抛；写应用TransactionTemplate包含commit，领域失败标回滚，保存后转换异常先回滚再安全返回。根4条回归及最终独立快照4条通过；独立消费者、门禁7/流程10/启动14/安装16通过。93源文件、规范/三份配置、三个宿主135/134/134及portable134资源哈希一致；技术/开发3.4、工作台1.4及AI/output证据已更新。开发与当前自测完成，独立CR/testing/发布未开始，生产并发幂等风险仍开放。",
-    "next_action": "用户审阅04第6章、05第6章及19规范；后续以实际使用范围开展独立CR，验证并发/幂等/生产数据库及协议适配，不把开发回归当独立验收或发布。"
+    "summary": "SRC-045规范1.9/快照1.7与映射/异常归属门禁同步；规则缺失判断归领域、公开错误码不变；根与快照全部模块各7项、独立消费者、11公共门禁/16安装及94来源/137核心发行资源一致",
+    "next_action": "开发及相关回归完成，CR尚未开始；审阅04/05的3.6修订与规范1.9，未执行独立CR/发布或生产验收"
   },
-  "last_updated": "2026-09-17T23:53:04+08:00",
+  "last_updated": "2026-09-18T16:13:10+08:00",
   "legacy_phase_evidence": {
     "intake": {
       "status": "complete",

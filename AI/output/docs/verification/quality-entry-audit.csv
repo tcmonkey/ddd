@@ -1,0 +1,16 @@
+file,method,whole_body_try_catch,declares_throws,rethrows_from_catch
+ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/input/DddController.java,write,true,false,false
+ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/input/DddController.java,query,true,false,false
+ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/input/DddController.java,calculate,true,false,false
+ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/input/DddController.java,calculateRule,true,false,false
+ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/input/DddController.java,queryExternal,true,false,false
+ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/output/DddOutputAdaptorImpl.java,query,true,false,false
+ddd-domain/src/main/java/com/ddd/domain/ddd/service/DddCalculateDomainService.java,calculate,true,false,false
+ddd-domain/src/main/java/com/ddd/domain/ddd/service/DddRuleDomainService.java,calculate,true,false,false
+ddd-domain/src/main/java/com/ddd/domain/ddd/service/DddWriteDomainService.java,write,true,false,false
+ddd-application/src/main/java/com/ddd/application/ddd/service/DddCalculateApplication.java,calculate,true,false,false
+ddd-application/src/main/java/com/ddd/application/ddd/service/DddExternalReadApplication.java,query,true,false,false
+ddd-application/src/main/java/com/ddd/application/ddd/service/DddReadApplication.java,query,true,false,false
+ddd-application/src/main/java/com/ddd/application/ddd/service/DddWriteApplication.java,write,true,false,false
+ddd-application/src/main/java/com/ddd/application/ddd/service/DddRuleApplication.java,calculate,true,false,false
+checked=14,failed=0
