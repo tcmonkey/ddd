@@ -1,14 +1,15 @@
 # Java DDD 开发规范
 
-版本：1.9。适用于使用 `ddd` 参考工程生成的 Java Maven 项目；这是已确认的项目约定，不宣称是所有 DDD 项目的通用标准。本版纠正仅补注释而遗漏映射与异常归属的实施缺口（MAP-001/002/003/006、ERR-008），继续保留业务方法编号注释、对象职责及需求迭代整体复核，保留四层异常、同级前端和AI归档约定。构造器注入依赖字段的注释例外继续生效，也是 solo 生成 Spring 项目的默认规则，不仅用于 ddd 示例。
+版本：1.10。作为 solo 的 Java DDD 默认开发约定，适用于采用 Java/Spring/Maven 与 DDD 分层的项目，不绑定具体业务应用。`ddd` 是随技能提供的参考工程，不是适用项目名单；其他技术栈按其实际架构采用相关通用原则。已有项目的明确规范和用户决定优先，本文件不宣称是行业统一标准。
 
 ## 1. 使用方式与规则优先级
 
 - 本文件是当前生效规范。输入材料清单、决策记录、技术方案版本日志是历史证据，不应直接按历史条目生成代码。
+- 公共规范记录可复用规则、适用条件和验证边界；项目名称、项目内SRC编号、整改来源与执行证据留在各项目的交付记录，不能作为通用规则的适用范围或隐含依赖。
 - “必须/禁止”是本模板约束；“按需”由业务方案决定；“样例限定”不得机械复制到生产。
 - 新项目使用本模板时默认采用这些规则。已有项目的明确规范或用户后续确认的变更优先；发生冲突须说明并记录，不能静默覆盖。
 - 单条规则的例外必须注明规则 ID、原因、影响和验证方式。不得通过全局关闭 Checkstyle 代替解决违规。
-- 检查标记：**C**＝Checkstyle 已实现；**P**＝自动门禁只检查部分语法/结构，其余需要评审；**R**＝设计、AI/人工评审或专项测试，本轮未自动实现。
+- 检查标记：**C**＝Checkstyle 已实现；**P**＝自动门禁只检查部分语法/结构，其余需要评审；**R**＝设计、AI/人工评审或专项测试，不由当前静态门禁完整实现。
 
 ## 2. 模块与包结构
 
@@ -83,7 +84,7 @@ start        Application / config / resources / 按需 aop
 |---|---|---|
 | REPO-001 | domain 声明仓储接口，infrastructure 实现；按 ID/IDs 查询、删除可接受基础标识或标识集合，不使用 DomainService Param。 | R |
 | REPO-002 | 单个查询返回 Aggregate，批量查询返回 Aggregate 集合，不返回 Optional；新增/修改接收完整 Aggregate，保存返回 Boolean，修改按标识与版本定位。 | P：禁止 Optional；聚合类型/行为需评审 |
-| REPO-003 | 查询缺失语义由业务明确：当前主聚合返回可首次写入的未持久化空聚合；规则缺失返回领域错误。真实项目不能无条件套用“查不到就创建”。 | R、样例限定 |
+| REPO-003 | 查询缺失语义由业务明确：参考样例的主聚合返回可首次写入的未持久化空聚合；规则仓储返回缺失快照，由领域服务判断并返回领域错误。真实项目不能无条件套用“查不到就创建”。 | R、样例限定 |
 | REPO-004 | 复用 MyBatis-Plus CrudRepository，项目 BaseRepository 提供公共能力；Mapper 继承 BaseMapper 并由 start 扫描。框架基类已有 Mapper 注入时禁止重复声明注入或复杂继承。 | R |
 | REPO-005 | 禁止自定义 SQL：不写 XML SQL、SQL 注解、Provider、拼接原生 SQL；使用 MyBatis-Plus CRUD/安全条件构造器，多表关联按业务编排。不得使用 last/apply 等方法绕过此约束。 | P：禁止 SQL/Provider 注解，其余需评审 |
 | REPO-006 | XXPO 仅为 infrastructure 数据库表映射，Repository 负责 PO ↔ Aggregate，PO 不进入 domain/application/adaptor/client。 | P：类型命名；完整跨层引用需评审 |
@@ -132,7 +133,7 @@ start        Application / config / resources / 按需 aop
 | FMT-002 | 每行一个 import，禁止星号、冗余/未使用 import；按 JDK/第三方/项目内/静态导入分组排序。 | P：星号/冗余/未使用与多语句自动；分组排序需评审 |
 | FMT-003 | 方法/构造器签名一行放得下时不提前换行，只有超过截止线才换行；record 组件按可读性布局。 | P：最大行宽自动；无必要换行需评审 |
 | FMT-004 | 方法体/PO getter/setter 不压成单行，多语句分行；控制结构有大括号，操作符和标点空格一致。 | C：相应语法规则 |
-| FMT-005 | 所有业务逻辑方法，包括私有辅助方法、事务/异步回调和有业务行为的构造器，按实际职责写中文行内编号步骤，如“// 1. 核验本用户的对话归属与删除代次”。独立流程从1连续编号；说明做什么、业务约束或为何这样做，禁止“处理数据/第二步”等占位或错误描述。按逻辑阶段分组，不逐行翻译赋值、不为简单getter/纯装配凑步骤。长方法先划分对象职责和有意义的阶段，禁止仅补注释、无意义抽方法或无节制加类；跨层调用、结果校验和转换显式分开。 | P：DOC-007 编号/规模扫描；含义、完整覆盖及内聚必须逐方法复核 |
+| FMT-005 | 所有业务逻辑方法，包括私有辅助方法、事务/异步回调和有业务行为的构造器，按实际职责写中文行内编号步骤，如“// 1. 核验业务对象归属与当前版本”。独立流程从1连续编号；说明做什么、业务约束或为何这样做，禁止“处理数据/第二步”等占位或错误描述。按逻辑阶段分组，不逐行翻译赋值、不为简单getter/纯装配凑步骤。长方法先划分对象职责和有意义的阶段，禁止仅补注释、无意义抽方法或无节制加类；跨层调用、结果校验和转换显式分开。 | P：DOC-007 编号/规模扫描；含义、完整覆盖及内聚必须逐方法复核 |
 | MAV-001 | 根 POM 集中管理依赖/BOM/插件版本；module dependency/plugin 禁止 version。Maven 3 子模块保留 parent.version，但采用 MAV-005 的 ${revision}，不重复硬编码项目版本。各 dependency/plugin 使用多行 XML。 | R：Checkstyle 不解析 POM |
 | MAV-002 | 基础平台使用根 Spring Boot parent 或经批准的 BOM 方案；新项目重新确认版本，不把当前 3.3.12/JDK17 当作永久生产标准。 | R |
 | MAV-003 | 根 POM 的 build/plugins 实际声明并绑定 Checkstyle check 到 validate，子模块继承；只写 pluginManagement 不会触发检查。插件与引擎版本只在根管理。 | 安装器＋Maven 构建验证 |
@@ -204,36 +205,38 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 
 真实项目不能机械复制所有演示链路或生产未适配配置；已有项目约定优先。快照是经用户确认的静态版本，不依赖原 ddd 工程的绝对路径，不随新业务开发自动更新。
 
-## 12. 历史约定收敛结论
+## 12. 规则收敛与版本记录
 
-| 历史分歧 | 当前唯一生效规则 | 来源 |
+| 设计选择 | 当前生效规则 | 规则索引 |
 |---|---|---|
-| 单个 src 下按层分包 / 多 Maven module | 多 module，项目名-层名 | SRC-008、009 |
-| 会员积分 / 公共占位 | 仅 Ddd 占位，真实项目替换领域语言 | SRC-013 |
-| Entiry 拼写 | Entity | SRC-010 的已落实约定 |
-| 构造器 / 字段 Autowired / 构造器 | 最终单一构造器；框架基类已有注入不重复 | SRC-024 覆盖 017 |
-| Aggregate 持有标量或注入仓储 / Entity 容器 | Aggregate 只容纳 Entity，DomainService 构造器持有仓储 | SRC-024、025、027 |
-| 内存仓储 / 正式仓储结构 | 正式 MyBatis-Plus 仓储，即使规则表为空 | SRC-020、021 |
-| Clock 与手工转换器 Bean / 按需配置 | 默认扫描 Component，直接取当前时间 | SRC-022 |
-| Domain 专属返回 / 全层共同包装 | common Result，模块枚举错误码，Domain/Out 返回 DO | SRC-026、029 |
-| OutAdaptor 再加重复 Param / 直接 Command | 无独立语义直接 Application Command | SRC-031 覆盖 030 的冗余转换 |
-| Repository 使用领域读取 Param / 标识类型 | Repository CRUD 标识例外；分页自有域内对象 | SRC-033 |
-| 通用 request/command/execute / 具体参数与动作 | 四层签名及完整类型变量名，明确业务动作 | SRC-034 |
-| 所有构造器一律注释 / 纯装配例外 | 纯依赖注入构造器无注释；业务行为构造器、公开方法和接口契约保留 | SRC-040 细化 DOC-001 与 SRC-014/018 |
-| 注入字段继续注释 / 去重复 | 构造器注入依赖字段不写重复注释；业务属性、常量、日志仍注释 | SRC-041，DOC-006，适用于 solo Spring 代码生成 |
-| 中文门禁诊断 / 跨宿主可读 | ASCII 英文诊断 + 稳定规则 ID，源码/中文 Javadoc 仍 UTF-8 | SRC-040，MAV-007 |
-| 手动接口 Javadoc 检查 / 构建约束 | Checkstyle 生命周期门禁；独立接口检查脚本已移除 | SRC-035、SRC-036 |
-| start 依靠传递依赖 / 显式装配清单 | 直接列出本服务实际运行模块，按需裁剪；不是全仓库依赖清单 | SRC-037 |
-| 子模块固定 parent 版本 / 单点版本 | 根 revision + 子模块 ${revision}；Maven 3 使用 Flatten 适配发布 | SRC-038 细化 SRC-015 |
-| 默认估工时 / 当事人排期 | 默认不生成人天/工时或合计工期；显式估算请求需依据与不确定性 | SRC-042，DEL-005 |
-| 局部表结构检查 / 整份方案生成后推演 | 主动贯穿整个技术方案的实际风险，回改矛盾并区分推理、实验和待验证 | SRC-042，DEL-004 |
+| 单个 src 下按层分包 / 多 Maven module | 多 module，项目名-层名 | MOD-001 |
+| 会员积分 / 公共占位 | 仅 Ddd 占位，真实项目替换领域语言 | NAM-001 |
+| Entiry 拼写 | Entity | NAM-002 |
+| 构造器 / 字段 Autowired / 构造器 | 最终单一构造器；框架基类已有注入不重复 | DI-001 |
+| Aggregate 持有标量或注入仓储 / Entity 容器 | Aggregate 只容纳 Entity，DomainService 构造器持有仓储 | DDD-001/006 |
+| 内存仓储 / 正式仓储结构 | 正式 MyBatis-Plus 仓储，即使规则表为空 | REPO-004/009 |
+| Clock 与手工转换器 Bean / 按需配置 | 默认扫描 Component，直接取当前时间 | DI-002/003 |
+| Domain 专属返回 / 全层共同包装 | common Result，模块枚举错误码，Domain/Out 返回 DO | ERR-001/002 |
+| OutAdaptor 再加重复 Param / 直接 Command | 无独立语义直接 Application Command | MAP-003/004 |
+| Repository 使用领域读取 Param / 标识类型 | Repository CRUD 标识例外；分页自有域内对象 | REPO-001/007 |
+| 通用 request/command/execute / 具体参数与动作 | 四层签名及完整类型变量名，明确业务动作 | NAM-003/004 |
+| 所有构造器一律注释 / 纯装配例外 | 纯依赖注入构造器无注释；业务行为构造器、公开方法和接口契约保留 | DOC-001/005 |
+| 注入字段继续注释 / 去重复 | 构造器注入依赖字段不写重复注释；业务属性、常量、日志仍注释 | DOC-006 |
+| 中文门禁诊断 / 跨宿主可读 | ASCII 英文诊断 + 稳定规则 ID，源码/中文 Javadoc 仍 UTF-8 | MAV-007 |
+| 手动接口 Javadoc 检查 / 构建约束 | Checkstyle 生命周期门禁；独立接口检查脚本已移除 | MAV-003/004 |
+| start 依靠传递依赖 / 显式装配清单 | 直接列出本服务实际运行模块，按需裁剪；不是全仓库依赖清单 | MOD-009 |
+| 子模块固定 parent 版本 / 单点版本 | 根 revision + 子模块 ${revision}；Maven 3 使用 Flatten 适配发布 | MAV-005/006 |
+| 默认估工时 / 当事人排期 | 默认不生成人天/工时或合计工期；显式估算请求需依据与不确定性 | DEL-005 |
+| 局部表结构检查 / 整份方案生成后推演 | 主动贯穿整个技术方案的实际风险，回改矛盾并区分推理、实验和待验证 | DEL-004 |
 
 不把历史版本日志中的旧选择当作新项目规则。规则变更更新本文件版本、受影响的安装资源/项目文档及快照说明；影响自动检查或源码时同步对应 checkstyle.xml/代码并验证正向构建与反向违规用例。仅R级交付文档规则修改时验证文档与发行包一致性、相关流程回归，不虚构门禁覆盖或重复宣称Java运行验证。
 
-实现参考：[Maven 插件生命周期接入](https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)、[Checkstyle MatchXpath](https://checkstyle.org/checks/coding/matchxpath.html)、[Javadoc 方法检查](https://checkstyle.org/checks/javadoc/javadocmethod.html)、[构造器缺失注释检查](https://checkstyle.org/checks/javadoc/missingjavadocmethod.html)、[窄范围 XPath 豁免](https://checkstyle.org/filters/suppressionxpathsinglefilter.html)、[Checker 编码与诊断语言](https://checkstyle.org/config.html)。这些资料用于解释检查能力；本项目的业务架构与偏好来自用户确认，不由第三方文档替代决定。
+实现参考：[Maven 插件生命周期接入](https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)、[Checkstyle MatchXpath](https://checkstyle.org/checks/coding/matchxpath.html)、[Javadoc 方法检查](https://checkstyle.org/checks/javadoc/javadocmethod.html)、[构造器缺失注释检查](https://checkstyle.org/checks/javadoc/missingjavadocmethod.html)、[窄范围 XPath 豁免](https://checkstyle.org/filters/suppressionxpathsinglefilter.html)、[Checker 编码与诊断语言](https://checkstyle.org/config.html)。这些资料用于解释检查能力；具体项目的业务架构与约定由该项目需求和用户决定，不能由第三方文档替代。
 
 1.7：用户要求四层主入口逐层捕获及禁止向上抛出，同级-app前端、AI文档集中输出；新增语法门禁与事务回滚验证。历史源码/审批保留为原时点证据。
 
-1.8：SRC-044及hello-travel SRC-023纠正既有FMT-005未落实的问题；加入业务方法清单、编号/规模/有限领域结构门禁、语义复核和迭代整体审查，不将静态覆盖等同生产认证。
+1.8：补充FMT-005的业务方法清单、编号/规模/有限领域结构门禁、语义复核和迭代整体审查，不将静态覆盖等同生产认证。
 
-1.9：hello-travel SRC-025 / DDD SRC-045补齐MAP转换点及ERR模块异常创建归属；静态门禁新增QUALITY-MAPPING、QUALITY-ERROR-OWNER，明确完整源对象和用途转换，不将构造位置通过等同对象设计合格。
+1.9：完善MAP转换点及ERR模块异常创建归属；静态门禁新增QUALITY-MAPPING、QUALITY-ERROR-OWNER，明确完整源对象和用途转换，不将构造位置通过等同对象设计合格。
+
+1.10：明确公共规范对所有适用项目生效，移除项目名与项目内来源编号，使用稳定规则ID索引。具体改进来源、业务约定与执行证据保留在所属项目；本次不改变Java门禁和业务源码。

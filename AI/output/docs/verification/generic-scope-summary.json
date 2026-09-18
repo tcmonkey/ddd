@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-18",
+  "scope": "公共规范适用范围及项目来源分离，仅文档修改",
+  "norm_version": "1.10",
+  "snapshot_documentation_version": "1.8",
+  "business_source_and_guard_changes": "none",
+  "workflow_tests": 10,
+  "installation_tests": 16,
+  "failures": 0,
+  "skill_validation": "valid",
+  "core_and_three_host_and_portable_files_equal": 137,
+  "snapshot_reference_source_files_equal": 94,
+  "active_installed_skill_equal": true,
+  "project_norm_copies_equal": true,
+  "generic_norm_has_project_name_or_source_ids": false,
+  "new_java_business_tests": "not_run; previous coding evidence retained"
+}

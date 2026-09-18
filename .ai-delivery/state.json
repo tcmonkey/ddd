@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 52,
+  "revision": 53,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -41,7 +41,7 @@
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "SRC-045规范1.9/快照1.7，映射与异常归属门禁同步；规则缺失判断归领域，公开错误码不变；根与快照全部模块各7项通过，独立消费者及94来源文件一致"
+      "note": "SRC-045规范1.9/快照1.7，映射与异常归属门禁同步；规则缺失判断归领域，公开错误码不变；根与快照全部模块各7项通过，独立消费者及94来源文件一致；SRC-046仅整理公共规范适用范围，当前规范1.10/快照说明1.8，业务代码及此前回归证据不变"
     },
     "developer_self_test": {
       "status": "complete",
@@ -163,13 +163,13 @@
   "last_actor": {
     "platform": "codex",
     "model": "unknown",
-    "updated_at": "2026-09-18T16:13:10+08:00"
+    "updated_at": "2026-09-18T16:37:54+08:00"
   },
   "handoff": {
-    "summary": "SRC-045规范1.9/快照1.7与映射/异常归属门禁同步；规则缺失判断归领域、公开错误码不变；根与快照全部模块各7项、独立消费者、11公共门禁/16安装及94来源/137核心发行资源一致",
-    "next_action": "开发及相关回归完成，CR尚未开始；审阅04/05的3.6修订与规范1.9，未执行独立CR/发布或生产验收"
+    "summary": "SRC-046同步公共规范1.10和快照说明1.8，规则与具体项目改进来源分离；94来源与137核心发行一致，流程10/安装16通过；仅文档修订，Java门禁与业务源码不变",
+    "next_action": "开发记录3.7说明此次文档修订；保留既有开发回归与审批，独立CR/生产验收和发布未开始"
   },
-  "last_updated": "2026-09-18T16:13:10+08:00",
+  "last_updated": "2026-09-18T16:37:54+08:00",
   "legacy_phase_evidence": {
     "intake": {
       "status": "complete",

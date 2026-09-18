@@ -1,0 +1,39 @@
+test_bad_marker_rejected (__main__.InstallationTest) ... ok
+test_cli_dry_run_writes_nothing (__main__.InstallationTest) ... ok
+test_copy_update_and_local_edit_protection (__main__.InstallationTest) ... ok
+test_detached_resources_and_python_cache_do_not_break_update (__main__.InstallationTest) ... ok
+test_dry_run_and_codex_copy_mode (__main__.InstallationTest) ... ok
+test_failed_replacement_restores_previous_skill (__main__.InstallationTest) ... ok
+test_failed_rollback_keeps_recovery_files (__main__.InstallationTest) ... ok
+test_foreign_install_targets_preserved (__main__.InstallationTest) ... ok
+test_generated_edit_blocks_build_before_other_updates (__main__.InstallationTest) ... ok
+test_old_links_migrate_and_codex_duplicate_removed (__main__.InstallationTest) ... ok
+test_output_directory_links_rejected_without_external_writes (__main__.InstallationTest) ... ok
+test_portable_zip_matches_core_and_is_reproducible (__main__.InstallationTest) ... ok
+test_real_files_and_platform_overlay (__main__.InstallationTest) ... ok
+test_renamed_owned_link_removed_but_foreign_legacy_kept (__main__.InstallationTest) ... ok
+test_single_source_update_and_stale_file_removal (__main__.InstallationTest) ... ok
+test_unowned_output_and_source_symlinks_rejected (__main__.InstallationTest) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 8.626s
+
+OK
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u_e1mjeq/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u_e1mjeq/toolkit/dist/claude-code/solo
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u_e1mjeq/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u_e1mjeq/toolkit/dist/claude-code/solo
+[claude-code] conflict/error: Generated files were modified; preserve/reconcile them first: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-u_e1mjeq/home/.claude/skills/solo
+[codex] plan (symlink): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/toolkit/dist/codex/solo
+[codex] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/toolkit/dist/codex/solo
+[codex] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/toolkit/dist/codex/solo
+[codex] conflict/error: Existing managed copy: update with --install-mode copy: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-wzl285ek/home/.agents/skills/solo
+[codex] conflict/error: Refusing to overwrite an unowned directory: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-lmt1hzmw/home/.agents/skills/solo
+[claude-code] conflict/error: Refusing to overwrite an unowned directory: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-lmt1hzmw/home/.claude/skills/solo
+[qwen-code] conflict/error: Refusing to overwrite an unowned directory: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-lmt1hzmw/home/.qwen/skills/solo
+[codex] conflict/error: Foreign symlink conflict: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-lmt1hzmw/foreign-link-home/.agents/skills/solo -> /private/var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-lmt1hzmw/foreign-skill
+[codex] install/update (symlink): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/home/.agents/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/toolkit/dist/codex/solo
+[codex] remove obsolete owned link: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/home/.codex/skills/solo
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/toolkit/dist/claude-code/solo
+[qwen-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/home/.qwen/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-epp_x4um/toolkit/dist/qwen-code/solo
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-uw9rf3ph/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-uw9rf3ph/toolkit/dist/claude-code/solo
+[claude-code] remove obsolete owned link: /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-uw9rf3ph/home/.claude/skills/solo-delivery
+[claude-code] install/update (copy): /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-uw9rf3ph/home/.claude/skills/solo <- /var/folders/_w/fr_6d7fx5557htgb6q12d_5h0000gn/T/solo-install-test-uw9rf3ph/toolkit/dist/claude-code/solo
