@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 public final class DddExternalReadApplication {
 
     private final DddOutputAdaptor outputAdaptor;
-
     private final DddApplicationAssembler assembler;
 
     public DddExternalReadApplication(

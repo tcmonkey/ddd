@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-18",
+  "scope": "无参数Component标记注解省略空括号",
+  "norm_version": "1.12",
+  "rule": "FMT-007",
+  "hello_travel_annotations_changed": 38,
+  "ddd_annotations_changed": 0,
+  "reference_source_changed": false,
+  "component_semantics": "unchanged; no attributes added",
+  "remaining_empty_component_annotations": 0,
+  "hello_travel_default_maven_validate": "passed",
+  "skill_validation": "valid",
+  "workflow_tests": 10,
+  "installation_tests": 16,
+  "core_host_portable_files_equal": 137,
+  "snapshot_source_files_equal": 94,
+  "business_junit_this_change": "not_run; annotation syntax only"
+}

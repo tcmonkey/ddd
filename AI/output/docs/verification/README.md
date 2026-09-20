@@ -9,3 +9,7 @@ quality-*为当前规范1.8/快照1.6的源码业务质量扫描、全方法清�
 ## 2026-09-18当前映射与异常归属证据
 
 mapping-summary.json为本轮范围与统计；mapping-*.log为实际构建/回归；mapping-junit保留全部模块JUnit原始结果；mapping-sha256.json核对日志/清单。hello-travel的mapping-class/constructor/method-inventory.csv及mapping-entry-audit.csv提供全量位置导航；DDD mapping-entry-audit.csv提供14主入口结构检查。旧quality-/boundary-文件保留历史证据，不将旧执行重复计入本轮。
+
+## 2026-09-18业务垂直领域整改
+
+vertical-summary.json是当前范围，vertical-*.log/CSV与vertical-junit为原始证据，vertical-sha256.json校验文件；hello-travel的vertical-java-before.zip保留整改前Java来源，仅作归档。当前39项后端与36主入口统计不混算旧轮35/50；DDD根与临时独立快照各7项。跨域事务使用mock管理器验证commit/rollback调用，不声称真实MySQL故障数据回滚。

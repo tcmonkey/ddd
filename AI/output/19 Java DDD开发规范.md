@@ -1,6 +1,6 @@
 # Java DDD 开发规范
 
-版本：1.10。作为 solo 的 Java DDD 默认开发约定，适用于采用 Java/Spring/Maven 与 DDD 分层的项目，不绑定具体业务应用。`ddd` 是随技能提供的参考工程，不是适用项目名单；其他技术栈按其实际架构采用相关通用原则。已有项目的明确规范和用户决定优先，本文件不宣称是行业统一标准。
+版本：1.18。作为 solo 的 Java DDD 默认开发约定，适用于采用 Java/Spring/Maven 与 DDD 分层的项目，不绑定具体业务应用。`ddd` 是随技能提供的参考工程，不是适用项目名单；其他技术栈按其实际架构采用相关通用原则。已有项目的明确规范和用户决定优先，本文件不宣称是行业统一标准。
 
 ## 1. 使用方式与规则优先级
 
@@ -22,9 +22,10 @@
 | MOD-005 | model 是内部稳定 DO 共享层，domain/application/adaptor/infrastructure 可依赖，client 禁止依赖；不放持久化映射、协议模型和领域行为。 | R |
 | MOD-006 | domain 只依赖 common/model/JDK，禁止 Spring、Jakarta、MyBatis 等框架。 | P：禁止常见框架 import；POM、全限定类型/传递依赖需评审 |
 | MOD-007 | application 依赖 domain/model/common；infrastructure 实现 domain 仓储端口；adaptor 依赖 application/client/model/common。start 只负责启动和装配，业务模块禁止反向依赖 start。 | R |
-| MOD-008 | 同一 adaptor module 区分 input/output：input 放协议入口及 assembler，output 放外部能力实现、converter 和私有第三方模型。 | R |
+| MOD-008 | 同一 adaptor module 区分 input/output。每个业务的 input 下必须建立同级 `controller` 与 `assembler` 子包：协议入口只放 `input.controller`，输入双向转换只放 `input.assembler`，禁止将 Controller 或 Assembler 直接平铺在 input 根包；listener、scheduler 等按真实职责建立同级子包。output 放外部能力实现、converter 和私有第三方模型。 | P：QUALITY-PACKAGE 检查输入类后缀与包位置；协议职责仍需评审 |
 | MOD-010 | 生成有前端的项目时，默认以用户项目名为服务端目录，自动创建同级`<项目名>-app`为独立前端项目，拥有自己的package.json、lockfile、源码、构建与README；禁止默认嵌套到服务端frontend/web目录。用户明确其他布局或已有仓库约定优先；目标已存在先检查保留，不覆盖。同步启动脚本、代理、文档和项目目录引用；不把服务端凭据复制到前端。 | R：目录与独立构建验证 |
 | MOD-009 | start 的 POM 是本服务的显式装配清单，直接声明实际随服务运行的内部模块，不仅依靠传递依赖。完整模板列出 common、client、model、domain、application、infrastructure、adaptor；真实项目按服务边界裁剪，不引入无用途、其他服务或仅工具用途的模块。测试专用依赖使用 test scope，运行专用依赖按需使用 runtime scope；所有依赖版本仍由根 POM 管理。业务模块不得反向依赖 start。 | R：核对 POM、有效依赖树和运行验证，Checkstyle 不检查 |
+| MOD-011 | `util`仅在存在跨业务、跨层复用的无状态技术操作时建立，可被业务模块内部依赖；只包含格式、编码、序列化等技术工具，不包含业务路由、领域规则、持久化访问、Spring组件生命周期或跨域编排。无真实复用不建util module或工具包。 | R：核对依赖方向、调用者与工具语义 |
 
 按业务子域组织包，推荐骨架：
 
@@ -39,7 +40,7 @@ application  exception / <业务>.command / result / assembler / service / adapt
 infrastructure exception / 基础仓储与 Mapper
              <业务>.mysql.mapper / pojo / repository
 adaptor      exception / common
-             <业务>.input.assembler / 按需 listener、scheduler
+             <业务>.input.controller / assembler / 按需 listener、scheduler
              <业务>.output.converter / model
 start        Application / config / resources / 按需 aop
 ```
@@ -76,7 +77,25 @@ start        Application / config / resources / 按需 aop
 | DDD-006 | Repository 依赖由 DomainService 的构造器传入，不注入 Aggregate。框架装配在 start，领域对象保持普通 Java 对象。 | P：禁止字段 Autowired/Resource；依赖设计需评审 |
 | DDD-007 | 写模式：Application → DomainService → Aggregate/Entity → Repository，状态变化归 Entity。域内普通读：Application → Repository → Aggregate → assembler。 | R |
 | DDD-008 | 外部普通读：Application → OutAdaptor；规则+计算：DomainService 加载规则 Aggregate，以模型行为完成计算；纯计算：DomainService，无虚构聚合/持久化依赖。 | R |
-| DDD-009 | 真实需求只保留所需模式；本模板的五条链路用于覆盖四种模式及读模式的内/外分支，不要求真实项目全部复制。 | R |
+| DDD-009 | 五种业务处理模式是写入、域内普通读、外部普通读、规则与计算、纯计算；它们是每个业务领域可按需采用的用例路径，不是项目级五个业务模块或固定五个服务。只生成实际需要的模式，不机械复制全部示例。 | R |
+| DDD-010 | 先按业务垂直领域组织模型与包，再在域内选择开发模式；DomainService、Param、业务assembler和仓储协作归所属业务。禁止按write/read/calculate横向汇总无关业务到一个全局DomainService、写入门面或路由；跨域事务与流程由Application显式协调各域端口，共享技术工具不包含业务路由。 | R：核对全部依赖、Param归属与跨域调用及正常/失败链路 |
+| DDD-011 | 参考DddWriteDomainService.write演示的是参考业务内的写模式，真实项目使用对应业务领域与动作命名；一个领域可按用例内聚性拥有多个DomainService，普通读/外部普通读无需为凑模式创建DomainService。文件数和服务数由业务职责决定，不能以模板类名推导全项目总服务。 | R：参考适用性与对象职责复核 |
+| DDD-012 | 真实业务的DomainService以业务职责命名，例如`AuthDomainService`；写入、读取、规则或计算等模式由用例、公开动作和Param表达，不以`Write`、`Read`或`Calculate`后缀替代领域身份。参考工程中带模式词的类名只用于标示教学链路。若同一领域存在多个服务，名称应区分实际职责，而非仅复述处理模式。 | R：对象名、职责、调用链和未来扩展反例复核 |
+| DDD-013 | `workflow`只用于有明确状态节点、转移、恢复或补偿语义的SOP/状态图。协议中的`action`选择必须由Application入口后的受控策略/注册表分派到命名明确的用例，未知动作拒绝；不得以泛化`Flow`/`Workflow`类承载动作`switch`，也不得为掩盖集中逻辑只增加空转发类。共享协作仅保留可复用校验、访问或基础设施边界，具体动作仍有可审阅的职责归属。 | R：检查动作映射、具体用例、状态图证据和扩展新动作反例 |
+
+| DDD-014 | AI、邮件、文件、安全、向量等技术能力先按用户任务确定业务所有者，再在所属业务内定义用途明确的端口与适配器；不得建立与业务域平级的`model`、`mail`、`file`、`security`等技术总包，也不得用动态`action`的万能模型端口混合问答、意图、记忆、嵌入等不同契约。共享内部DO仍按MOD-005归具体业务包。 | R：从用户任务反推端口所有者，核对包树、命令/结果语义、装配位置、流式/治理能力和新增能力扩展反例 |
+| DDD-015 | 一个Application Service只承载一个可从类名理解的业务动作，动作逻辑直接沉淀在该服务中；禁止以`Write`、`Operations`、`Actions`、`UseCase`、`Repositories`等泛化名称聚合多个动作或仅作转发。多动作协议通过受控策略/注册表分派到具体服务；共享协作只在确有独立职责时抽取。 | R：核对类名、公开动作、依赖和新增动作反例 |
+| DDD-016 | `@Scheduled`是时间输入协议，只能位于`adaptor/<业务>/input/scheduler`等业务输入适配器包。调度器只触发Application的可调用业务动作并处理本轮边界失败，不直接访问Repository、DomainService或第三方SDK；Application不得带`@Scheduled`。Controller只处理HTTP/RPC/SSE协议，连接推送状态与定时触发分离。 | P：QUALITY-SCHEDULER-BOUNDARY检查注解包归属；职责与失败策略仍需R |
+
+### 4.1 AI业务编排与框架隔离
+
+| ID | 生效规则 | 检查 |
+|---|---|---|
+| AI-001 | Application的`<业务>.adaptor`声明面向业务的外部能力契约，Command、Result和中间模型表达业务含义，不暴露模型厂商、LangChain4j、LangGraph4j、向量SDK或传输对象。OutAdaptor在所属业务的output实现该契约；更换AI平台或框架只替换实现和装配，不改变领域规则与业务调用链。 | R：核对公开类型、依赖图和替换实现反例 |
+| AI-002 | LangChain4j的`@AiService`、提示词、流式模型、嵌入、重试、降级和供应商装配归所属业务的adaptor output与start；Application不得直接调用供应商SDK。模型能力按意图识别、普通对话、结构化生成、检索等不同契约拆分，不以万能模型端口混合。 | R：核对框架依赖、提示词/模型装配与端口语义 |
+| AI-003 | 有真实多步骤业务状态、校验和路由需求时，Application可使用Graph框架编排业务节点。Node只协调步骤和最小状态：外部调用走OutAdaptor，内部数据走Repository，确定性不变量与计算走DomainService；OutAdaptor不得调用Domain。普通单次对话或少量明确分支由Application直接路由，不为使用Graph而制造节点。 | R：核对节点职责、状态最小化、循环/重试上界、失败与降级路径 |
+| AI-004 | RAG同时使用关系库与向量库时，关系库保存文档、版本、解析状态、分块元数据、哈希、权限、生命周期与向量引用；向量库保存embedding及检索索引。两者表/collection、删除重建、来源引用和一致性策略必须在方案中分别标明。未核验的检索或外部事实必须带来源与待核验语义，不能被模型表述为确定事实。 | R：方案、数据模型、删除/重建和召回失败反例 |
+| AI-005 | 对话、短期记忆、长期记忆、上下文预算、模型调用证据和同步事件按业务身份与会话隔离。图框架只保存最小化、可序列化且不含敏感业务对象的运行状态；跨进程恢复、检查点、幂等重放与未知模型调用结果须由方案明确，不能由本地内存实现暗示已具备。 | R：隔离、重放、进程中断和敏感信息反例 |
 
 ## 5. 仓储与数据访问
 
@@ -123,7 +142,7 @@ start        Application / config / resources / 按需 aop
 | DOC-003 | PO/Entity/Value 字段说明业务语义、映射或不变量；Controller/RPC 的契约说明用途、输入、输出、错误行为，不依靠实现类文档替代接口契约。 | P：字段文档存在；实际完整性需评审 |
 | DOC-004 | Javadoc 内容变更与参数名同步；接口约定不能因实现已注释而省略。自动生成的访问器不用重复声明，只检查实际源码。 | C：源码声明 |
 | DOC-005 | 被 Spring 扫描的组件（含 start 定向扫描的 DomainService），单一构造器仅将输入依赖赋给 final 字段时，不写重复的构造器 Javadoc/行内注释；类型仍需说明，注入依赖字段按 DOC-006 处理。构造器包含校验、初始化、计算、转换或其他行为则必须写 Javadoc，普通业务对象/异常构造器不在例外内。公开业务方法、Controller 入口、RPC/Repository 接口注释不能省略。 | P：窄范围构造器 AST 豁免；字段/参数对应关系与真实扫描需评审 |
-| DOC-006 | 被 Spring 扫描类中，通过构造器接收并保存的注入依赖字段不写重复 Javadoc/行内注释，以清晰类型名和字段名表达职责；不删除字段或 final，也不改变构造器注入方式。业务状态、配置语义字段、PO/Entity/Value 属性、常量与日志字段仍保留说明；不能因为类被扫描就豁免全部字段。复杂构造器中的注入依赖仍按此语义判断，但构造器行为注释按 DOC-005 保留。此约定用于 solo 后续生成的 Spring 项目，不局限 ddd 参考工程。 | P：纯装配组件的未初始化非静态 final 字段窄范围豁免；复杂构造器、真实扫描/依赖语义需评审与定向适配 |
+| DOC-006 | 被 Spring 扫描类中，通过构造器接收并保存的注入依赖字段不写重复 Javadoc/行内注释，以清晰类型名和字段名表达职责；不删除字段或 final，也不改变构造器注入方式。业务状态、配置语义字段、PO/Entity/Value 属性、常量与日志字段仍保留说明；不能因为类被扫描就豁免全部字段。复杂构造器中的注入依赖仍按此语义判断，但构造器行为注释按 DOC-005 保留。依赖字段排列遵循FMT-006。此约定用于 solo 后续生成的 Spring 项目，不局限 ddd 参考工程。 | P：纯装配组件的未初始化非静态 final 字段窄范围豁免；复杂构造器、真实扫描/依赖语义需评审与定向适配 |
 
 ## 8. 代码格式与版本管理
 
@@ -133,7 +152,9 @@ start        Application / config / resources / 按需 aop
 | FMT-002 | 每行一个 import，禁止星号、冗余/未使用 import；按 JDK/第三方/项目内/静态导入分组排序。 | P：星号/冗余/未使用与多语句自动；分组排序需评审 |
 | FMT-003 | 方法/构造器签名一行放得下时不提前换行，只有超过截止线才换行；record 组件按可读性布局。 | P：最大行宽自动；无必要换行需评审 |
 | FMT-004 | 方法体/PO getter/setter 不压成单行，多语句分行；控制结构有大括号，操作符和标点空格一致。 | C：相应语法规则 |
+| FMT-006 | Spring组件中由构造器注入的依赖字段按组连续排列，字段之间不留空行；依赖字段组与紧随其后的构造方法（含其注解或Javadoc）之间保留一行空行。不删除注释、字段或final，不将此规则套到业务属性、PO/Entity/Value、常量或日志字段；不为格式调整重排业务初始化顺序。 | R：依赖字段语义及空行复核，现有Checkstyle未实现此专项检查 |
 | FMT-005 | 所有业务逻辑方法，包括私有辅助方法、事务/异步回调和有业务行为的构造器，按实际职责写中文行内编号步骤，如“// 1. 核验业务对象归属与当前版本”。独立流程从1连续编号；说明做什么、业务约束或为何这样做，禁止“处理数据/第二步”等占位或错误描述。按逻辑阶段分组，不逐行翻译赋值、不为简单getter/纯装配凑步骤。长方法先划分对象职责和有意义的阶段，禁止仅补注释、无意义抽方法或无节制加类；跨层调用、结果校验和转换显式分开。 | P：DOC-007 编号/规模扫描；含义、完整覆盖及内聚必须逐方法复核 |
+| FMT-007 | 不提供任何属性值的标记注解使用无括号形式，如@Component、@Service、@Repository；禁止无参数时写@Component()。指定Bean名称或其他注解属性时保留括号和实际值，如@Component("namedBean")；不把格式约定解释成需要补value。 | R：检查无参数标记注解；现有门禁未实现此专项检查 |
 | MAV-001 | 根 POM 集中管理依赖/BOM/插件版本；module dependency/plugin 禁止 version。Maven 3 子模块保留 parent.version，但采用 MAV-005 的 ${revision}，不重复硬编码项目版本。各 dependency/plugin 使用多行 XML。 | R：Checkstyle 不解析 POM |
 | MAV-002 | 基础平台使用根 Spring Boot parent 或经批准的 BOM 方案；新项目重新确认版本，不把当前 3.3.12/JDK17 当作永久生产标准。 | R |
 | MAV-003 | 根 POM 的 build/plugins 实际声明并绑定 Checkstyle check 到 validate，子模块继承；只写 pluginManagement 不会触发检查。插件与引擎版本只在根管理。 | 安装器＋Maven 构建验证 |
@@ -144,7 +165,7 @@ start        Application / config / resources / 按需 aop
 
 ### DOC-007 业务质量扫描与语义复核
 
-Java DDD项目在根validate阶段默认执行scripts/JavaBusinessQuality.java（JDK17源码启动，exec-maven-plugin），与Checkstyle各自承担不同检查。扫描所有模块src/main/java，列出公开/私有方法、构造器及流程分类；有至少两个直接语句的主流程、try或块式lambda须有至少两个非空中文职责编号且连续。纯单操作/getter和纯装配不凑编号；有业务行为的构造器、复杂单语句链、catch/finally以及条件/循环内部的语义覆盖仍须复核。测试、生成目录和脚本不作为业务源码扫描。
+Java DDD项目在根validate阶段默认执行scripts/JavaBusinessQuality.java（JDK17源码启动，exec-maven-plugin），与Checkstyle各自承担不同检查。扫描所有模块src/main/java，列出公开/私有方法、构造器及流程分类；有至少两个直接语句的主流程、try或块式lambda须有至少两个非空中文职责编号且连续。纯单操作/getter和纯装配不凑编号；有业务行为的构造器、复杂单语句链、catch/finally以及条件/循环内部的语义覆盖仍须复核。扫描同时阻止`@Scheduled`落在非adaptor业务scheduler包。测试、生成目录和脚本不作为业务源码扫描。
 
 默认单业务方法不超过45个AST语句节点（含嵌套流程），超限以QUALITY-SIZE阻止构建；拆分依据业务职责，不以绕过计数为目标。编号缺失/不连续报QUALITY-STEPS，DDD-003/004的有限结构特征报QUALITY-DOMAIN；解析失败阻止交付。可执行`java scripts/JavaBusinessQuality.java . --report AI/output/docs/verification/quality-method-inventory.csv`保存逐方法清单。清单必须包含未自动覆盖类别的复核记录，语义复核指出所负责对象、约束、事务/错误与适用的反例；自动扫描不证明全部注释正确或面向对象设计成立。
 
@@ -228,6 +249,11 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 | 子模块固定 parent 版本 / 单点版本 | 根 revision + 子模块 ${revision}；Maven 3 使用 Flatten 适配发布 | MAV-005/006 |
 | 默认估工时 / 当事人排期 | 默认不生成人天/工时或合计工期；显式估算请求需依据与不确定性 | DEL-005 |
 | 局部表结构检查 / 整份方案生成后推演 | 主动贯穿整个技术方案的实际风险，回改矛盾并区分推理、实验和待验证 | DEL-004 |
+| 按技术名横向分包 / 先确定业务所有者 | 技术能力归属业务域，跨层技术工具仅按需抽取 | DDD-014/MOD-011 |
+| 一个泛化应用服务 / 每个动作一个服务 | 具体动作直接归具体Application Service，多动作请求受控分派 | DDD-013/015 |
+| 模型框架侵入业务 / 业务语义端口隔离 | Application声明业务契约，框架实现留在输出适配器和启动装配 | AI-001/002 |
+| Graph写在外部适配器 / Application业务编排 | 图节点在Application协调外部、内部与领域协作 | AI-003 |
+| Application定时触发 / 业务输入调度器 | `@Scheduled`仅在adaptor业务scheduler，应用层公开可调用动作 | DDD-016 |
 
 不把历史版本日志中的旧选择当作新项目规则。规则变更更新本文件版本、受影响的安装资源/项目文档及快照说明；影响自动检查或源码时同步对应 checkstyle.xml/代码并验证正向构建与反向违规用例。仅R级交付文档规则修改时验证文档与发行包一致性、相关流程回归，不虚构门禁覆盖或重复宣称Java运行验证。
 
@@ -240,3 +266,13 @@ Checkstyle 实现采用包结构/注解和单文件 AST，不做 Java 类型解�
 1.9：完善MAP转换点及ERR模块异常创建归属；静态门禁新增QUALITY-MAPPING、QUALITY-ERROR-OWNER，明确完整源对象和用途转换，不将构造位置通过等同对象设计合格。
 
 1.10：明确公共规范对所有适用项目生效，移除项目名与项目内来源编号，使用稳定规则ID索引。具体改进来源、业务约定与执行证据保留在所属项目；本次不改变Java门禁和业务源码。
+
+1.11：明确构造器注入的依赖字段连续排列，字段组与构造方法之间保留一行空行；只作用于注入依赖，不改变业务属性布局或运行行为。
+
+1.12：无参数标记注解省略空括号，有实际属性时保留参数形式；不改变组件扫描或Bean命名行为。
+
+1.13：明确先业务领域、后域内用例模式；禁止将无关业务的写/读/计算集中到全局领域服务或应用路由。跨域协调归应用层，参考模式不规定服务数量。
+
+1.14：真实业务领域服务按业务职责命名，模式通过用例和动作表达；参考工程的模式词仅标识教学链路，不能外推为真实项目的类名后缀。
+
+1.18：新增业务域内技术归属、单动作Application Service、调度输入边界与AI业务编排规则。模型框架通过业务语义端口隔离；Graph在Application协调节点，RAG关系/向量存储及会话隔离按实际业务方案验证。公共规则不使用促成改进的项目、表、节点或供应商名称。

@@ -1,0 +1,75 @@
+{
+  "date": "2026-09-18",
+  "scope": "05业务垂直领域重构，非完整06或独立CR",
+  "norm_version": "1.13",
+  "rules": [
+    "DDD-009",
+    "DDD-010",
+    "DDD-011"
+  ],
+  "snapshot_version": "1.11",
+  "business_domains": [
+    "auth",
+    "chat",
+    "memory",
+    "knowledge",
+    "sync"
+  ],
+  "obsolete_types_removed": [
+    "TravelWriteDomainService",
+    "TravelWriteApplicationAssembler",
+    "DomainWrites",
+    "TravelRepositories"
+  ],
+  "retained_save_operations": 17,
+  "retained_remove_operations": 3,
+  "unused_remove_operations_deleted": 14,
+  "retained_rule_body_AST_equal": 20,
+  "unchanged_entity_aggregate_repository_converter_files": 68,
+  "source_files": 294,
+  "methods_and_constructors": 790,
+  "flow_blocks": 371,
+  "constructor_sites": 782,
+  "quality_violations": 0,
+  "main_entries": {
+    "hello-travel": 36,
+    "ddd": 14,
+    "violations": 0
+  },
+  "backend": {
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ddd_backend": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ddd_snapshot": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "workflow_tests": 10,
+  "installation_tests": 16,
+  "independent_installed_application_consumer": "clean compile passed",
+  "frontend_this_iteration": "unchanged; not rerun",
+  "transaction_regression": "real TransactionTemplate/local business services and mock manager: commit/rollback and stop-after-failure, no physical MySQL rollback claim",
+  "skill_validation": "valid",
+  "core_three_host_portable_equal": 137,
+  "reference_source_files_equal": 94,
+  "active_installed_skill_and_project_norm_copies_equal": true,
+  "frozen_flyway_v1_sha256": "24c7e95ff500378edead0ef52a05b2038635288420e3498eec0f3119d8f0525f",
+  "not_executed": [
+    "真实模型/嵌入/高德/SMTP",
+    "已安装MySQL/Milvus/Redis业务写入",
+    "完整06",
+    "独立CR/验收/发布"
+  ],
+  "delivery_validation": "structurally_valid",
+  "handoff_revision": 56
+}

@@ -1,0 +1,19 @@
+{
+  "vertical-backend.log": "fab45cce9ba9de04372fe96260f6e0e6ffd746bc0efe245efcb3d7337f9d8c79",
+  "vertical-business-layout.json": "926d6fbfb697fbe91b78358b0796b2d8d6436e05529ed1896b29b432359119a0",
+  "vertical-delivery.log": "1871d11e04769a63d00aec3378c4608532c4b7c6b2616ca422d26e6f686948ee",
+  "vertical-distribution.log": "c33f53ff519db45d5c529aaeb2561bd312a3c854d34ba7188b108efe0fd6d245",
+  "vertical-installation.log": "d25210fc3f5b1d01793dd962bc8102caf816a1e4107d98597c9bd9c6b247068f",
+  "vertical-junit/backend/ddd-domain/TEST-com.ddd.domain.ddd.model.aggregate.DddAggregateTest.xml": "5d2af59eedb5f3b89d4027ca382462f8bc4f1927e664dd2700b0625110b2959c",
+  "vertical-junit/backend/ddd-start/TEST-com.ddd.adaptor.ddd.input.BoundaryFailureTest.xml": "f701eebeb03f81e484778618d7afec6a6134340a34a0b69b4a7298d896609215",
+  "vertical-junit/backend/ddd-start/TEST-com.ddd.adaptor.ddd.input.DddControllerTest.xml": "415ce18db8b2eaeea26602f967127108d78d9c52b3f84a2ee76b07990d38087b",
+  "vertical-junit/backend/ddd-start/TEST-com.ddd.adaptor.ddd.input.WriteRollbackTest.xml": "a7659b349caf03bb5a33543c03d4fbd9fe87e20adb2aeb9fa155a3d693f8bdfb",
+  "vertical-junit/snapshot/ddd-domain/TEST-com.ddd.domain.ddd.model.aggregate.DddAggregateTest.xml": "d90fc37835ea163f20d8404f32334557bc93cb45358fefdcde3521c4d629c053",
+  "vertical-junit/snapshot/ddd-start/TEST-com.ddd.adaptor.ddd.input.BoundaryFailureTest.xml": "547ef3f9cdc2d1f72b283d1e554f56187c8023c0e12cae339e0bf8d6533d6418",
+  "vertical-junit/snapshot/ddd-start/TEST-com.ddd.adaptor.ddd.input.DddControllerTest.xml": "06790ea38ac237ec7cfa5d392147609a3404f9a9a4f8a28dfcc3a20a2784b197",
+  "vertical-junit/snapshot/ddd-start/TEST-com.ddd.adaptor.ddd.input.WriteRollbackTest.xml": "c56a749f40f1c2334be96623c26e7958f875d5b09d4b66bea06e32b7feae5929",
+  "vertical-rule-equivalence.log": "b7ce129c3058eee9ad56ddef3b0b4b0a49edee617caba7b42768591a3ad7e035",
+  "vertical-snapshot.log": "a9fa98193c563f178793faf774a87fb9349363b978ca16978f97719c76b27358",
+  "vertical-summary.json": "d0708c26b72999296cc5a29b1a908c77a3fb2048b518cdb95055c70837e37417",
+  "vertical-workflow.log": "4566d71991fbf728d1d6db870b168cdf9a9559a9fa1ae65e7bc1a23c84b44ce8"
+}

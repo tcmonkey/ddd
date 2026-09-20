@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * DDD 纯计算模式的领域服务模板。
+ * 当前ddd示例业务内纯计算模式的领域服务。
  *
  * <p>不检索聚合根或仓储，也不变更领域状态；所有计算逻辑都收敛在领域服务中。
  *

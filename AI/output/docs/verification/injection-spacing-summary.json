@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-18",
+  "scope": "构造器注入依赖字段空行与通用规范同步",
+  "norm_version": "1.11",
+  "rule": "FMT-006",
+  "snapshot_version": "1.9",
+  "changed_classes": {
+    "hello-travel": 28,
+    "ddd": 5
+  },
+  "nonblank_lines_before_after": "identical for each modified Java file",
+  "layout_recheck_remaining_changes": 0,
+  "maven_validate": {
+    "hello-travel": "passed",
+    "ddd": "passed"
+  },
+  "workflow_tests": 10,
+  "installation_tests": 16,
+  "skill_validation": "valid",
+  "core_host_portable_files_equal": 137,
+  "snapshot_source_files_equal": 94,
+  "new_business_junit_execution": "none; whitespace-only change",
+  "new_permanent_automatic_spacing_gate": "none; FMT-006 is R with scoped layout review"
+}

@@ -1,0 +1,76 @@
+{
+  "business_domains": {
+    "auth": [
+      "UserAccount",
+      "Device",
+      "LoginSession",
+      "EmailChallenge",
+      "RefreshReceipt"
+    ],
+    "chat": [
+      "Conversation",
+      "Message",
+      "ChatRun",
+      "ModelInvocation"
+    ],
+    "memory": [
+      "MemorySummary",
+      "MemoryFact",
+      "MemoryFactSource"
+    ],
+    "knowledge": [
+      "KnowledgeDocument",
+      "KnowledgeChunk",
+      "IndexJob"
+    ],
+    "sync": [
+      "SyncEvent",
+      "OutboxEvent"
+    ]
+  },
+  "used_write_operations": [
+    "removeMemoryFactSource",
+    "removeRefreshReceipt",
+    "removeSyncEvent",
+    "saveChatRun",
+    "saveConversation",
+    "saveDevice",
+    "saveEmailChallenge",
+    "saveIndexJob",
+    "saveKnowledgeChunk",
+    "saveKnowledgeDocument",
+    "saveLoginSession",
+    "saveMemoryFact",
+    "saveMemoryFactSource",
+    "saveMemorySummary",
+    "saveMessage",
+    "saveModelInvocation",
+    "saveOutboxEvent",
+    "saveRefreshReceipt",
+    "saveSyncEvent",
+    "saveUserAccount"
+  ],
+  "application_consumers_changed": [
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/memory/workflow/PrivacyCleanup.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/memory/workflow/MemoryFlow.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/chat/workflow/ChatFlow.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/auth/workflow/AuthFlow.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/tx/Transactions.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/knowledge/workflow/KnowledgeFlow.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/knowledge/workflow/RagFlow.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/knowledge/workflow/KnowledgeIndexer.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/sync/workflow/SyncEvents.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/sync/service/SyncApplication.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/jobs/workflow/BackgroundJobs.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/jobs/workflow/RetentionJobs.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/travel/workflow/TravelGraph.java",
+    "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/travel/workflow/RunCoordinator.java"
+  ],
+  "removed_unused_remove_operations": 14,
+  "obsolete_types_removed": [
+    "TravelWriteDomainService",
+    "DomainWrites",
+    "TravelWriteApplicationAssembler",
+    "TravelRepositories"
+  ]
+}

@@ -1,0 +1,6 @@
+ddd/ddd-adaptor/src/main/java/com/ddd/adaptor/ddd/input/DddController.java,blank_lines_removed=5
+ddd/ddd-application/src/main/java/com/ddd/application/ddd/service/DddCalculateApplication.java,blank_lines_removed=1
+ddd/ddd-application/src/main/java/com/ddd/application/ddd/service/DddExternalReadApplication.java,blank_lines_removed=1
+ddd/ddd-application/src/main/java/com/ddd/application/ddd/service/DddRuleApplication.java,blank_lines_removed=1
+ddd/ddd-application/src/main/java/com/ddd/application/ddd/service/DddWriteApplication.java,blank_lines_removed=2
+component_classes=10,adjacent_dependency_pairs_and_constructors=22,changed_files=5,apply=true

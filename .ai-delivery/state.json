@@ -4,7 +4,7 @@
   "project_name": "ddd",
   "delivery_mode": "full",
   "interaction_mode": "guided",
-  "revision": 53,
+  "revision": 59,
   "current_phase": "code_review",
   "phases": {
     "intake": {
@@ -41,13 +41,13 @@
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "SRC-045规范1.9/快照1.7，映射与异常归属门禁同步；规则缺失判断归领域，公开错误码不变；根与快照全部模块各7项通过，独立消费者及94来源文件一致；SRC-046仅整理公共规范适用范围，当前规范1.10/快照说明1.8，业务代码及此前回归证据不变"
+      "note": "SRC-049/050规范1.14/快照1.12，明确业务领域内按需采用五种模式，真实项目服务按业务职责命名；教学链路类名和执行逻辑不变；根与独立快照各7项、流程10/安装16通过"
     },
     "developer_self_test": {
       "status": "complete",
       "required": true,
       "approved_at": null,
-      "note": "本轮相关开发回归：根/快照全部模块JUnit各7、公共门禁11/安装16、独立消费者、94来源及发行137核心资源一致；未执行独立CR或生产验收"
+      "note": "本轮相关回归：root和独立临时参考快照clean test全部模块各7项通过，流程10/安装16及发行/来源一致；不当作独立CR或生产验收"
     },
     "code_review": {
       "status": "not_started",
@@ -163,13 +163,13 @@
   "last_actor": {
     "platform": "codex",
     "model": "unknown",
-    "updated_at": "2026-09-18T16:37:54+08:00"
+    "updated_at": "2026-09-19T11:02:50+08:00"
   },
   "handoff": {
-    "summary": "SRC-046同步公共规范1.10和快照说明1.8，规则与具体项目改进来源分离；94来源与137核心发行一致，流程10/安装16通过；仅文档修订，Java门禁与业务源码不变",
-    "next_action": "开发记录3.7说明此次文档修订；保留既有开发回归与审批，独立CR/生产验收和发布未开始"
+    "summary": "SRC-052：参考Controller迁入input.controller，Assembler位于同级input.assembler；规范1.17/MOD-008、QUALITY-PACKAGE与技能快照同步。DDD根和随包快照各7项测试、76类/141方法/57流程块零违规；Solo流程10、启动14、Java门禁12、安装16通过。",
+    "next_action": "审阅MOD-008及QUALITY-PACKAGE；业务行为与HTTP契约未变，独立CR、生产验收和发布仍未开始。"
   },
-  "last_updated": "2026-09-18T16:37:54+08:00",
+  "last_updated": "2026-09-19T11:02:50+08:00",
   "legacy_phase_evidence": {
     "intake": {
       "status": "complete",

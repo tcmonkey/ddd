@@ -2,7 +2,7 @@
 
 这是一个可运行的 Java DDD 参考工程，用 `Ddd*` 作为中性占位名称，展示模块边界、五种调用模式、统一结果与分层错误处理规范。
 
-真实项目应以领域语言替换 `Ddd` 前缀，例如将 `DddWriteApplication` 替换为 `OrderWriteApplication`；不得把本工程的表名、接口路径或中性模型机械复制到生产项目。
+真实项目应以领域语言替换 `Ddd` 前缀。先按业务职责命名领域对象，例如订单领域服务可为 `OrderDomainService`；写入、读取等模式由用例、公开动作和参数表达。`DddWriteApplication`、`DddWriteDomainService`等名称仅标记本参考工程的教学路径，不能机械替换为真实项目的类名后缀；也不得把本工程的表名、接口路径或中性模型复制到生产项目。
 
 ## 快速验证
 
@@ -114,7 +114,7 @@ ddd-adaptor
     ├── common/ApiExceptionHandler
     ├── exception/{AdaptorErrorCode, AdaptorException}
     └── ddd
-        ├── input/{DddController,assembler}
+        ├── input/{controller,assembler}
         └── output/{converter,model,DddOutputAdaptorImpl}
 
 ddd-start

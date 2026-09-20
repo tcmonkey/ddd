@@ -1,4 +1,4 @@
-package com.ddd.adaptor.ddd.input;
+package com.ddd.adaptor.ddd.input.controller;
 
 import com.ddd.adaptor.ddd.input.assembler.DddInputAssembler;
 import com.ddd.application.ddd.command.DddCalculateCommand;
@@ -47,15 +47,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DddController {
 
     private final DddWriteApplication writeApplication;
-
     private final DddReadApplication readApplication;
-
     private final DddCalculateApplication calculateApplication;
-
     private final DddRuleApplication ruleApplication;
-
     private final DddExternalReadApplication externalReadApplication;
-
     private final DddInputAssembler assembler;
 
     public DddController(

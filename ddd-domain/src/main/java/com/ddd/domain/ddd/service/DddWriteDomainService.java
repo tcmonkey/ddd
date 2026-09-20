@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 /**
- * DDD 写模式的领域决策服务模板。
+ * 当前ddd示例业务内的写模式领域服务；不能承载其他无关业务的全部写入。
  *
  * <p>该服务通过构造器获得领域仓储端口，不依赖 Spring API。 它负责加载聚合、协同规则聚合与根实体， 并在领域行为完成后保存完整聚合。
  *

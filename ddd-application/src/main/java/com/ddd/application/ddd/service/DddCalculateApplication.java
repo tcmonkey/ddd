@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 public final class DddCalculateApplication {
 
     private final DddCalculateDomainService calculateDomainService;
-
     private final DddApplicationAssembler assembler;
 
     public DddCalculateApplication(

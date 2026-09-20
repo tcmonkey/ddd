@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 public final class DddRuleApplication {
 
     private final DddRuleDomainService dddRuleDomainService;
-
     private final DddApplicationAssembler assembler;
 
     public DddRuleApplication(

@@ -1,0 +1,17 @@
+test_active_phase_requires_document (__main__.DeliveryWorkflowTest) ... ok
+test_handoff_revision_and_section (__main__.DeliveryWorkflowTest) ... ok
+test_lazy_modes_and_non_overwrite (__main__.DeliveryWorkflowTest) ... ok
+test_legacy_combined_verification_is_stale (__main__.DeliveryWorkflowTest) ... ok
+test_migration_conflict_makes_no_existing_writes (__main__.DeliveryWorkflowTest) ... ok
+test_migration_preserves_history_and_no_false_release (__main__.DeliveryWorkflowTest) ... ok
+test_override_is_local_and_merge_has_section (__main__.DeliveryWorkflowTest) ... ok
+test_recoverable_handoff_transaction (__main__.DeliveryWorkflowTest) ... ok
+test_recoverable_migration_and_revision_conflict (__main__.DeliveryWorkflowTest) ... ok
+test_shared_document_does_not_complete_cr_or_testing (__main__.DeliveryWorkflowTest) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 3.424s
+
+OK
+Recovered pending handoff transaction at revision 1
+迁移事务已完成，原文可从 migrations 归档恢复。

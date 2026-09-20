@@ -31,9 +31,7 @@ public class DddWriteApplication {
     private static final Logger LOG = LoggerFactory.getLogger(DddWriteApplication.class);
 
     private final DddWriteDomainService dddWriteDomainService;
-
     private final DddApplicationAssembler assembler;
-
     private final org.springframework.transaction.PlatformTransactionManager transactionManager;
 
     public DddWriteApplication(

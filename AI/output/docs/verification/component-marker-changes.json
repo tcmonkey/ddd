@@ -1,0 +1,154 @@
+[
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/memory/converter/MemoryFactPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/memory/converter/MemorySummaryPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/memory/converter/MemoryFactSourcePersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/chat/converter/ConversationPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/chat/converter/ModelInvocationPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/chat/converter/ChatRunPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/chat/converter/MessagePersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/auth/converter/DevicePersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/auth/converter/EmailChallengePersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/auth/converter/UserAccountPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/auth/converter/RefreshReceiptPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/auth/converter/LoginSessionPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/knowledge/converter/KnowledgeDocumentPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/knowledge/converter/KnowledgeChunkPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/knowledge/converter/IndexJobPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/sync/converter/OutboxEventPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-infrastructure/src/main/java/com/hellotravel/infrastructure/sync/converter/SyncEventPersistenceConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/file/output/converter/FileOutputConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/security/output/converter/SecurityOutputConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/mail/output/converter/MailOutputConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/knowledge/output/converter/VectorOutputConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/http/assembler/ChatInputAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/http/assembler/AuthInputAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/http/assembler/KnowledgeInputAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/http/assembler/SyncInputAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/model/output/converter/ModelOutputConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-adaptor/src/main/java/com/hellotravel/adaptor/travel/output/converter/TravelOutputConverter.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/memory/assembler/ContextApplicationAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/file/assembler/FileCommandAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/security/assembler/SecurityCommandAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/auth/assembler/AuthApplicationAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/mail/assembler/MailCommandAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/knowledge/assembler/KnowledgeApplicationAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/knowledge/assembler/VectorCommandAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/persistence/assembler/TravelWriteApplicationAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/model/assembler/ModelCommandAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/sync/assembler/SyncApplicationAssembler.java",
+    "annotations": 1
+  },
+  {
+    "file": "hello-travel/hello-travel-application/src/main/java/com/hellotravel/application/travel/assembler/TravelCommandAssembler.java",
+    "annotations": 1
+  }
+]

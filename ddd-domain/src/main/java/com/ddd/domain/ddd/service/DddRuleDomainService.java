@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 规则聚合查询和计算的领域服务。
+ * 当前ddd示例业务内按规则完成计算的领域服务。
  *
  * <p>规则读取、领域计算和错误结果转换均在本公开入口完成， Application 只接收领域决策结果。
  *
