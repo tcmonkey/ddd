@@ -128,7 +128,8 @@ ddd-start
 
 ### adaptor
 
-- `input`：HTTP Controller 只做协议校验、`request/path → command` 转换、调用一个 Application、`result → response` 转换。
+- `input`：HTTP Controller 只做协议校验、`request/path → command` 转换、调用一个 Application、`result → response` 转换；Controller 与 Assembler 分别位于同级`input.controller`、`input.assembler`。listener、scheduler等输入协议按业务域建立同级职责包。
+- `@Scheduled`是时间输入协议，只能位于业务的`input.scheduler`；它只触发Application公开的业务动作并处理本轮失败，不能直接访问Repository、DomainService或第三方SDK。HTTP/SSE Controller不能兼任Scheduler。
 - `output`：直接接收 Application Command，通过 converter 转为 adaptor 私有的第三方请求，调用第三方 HTTP/RPC/MQ/OSS 等能力，再转换为 `ddd-model` 的内部 DO。
 - `ApiExceptionHandler` 只处理未被主调用边界转换的 HTTP 校验异常和兜底异常。
 - 当前 Controller 不需要接口；未来提供 RPC 二方包时，在 `ddd-client` 声明契约，由 `adaptor/input` 实现。
@@ -136,6 +137,7 @@ ddd-start
 ### application
 
 - 只编排用例，保留 `command`、`param`、`result`，不持有领域状态。
+- 一个 Application Service 只表达并实现一个可从类名理解的业务动作；不建立`Write`、`Operations`、`Actions`、`UseCase`或`Repositories`等泛化聚合/转发类。多动作协议由受控策略或注册表分派到具体动作服务。
 - `DddApplicationAssembler` 统一处理 `Command → Domain Param`、`Aggregate/XXDO → Application Result`；Application Service 不直接创建领域 Param，也不手写字段转换。
 - 调用 DomainService 或 domain 的 repository 端口；调用外部能力时，只依赖 Application 自己声明的 `DddOutputAdaptor`。
 - 任一跨 Application 边界输入均使用 `XXCommand`，即使只有一个标识；调用 DomainService 时通过 assembler 组装 Domain `XXParam`。OutAdaptor 无额外调用语义时直接接收 Command；按 ID 调用 Repository 时直接提取标识，不创建领域 Param。
@@ -218,6 +220,14 @@ Checkstyle 的自定义诊断使用 ASCII 英文并保留规则 ID，内置语�
 
 使用 solo 的 Java DDD 模板生成新项目时，AI 在根 POM 建好、正式编码前自动运行 Skill 的安装器，携带相同门禁与规范快照。配置与项目脱离 Skill 也可独立构建，不需要用户每次手动补 checkstyle.xml；已有冲突配置会保留并要求显式协调。
 
+## DDD 与 AI 框架的通用边界
+
+本参考工程不预置 LangChain4j、LangGraph4j、向量库或具体模型厂商依赖；这避免把教学用的基础 DDD 链路误当作任意 AI 项目的固定实现。需要 AI 能力时，仍先按业务域划分：Application 的`<业务>.adaptor`声明对话、意图识别、结构化生成或事实查询等业务语义端口；所属业务的 adaptor output 与 start 承载`@AiService`、提示词、模型流式调用、嵌入和供应商装配。端口的 Command、Result 与中间模型不得暴露框架或厂商类型。
+
+存在真实多步骤状态、校验和路由时，Graph 位于 Application 作为业务编排：Node 调用 OutAdaptor 获取外部能力、调用 Repository 查询内部数据、调用 DomainService 执行确定性规则；OutAdaptor 不调用 Domain。普通单次对话或少量明确分支由 Application 直接路由，不为使用 Graph 制造节点。RAG 同时使用关系库和向量库时，前者保存文档生命周期、分块元数据和向量引用，后者保存 embedding 与检索索引；两者的删除、重建、一致性和来源说明由具体业务方案定义。
+
+具体规则以[19 Java DDD开发规范](AI/output/19%20Java%20DDD开发规范.md)中的MOD-011、DDD-014～016、AI-001～005为准。本工程的`Ddd*`类、H2 schema、`ddd_data`表和接口路径始终只是教学占位，不能成为其他项目的默认命名或数据设计。
+
 ## 文档与交接
 
 `AI/input` 保存用户输入、规范和附件索引；`AI/output` 保存需求、产品、技术、计划、自测、决策与交接记录；`.ai-delivery` 保存机器状态。后续修改模板时，应同步更新技术方案、开发计划、自测报告与交接记录。
@@ -229,6 +239,10 @@ Java规范1.7：Controller、Application、DomainService及OutAdaptor实现主�
 ## 当前业务代码质量约束（2026-09-18）
 
 Java规范1.8：业务方法含私有辅助、回调按真实职责写中文编号步骤，实体持有初始化/校验/变化规则、聚合提供语义协作；迭代前后检查完整链路，复用职责并清理失效或重复代码。根validate默认执行Checkstyle及scripts/JavaBusinessQuality.java，后者扫描编号、45语句节点阈值与有限领域结构，不能证明注释含义或完整面向对象。独立CR和生产适配仍按流程执行。
+
+## 当前DDD+AI与调度边界（规范1.18）
+
+规范1.18补充技术能力归属业务域、无状态util的使用条件、单动作Application Service、时间输入调度器和AI业务编排边界。`scripts/JavaBusinessQuality.java`新增`QUALITY-SCHEDULER-BOUNDARY`：任何`@Scheduled`落在非adaptor业务scheduler包都会在validate阶段失败。AI、RAG和Graph规则属于真实业务项目的设计约束；本参考工程不伪造模型调用、向量存储或Graph样例来证明这些规则。
 
 ```sh
 mvn validate
